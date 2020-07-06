@@ -9,7 +9,7 @@ class ThemeProvider with ChangeNotifier {
 
   final darkTheme = ThemeData(
     brightness: Brightness.dark,
-    accentColor: Colors.deepPurpleAccent,
+    accentColor: Color(0xff69F0AE),
     primaryColor: Color(0xff1d1f3e),
     primaryColorDark: Color(0xff1d1f3e),
     backgroundColor: Color(0xff1d1f3e),
@@ -19,11 +19,11 @@ class ThemeProvider with ChangeNotifier {
 
   final lightTheme = ThemeData(
     brightness: Brightness.dark,
-    accentColor: Colors.greenAccent,
-    primaryColor: Color(0xff1d1f3e),
-    primaryColorDark: Color(0xff1d1f3e),
-    backgroundColor: Color(0xff1d1f3e),
-    cardColor: Color(0xff343651),
+    accentColor: Color(0xff3B916E),
+    primaryColor: Colors.white,
+    primaryColorDark: Colors.white,
+    backgroundColor: Colors.white,
+    cardColor: Color(0xfffafafa),
     fontFamily: "Circular-Std",
   );
 
@@ -34,6 +34,11 @@ class ThemeProvider with ChangeNotifier {
 
   void setLightTheme() {
     theme = lightTheme;
+    notifyListeners();
+  }
+
+  void toggleTheme() {
+    theme = theme == lightTheme ? darkTheme : lightTheme;
     notifyListeners();
   }
 }
