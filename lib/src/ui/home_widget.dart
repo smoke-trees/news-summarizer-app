@@ -25,6 +25,23 @@ class HomeWidget extends StatelessWidget {
           ),
         ],
       ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(right: 25.0, left: 24.0),
+            child: TextField(
+              decoration: InputDecoration(
+                labelText: 'Search term',
+                hintText: 'What do you want to search for?',
+                border: OutlineInputBorder(),
+                icon: Icon(Icons.search)
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }
