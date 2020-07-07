@@ -5,6 +5,10 @@ import 'package:news_summarizer/src/ui/home_widget.dart';
 import 'package:provider/provider.dart';
 
 class SearchPage extends StatelessWidget {
+  final String value;
+
+  SearchPage(this.value);
+
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
@@ -33,11 +37,7 @@ class SearchPage extends StatelessWidget {
             ),
           ],
         ),
-        body: Center(
-          child: CircularProgressIndicator(
-            backgroundColor: Theme.of(context).backgroundColor,
-          ),
-        ),
+        body: Center(child: Text(value)),
       ),
     );
   }

@@ -38,6 +38,7 @@ class ThemeProvider with ChangeNotifier {
       builders: <TargetPlatform, PageTransitionsBuilder>{
         TargetPlatform.android: SharedAxisPageTransitionsBuilder(
           transitionType: SharedAxisTransitionType.scaled,
+          fillColor: Colors.white
         ),
       },
     ),

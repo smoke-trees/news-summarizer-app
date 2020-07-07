@@ -1,18 +1,9 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:news_summarizer/src/providers/theme_provider.dart';
-import 'package:news_summarizer/src/ui/search_page.dart';
+import 'package:news_summarizer/src/ui/search_form.dart';
 import 'package:provider/provider.dart';
 
 class HomeWidget extends StatelessWidget {
-  Route _createSearchRoute() => PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => SearchPage(),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-          FadeThroughTransition(
-            animation: animation,
-            secondaryAnimation: secondaryAnimation,
-            child: child,
-          ));
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +14,9 @@ class HomeWidget extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.search),
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(
-              builder: (context) => SearchPage())
-          );
+          if (SearchForm.formkey.currentState.validate()) {
+            SearchForm.formkey.currentState.save();
+          }
         },
       ),
       appBar: AppBar(
@@ -50,13 +41,7 @@ class HomeWidget extends StatelessWidget {
         children: <Widget>[
           Padding(
             padding: EdgeInsets.only(right: 25.0, left: 24.0),
-            child: TextField(
-              decoration: InputDecoration(
-                  labelText: 'Search term',
-                  hintText: 'What do you want to search for?',
-                  border: OutlineInputBorder(),
-                  icon: Icon(Icons.search)),
-            ),
+            child: SearchForm(),
           )
         ],
       ),
