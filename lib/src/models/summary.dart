@@ -1,11 +1,12 @@
-class Summary {
+class SummaryResponse {
   String url;
   String headline;
   String summary;
+  String error;
 
-  Summary({this.url, this.headline, this.summary});
+  SummaryResponse({this.url, this.headline, this.summary});
 
-  Summary.fromJson(Map<String, dynamic> json) {
+  SummaryResponse.fromJson(Map<String, dynamic> json) {
     url = json['url'];
     headline = json['headline'];
     summary = json['summary'];
@@ -18,4 +19,6 @@ class Summary {
     data['summary'] = this.summary;
     return data;
   }
+
+  SummaryResponse.withError(this.error);
 }

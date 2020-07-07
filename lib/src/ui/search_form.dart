@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:news_summarizer/src/providers/api_provider.dart';
 import 'package:news_summarizer/src/ui/search_page.dart';
+import 'package:provider/provider.dart';
 
 class SearchForm extends StatefulWidget {
   static final formkey = GlobalKey<FormState>();
@@ -12,6 +14,8 @@ class SearchFormState extends State<SearchForm> {
 
   @override
   Widget build(BuildContext context) {
+    final apiProvider = Provider.of<ApiProvider>(context);
+
     return Form(
       key: SearchForm.formkey,
       child: Column(
@@ -29,7 +33,8 @@ class SearchFormState extends State<SearchForm> {
                 border: OutlineInputBorder(),
                 icon: Icon(Icons.search)),
             onSaved: (value) {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage(value)));
+              apiProvider.setSearchTerm(value);
+              Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage()));
             },
           ),
         ],
