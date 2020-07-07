@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_summarizer/src/providers/theme_provider.dart';
-import 'package:news_summarizer/src/ui/search_form.dart';
+import 'package:news_summarizer/src/ui/widgets/search_form.dart';
 import 'package:provider/provider.dart';
 
 class HomeWidget extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_summarizer/src/providers/api_provider.dart';
-import 'package:news_summarizer/src/ui/search_page.dart';
+import 'package:news_summarizer/src/ui/pages/search_page.dart';
 import 'package:provider/provider.dart';
 
 class SearchForm extends StatefulWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_summarizer/src/providers/theme_provider.dart';
-import 'package:news_summarizer/src/ui/home_widget.dart';
+import 'package:news_summarizer/src/ui/pages/home_page.dart';
 import 'package:provider/provider.dart';
 
 class App extends StatelessWidget {
