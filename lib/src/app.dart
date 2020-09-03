@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_summarizer/src/providers/theme_provider.dart';
-import 'package:news_summarizer/src/ui/pages/home_page.dart';
+import 'package:news_summarizer/src/ui/pages/auth_page.dart';
 import 'package:provider/provider.dart';
 
 class App extends StatelessWidget {
@@ -11,7 +11,8 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'News Summarizer',
       theme: themeProvider.theme,
-      home: HomeWidget(),
+      debugShowCheckedModeBanner: false,
+      home: AuthPage(),
     );
   }
 }

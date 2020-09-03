@@ -1,23 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:news_summarizer/src/providers/theme_provider.dart';
-import 'package:news_summarizer/src/ui/widgets/search_form.dart';
+import 'package:news_summarizer/src/ui/widgets/phone_form.dart';
 import 'package:provider/provider.dart';
 
-class HomeWidget extends StatelessWidget {
+class AuthPage extends StatefulWidget {
+  @override
+  _AuthPageState createState() => _AuthPageState();
+}
+
+class _AuthPageState extends State<AuthPage> {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.search),
-        onPressed: () {
-          if (SearchForm.formkey.currentState.validate()) {
-            SearchForm.formkey.currentState.save();
-          }
-        },
-      ),
+      backgroundColor: Theme.of(context).primaryColor,
       appBar: AppBar(
         centerTitle: true,
         title: Text(
@@ -27,7 +24,7 @@ class HomeWidget extends StatelessWidget {
               fontWeight: FontWeight.bold,
               color: Theme.of(context).accentColor),
         ),
-        actions: <Widget>[
+        actions: [
           IconButton(
             icon: Icon(Icons.tonality),
             onPressed: () {
@@ -42,7 +39,7 @@ class HomeWidget extends StatelessWidget {
         children: [
           Padding(
             padding: EdgeInsets.only(right: 25.0, left: 24.0),
-            child: SearchForm(),
+            child: PhoneForm(),
           )
         ],
       ),

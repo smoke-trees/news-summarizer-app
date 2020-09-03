@@ -14,14 +14,16 @@ class ThemeProvider with ChangeNotifier {
     primaryColor: Color(0xff1d1f3e),
     primaryColorDark: Color(0xff1d1f3e),
     backgroundColor: Color(0xff1d1f3e),
+    inputDecorationTheme: InputDecorationTheme(
+      border: OutlineInputBorder(),
+    ),
     cardColor: Color(0xff262845),
     fontFamily: "Circular-Std",
     pageTransitionsTheme: const PageTransitionsTheme(
       builders: <TargetPlatform, PageTransitionsBuilder>{
         TargetPlatform.android: SharedAxisPageTransitionsBuilder(
-          transitionType: SharedAxisTransitionType.scaled,
-          fillColor: Color(0xff1d1f3e)
-        ),
+            transitionType: SharedAxisTransitionType.scaled,
+            fillColor: Color(0xff1d1f3e)),
       },
     ),
   );
@@ -32,14 +34,27 @@ class ThemeProvider with ChangeNotifier {
     primaryColor: Colors.white,
     primaryColorDark: Colors.white,
     backgroundColor: Colors.white,
+    inputDecorationTheme: InputDecorationTheme(
+      border: OutlineInputBorder(),
+      disabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Color(0xff3B916E)),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Color(0xff3B916E)),
+      ),
+      labelStyle: TextStyle(color: Colors.grey),
+      hintStyle: TextStyle(color: Colors.grey),
+      focusColor: Color(0xff3B916E),
+      helperStyle: TextStyle(color: Colors.grey),
+      fillColor: Color(0xff3B916E),
+    ),
     cardColor: Color(0xfffafafa),
     fontFamily: "Circular-Std",
     pageTransitionsTheme: const PageTransitionsTheme(
       builders: <TargetPlatform, PageTransitionsBuilder>{
         TargetPlatform.android: SharedAxisPageTransitionsBuilder(
-          transitionType: SharedAxisTransitionType.scaled,
-          fillColor: Colors.white
-        ),
+            transitionType: SharedAxisTransitionType.scaled,
+            fillColor: Colors.white),
       },
     ),
   );
