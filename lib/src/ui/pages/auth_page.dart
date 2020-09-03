@@ -34,13 +34,41 @@ class _AuthPageState extends State<AuthPage> {
         ],
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          SizedBox(height: 20),
+          Container(
+            margin: EdgeInsets.all(24),
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "Let's get you started!",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+              ),
+            ),
+          ),
+          SizedBox(height: 50),
           Padding(
-            padding: EdgeInsets.only(right: 25.0, left: 24.0),
+            padding: EdgeInsets.all(24),
             child: PhoneForm(),
-          )
+          ),
+          Container(
+            margin: EdgeInsets.all(24),
+            width: 100,
+            height: 45,
+            child: MaterialButton(
+              child: Text(
+                "NEXT",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+              onPressed: () {},
+              color: Theme.of(context).accentColor,
+            ),
+          ),
         ],
       ),
     );
