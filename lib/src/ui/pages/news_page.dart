@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:news_summarizer/src/ui/widgets/news_card.dart';
 import 'package:news_summarizer/src/utils/html_utils.dart';
+import 'package:news_summarizer/src/utils/news_feed_list.dart';
 import 'package:webfeed/domain/rss_feed.dart';
 import 'package:http/http.dart' as http;
+import 'package:webfeed/domain/rss_item.dart';
 
 class NewsPage extends StatefulWidget {
   @override
@@ -9,35 +13,48 @@ class NewsPage extends StatefulWidget {
 }
 
 class _NewsPageState extends State<NewsPage> {
-  static const String FEED_URL =
-      'https://timesofindia.indiatimes.com/rssfeeds/1221656.cms';
-  RssFeed _feed;
+  String _feedUrl = FeedUrlMap[NewsFeed.INDIA];
+  List<RssItem> _newsItems;
 
-  Future<RssFeed> loadFeed() async {
+  Future<List<RssItem>> loadFeed() async {
     try {
       final client = http.Client();
-      final response = await client.get(FEED_URL);
-      return RssFeed.parse(response.body);
+      final response = await client.get(_feedUrl);
+      var result = RssFeed.parse(response.body);
+      if (result == null || result.toString().isEmpty) {
+        return null;
+      }
+      setState(() {
+        _newsItems = result.items;
+      });
+      return result.items;
     } catch (e) {
-      //
+      Get.snackbar(
+        "Error",
+        "Something went wrong!",
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
     return null;
   }
 
-  load() async {
-    loadFeed().then((result) {
-      if (null == result || result.toString().isEmpty) {
-        print("Error");
-        return;
-      }
-      var imageUrl = getImageUrl(result.items[0].description);
-      print(imageUrl);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    load();
-    return Container();
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: FutureBuilder(
+        future: loadFeed(),
+        builder: (context, snapshot) => (snapshot.hasData)
+            ? ListView.builder(
+                itemBuilder: (context, index) => NewsCard(
+                  newsItem: _newsItems[index],
+                ),
+                itemCount: _newsItems.length,
+              )
+            : Center(child: CircularProgressIndicator()),
+      ),
+    );
   }
 }
