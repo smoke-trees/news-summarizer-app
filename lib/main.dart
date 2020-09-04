@@ -5,11 +5,13 @@ import 'package:news_summarizer/src/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider<ThemeProvider>(create: (_) => ThemeProvider()),
-      ChangeNotifierProvider<ApiProvider>(create: (_) => ApiProvider())
-    ],
-    child: App(),
-  ));
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ThemeProvider>(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider<ApiProvider>(create: (_) => ApiProvider())
+      ],
+      child: App(),
+    ),
+  );
 }

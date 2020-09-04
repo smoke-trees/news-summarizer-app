@@ -4,6 +4,8 @@ import 'package:news_summarizer/src/ui/widgets/search_form.dart';
 import 'package:provider/provider.dart';
 
 class HomeWidget extends StatelessWidget {
+  static const routename = "/home";
+
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: true);

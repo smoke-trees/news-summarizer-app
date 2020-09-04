@@ -29,7 +29,7 @@ class ThemeProvider with ChangeNotifier {
   );
 
   final lightTheme = ThemeData(
-    brightness: Brightness.dark,
+    brightness: Brightness.light,
     accentColor: Color(0xff3B916E),
     primaryColor: Colors.white,
     primaryColorDark: Colors.white,
