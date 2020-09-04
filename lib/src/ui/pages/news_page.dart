@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:news_summarizer/src/ui/widgets/news_card.dart';
-import 'package:news_summarizer/src/utils/html_utils.dart';
 import 'package:news_summarizer/src/utils/news_feed_list.dart';
 import 'package:webfeed/domain/rss_feed.dart';
 import 'package:http/http.dart' as http;
