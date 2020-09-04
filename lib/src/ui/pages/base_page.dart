@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:news_summarizer/src/providers/theme_provider.dart';
 import 'package:news_summarizer/src/ui/pages/home_page.dart';
+import 'package:news_summarizer/src/ui/pages/news_page.dart';
 import 'package:provider/provider.dart';
 
 class BasePage extends StatefulWidget {
@@ -17,7 +18,7 @@ class _BasePageState extends State<BasePage> {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
-    List<Widget> screens = [HomeWidget(), Container()];
+    List<Widget> screens = [HomeWidget(), NewsPage()];
 
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
