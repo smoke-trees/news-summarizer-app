@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:news_summarizer/src/providers/theme_provider.dart';
 import 'package:news_summarizer/src/ui/pages/home_page.dart';
-import 'package:news_summarizer/src/ui/pages/search_page.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 
@@ -67,6 +66,9 @@ class _AuthPageState extends State<AuthPage> {
       }
     };
 
+    setState(() {
+      _isLoading = true;
+    });
     await _auth.verifyPhoneNumber(
       phoneNumber: "+91" + _phoneController.text,
       timeout: Duration(seconds: 90),
@@ -86,6 +88,9 @@ class _AuthPageState extends State<AuthPage> {
       smsCode: smsCode,
     );
     try {
+      setState(() {
+        _isLoading = true;
+      });
       var authResult =
           await FirebaseAuth.instance.signInWithCredential(credential);
       User user = authResult.user;
@@ -260,22 +265,36 @@ class _AuthPageState extends State<AuthPage> {
                       width: 100,
                       height: 45,
                       child: MaterialButton(
-                        child: Text(
-                          "NEXT",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                        onPressed: () {
-                          if (_isOTPWidgetVisible) {
-                            signInPhoneNumber(_otpString);
-                          } else {
-                            if (_formkey.currentState.validate()) {
-                              initPhoneAuth(context);
-                            }
-                          }
-                        },
+                        child: (!_isLoading)
+                            ? Text(
+                                "NEXT",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              )
+                            : Container(
+                                height: 25,
+                                width: 25,
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.white,
+                                  ),
+                                ),
+                              ),
+                        disabledColor:
+                            Theme.of(context).accentColor.withOpacity(0.7),
+                        onPressed: (!_isLoading)
+                            ? () {
+                                if (_isOTPWidgetVisible) {
+                                  signInPhoneNumber(_otpString);
+                                } else {
+                                  if (_formkey.currentState.validate()) {
+                                    initPhoneAuth(context);
+                                  }
+                                }
+                              }
+                            : null,
                         color: Theme.of(context).accentColor,
                       ),
                     ),
