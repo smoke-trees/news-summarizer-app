@@ -14,8 +14,9 @@ class NewsPage extends StatefulWidget {
 class _NewsPageState extends State<NewsPage> {
   String _feedUrl = FeedUrlMap[NewsFeed.INDIA];
   List<RssItem> _newsItems;
+  Future<void> _getFeed;
 
-  Future<List<RssItem>> loadFeed() async {
+  Future<void> loadFeed() async {
     try {
       final client = http.Client();
       final response = await client.get(_feedUrl);
@@ -26,6 +27,7 @@ class _NewsPageState extends State<NewsPage> {
       setState(() {
         _newsItems = result.items;
       });
+      print(result.items.length);
       return result.items;
     } catch (e) {
       Get.snackbar(
@@ -40,17 +42,27 @@ class _NewsPageState extends State<NewsPage> {
   }
 
   @override
+  void initState() {
+    _getFeed = loadFeed();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: FutureBuilder(
-        future: loadFeed(),
+        future: _getFeed,
         builder: (context, snapshot) => (snapshot.hasData)
-            ? ListView.builder(
-                itemBuilder: (context, index) => NewsCard(
-                  newsItem: _newsItems[index],
+            ? RefreshIndicator(
+                onRefresh: loadFeed,
+                backgroundColor: Theme.of(context).cardColor,
+                child: ListView.builder(
+                  itemBuilder: (context, index) => NewsCard(
+                    newsItem: _newsItems[index],
+                  ),
+                  itemCount: _newsItems.length,
                 ),
-                itemCount: _newsItems.length,
               )
             : Center(child: CircularProgressIndicator()),
       ),
