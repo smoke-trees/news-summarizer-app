@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:news_summarizer/src/providers/theme_provider.dart';
 import 'package:news_summarizer/src/ui/pages/home_page.dart';
 import 'package:news_summarizer/src/ui/pages/search_page.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 
 class AuthPage extends StatefulWidget {
@@ -16,6 +17,7 @@ class _AuthPageState extends State<AuthPage> {
   final _formkey = GlobalKey<FormState>();
   bool _isLoading = false;
   bool _isOTPWidgetVisible = false;
+  String _otpString = "";
   final TextEditingController _phoneController = TextEditingController();
 
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
@@ -149,7 +151,50 @@ class _AuthPageState extends State<AuthPage> {
                   ),
                   Visibility(
                     visible: _isOTPWidgetVisible,
-                    child: Container(height: 50, width: 100, color: Colors.red),
+                    child: Column(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.symmetric(
+                            horizontal: 24,
+                            vertical: 24,
+                          ),
+                          alignment: Alignment.centerLeft,
+                          child: Text("Enter the OTP received"),
+                        ),
+                        SizedBox(height: 20),
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: 32),
+                          child: PinCodeTextField(
+                            animationType: AnimationType.slide,
+                            textInputType: TextInputType.number,
+                            length: 6,
+                            backgroundColor: Colors.transparent,
+                            textStyle: TextStyle(
+                              color: (themeProvider.theme ==
+                                      themeProvider.darkTheme)
+                                  ? Colors.white
+                                  : Colors.black,
+                              fontSize: 18,
+                            ),
+                            pinTheme: PinTheme(
+                              selectedColor: Theme.of(context).accentColor,
+                              activeColor: Theme.of(context).accentColor,
+                              inactiveColor: Theme.of(context).accentColor,
+                              fieldWidth: 40,
+                            ),
+                            onCompleted: (value) {
+                              setState(() {
+                                _otpString = value;
+                              });
+                            },
+                            onChanged: (value) {
+                              setState(() {});
+                            },
+                          ),
+                        ),
+                        SizedBox(height: 40),
+                      ],
+                    ),
                   ),
                   Container(
                     margin: EdgeInsets.all(24),
