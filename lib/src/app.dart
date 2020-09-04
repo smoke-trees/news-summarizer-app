@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:news_summarizer/src/providers/theme_provider.dart';
 import 'package:news_summarizer/src/ui/pages/auth_page.dart';
+import 'package:news_summarizer/src/ui/pages/base_page.dart';
 import 'package:news_summarizer/src/ui/pages/home_page.dart';
 import 'package:news_summarizer/src/utils/shared_prefs.dart';
 import 'package:provider/provider.dart';
@@ -21,11 +22,12 @@ class App extends StatelessWidget {
             (snapshot.connectionState == ConnectionState.done)
                 ? (snapshot.data == false || snapshot.data == null)
                     ? AuthPage()
-                    : HomeWidget()
+                    : BasePage()
                 : Container(),
       ),
       routes: {
         HomeWidget.routename: (context) => HomeWidget(),
+        BasePage.routename: (context) => BasePage(),
       },
     );
   }

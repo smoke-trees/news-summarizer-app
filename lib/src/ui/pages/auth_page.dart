@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:news_summarizer/src/providers/theme_provider.dart';
-import 'package:news_summarizer/src/ui/pages/home_page.dart';
+import 'package:news_summarizer/src/ui/pages/base_page.dart';
 import 'package:news_summarizer/src/utils/shared_prefs.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
@@ -57,7 +57,7 @@ class _AuthPageState extends State<AuthPage> {
         var authResult = await _auth.signInWithCredential(authCredential);
         if (authResult.user != null) {
           SharedPrefs.setIsUserLoggedIn(true);
-          Navigator.popAndPushNamed(context, HomeWidget.routename);
+          Navigator.popAndPushNamed(context, BasePage.routename);
         }
       } catch (e) {
         Get.snackbar(
@@ -102,7 +102,7 @@ class _AuthPageState extends State<AuthPage> {
         SharedPrefs.setIsUserLoggedIn(true);
         setState(() {
           _isLoading = false;
-          Navigator.popAndPushNamed(context, HomeWidget.routename);
+          Navigator.popAndPushNamed(context, BasePage.routename);
         });
       }
     } on PlatformException catch (err) {
@@ -157,14 +157,14 @@ class _AuthPageState extends State<AuthPage> {
               fontWeight: FontWeight.bold,
               color: Theme.of(context).accentColor),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.tonality),
-            onPressed: () {
-              themeProvider.toggleTheme();
-            },
-          ),
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: Icon(Icons.tonality),
+        //     onPressed: () {
+        //       themeProvider.toggleTheme();
+        //     },
+        //   ),
+        // ],
       ),
       body: FutureBuilder(
         future: _initialization,
