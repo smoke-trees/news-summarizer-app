@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:news_summarizer/src/providers/theme_provider.dart';
 import 'package:news_summarizer/src/ui/pages/auth_page.dart';
 import 'package:news_summarizer/src/ui/pages/home_page.dart';
+import 'package:news_summarizer/src/utils/shared_prefs.dart';
 import 'package:provider/provider.dart';
 
 class App extends StatelessWidget {
@@ -14,7 +15,15 @@ class App extends StatelessWidget {
       title: 'News Summarizer',
       theme: themeProvider.theme,
       debugShowCheckedModeBanner: false,
-      home: AuthPage(),
+      home: FutureBuilder(
+        future: SharedPrefs.getIsUserLoggedIn(),
+        builder: (context, snapshot) =>
+            (snapshot.connectionState == ConnectionState.done)
+                ? (snapshot.data == false || snapshot.data == null)
+                    ? AuthPage()
+                    : HomeWidget()
+                : Container(),
+      ),
       routes: {
         HomeWidget.routename: (context) => HomeWidget(),
       },

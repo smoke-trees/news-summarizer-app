@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:news_summarizer/src/providers/theme_provider.dart';
 import 'package:news_summarizer/src/ui/pages/home_page.dart';
+import 'package:news_summarizer/src/utils/shared_prefs.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 
@@ -53,8 +54,11 @@ class _AuthPageState extends State<AuthPage> {
     final PhoneVerificationCompleted verificationCompleted =
         (AuthCredential authCredential) async {
       try {
-        await _auth.signInWithCredential(authCredential);
-        Navigator.popAndPushNamed(context, HomeWidget.routename);
+        var authResult = await _auth.signInWithCredential(authCredential);
+        if (authResult.user != null) {
+          SharedPrefs.setIsUserLoggedIn(true);
+          Navigator.popAndPushNamed(context, HomeWidget.routename);
+        }
       } catch (e) {
         Get.snackbar(
           "Error",
@@ -95,6 +99,7 @@ class _AuthPageState extends State<AuthPage> {
           await FirebaseAuth.instance.signInWithCredential(credential);
       User user = authResult.user;
       if (user != null) {
+        SharedPrefs.setIsUserLoggedIn(true);
         setState(() {
           _isLoading = false;
           Navigator.popAndPushNamed(context, HomeWidget.routename);
