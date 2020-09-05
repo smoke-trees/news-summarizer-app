@@ -45,6 +45,11 @@ enum NewsFeed {
   VARANASI,
   THANE,
   THIRUVANANTHAPURAM,
+  USA,
+  SOUTH_ASIA,
+  UK,
+  EUROPE,
+  CHINA,
 }
 
 const Map<NewsFeed, String> FeedUrlMap = {
@@ -110,4 +115,10 @@ const Map<NewsFeed, String> FeedUrlMap = {
   NewsFeed.THANE: "http://timesofindia.indiatimes.com/rssfeeds/3831863.cms",
   NewsFeed.THIRUVANANTHAPURAM:
       "http://timesofindia.indiatimes.com/rssfeeds/878156304.cms",
+  NewsFeed.USA: "http://timesofindia.indiatimes.com/rssfeeds/30359486.cms",
+  NewsFeed.SOUTH_ASIA:
+      "http://timesofindia.indiatimes.com/rssfeeds/3907412.cms",
+  NewsFeed.UK: "http://timesofindia.indiatimes.com/rssfeeds/2177298.cms",
+  NewsFeed.EUROPE: "http://timesofindia.indiatimes.com/rssfeeds/1898274.cms",
+  NewsFeed.CHINA: "http://timesofindia.indiatimes.com/rssfeeds/1898184.cms",
 };
