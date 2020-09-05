@@ -50,6 +50,8 @@ enum NewsFeed {
   UK,
   EUROPE,
   CHINA,
+  MIDDLE_EAST,
+  REST_OF_WORLD,
 }
 
 const Map<NewsFeed, String> FeedUrlMap = {
@@ -121,4 +123,8 @@ const Map<NewsFeed, String> FeedUrlMap = {
   NewsFeed.UK: "http://timesofindia.indiatimes.com/rssfeeds/2177298.cms",
   NewsFeed.EUROPE: "http://timesofindia.indiatimes.com/rssfeeds/1898274.cms",
   NewsFeed.CHINA: "http://timesofindia.indiatimes.com/rssfeeds/1898184.cms",
+  NewsFeed.MIDDLE_EAST:
+      "http://timesofindia.indiatimes.com/rssfeeds/1898272.cms",
+  NewsFeed.REST_OF_WORLD:
+      "http://timesofindia.indiatimes.com/rssfeeds/671314.cms",
 };
