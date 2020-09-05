@@ -9,11 +9,11 @@ class NewsContainerPage extends StatefulWidget {
 
 class _NewsContainerPageState extends State<NewsContainerPage> {
   List<NewsFeed> _newsFeeds = [
-    NewsFeed.GUWAHATI,
-    NewsFeed.HUBLI,
-    NewsFeed.KANPUR,
-    NewsFeed.KOLKATA,
-    NewsFeed.LUDHIANA,
+    NewsFeed.MANGALORE,
+    NewsFeed.MYSORE,
+    NewsFeed.NOIDA,
+    NewsFeed.PUNE,
+    NewsFeed.GOA,
   ];
 
   @override
