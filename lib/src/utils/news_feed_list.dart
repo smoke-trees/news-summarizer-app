@@ -23,6 +23,11 @@ enum NewsFeed {
   BHUBANESHWAR,
   COIMBATORE,
   GURGAON,
+  GUWAHATI,
+  HUBLI,
+  KANPUR,
+  KOLKATA,
+  LUDHIANA,
 }
 
 const Map<NewsFeed, String> FeedUrlMap = {
@@ -62,4 +67,10 @@ const Map<NewsFeed, String> FeedUrlMap = {
   NewsFeed.COIMBATORE:
       "http://timesofindia.indiatimes.com/rssfeeds/7503091.cms",
   NewsFeed.GURGAON: "http://timesofindia.indiatimes.com/rssfeeds/6547154.cms",
+  NewsFeed.GUWAHATI: "http://timesofindia.indiatimes.com/rssfeeds/4118215.cms",
+  NewsFeed.HUBLI: "http://timesofindia.indiatimes.com/rssfeeds/3942695.cms",
+  NewsFeed.KANPUR: "http://timesofindia.indiatimes.com/rssfeeds/3947067.cms",
+  NewsFeed.KOLKATA:
+      "http://timesofindia.indiatimes.com/rssfeeds/-2128830821.cms",
+  NewsFeed.LUDHIANA: "http://timesofindia.indiatimes.com/rssfeeds/3947051.cms",
 };
