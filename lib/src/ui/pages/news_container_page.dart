@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_summarizer/src/ui/pages/news_page.dart';
+import 'package:news_summarizer/src/utils/news_feed_list.dart';
 
 class NewsContainerPage extends StatefulWidget {
   @override
@@ -7,10 +8,16 @@ class NewsContainerPage extends StatefulWidget {
 }
 
 class _NewsContainerPageState extends State<NewsContainerPage> {
+  List<NewsFeed> _newsFeeds = [
+    NewsFeed.MOST_RECENT_STORIES,
+    NewsFeed.INDIA,
+    NewsFeed.WORLD,
+  ];
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: _newsFeeds.length,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
@@ -24,20 +31,24 @@ class _NewsContainerPageState extends State<NewsContainerPage> {
             ),
           ),
           bottom: TabBar(
-            tabs: [
-              Tab(text: "MOST RECENT"),
-              Tab(text: "INDIA"),
-              Tab(text: "WORLD"),
-            ],
+            tabs: List.generate(
+              _newsFeeds.length,
+              (index) => Tab(
+                text: _newsFeeds[index]
+                    .toString()
+                    .split('.')
+                    .last
+                    .replaceAll("_", " "),
+              ),
+            ),
             isScrollable: true,
           ),
         ),
         body: TabBarView(
-          children: [
-            NewsPage(),
-            NewsPage(),
-            NewsPage(),
-          ],
+          children: List.generate(
+            _newsFeeds.length,
+            (index) => NewsPage(_newsFeeds[index]),
+          ),
         ),
       ),
     );

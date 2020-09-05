@@ -7,14 +7,25 @@ import 'package:http/http.dart' as http;
 import 'package:webfeed/domain/rss_item.dart';
 
 class NewsPage extends StatefulWidget {
+  final NewsFeed newsFeed;
+
+  NewsPage(this.newsFeed);
+
   @override
   _NewsPageState createState() => _NewsPageState();
 }
 
 class _NewsPageState extends State<NewsPage> {
-  String _feedUrl = FeedUrlMap[NewsFeed.INDIA];
+  String _feedUrl;
   List<RssItem> _newsItems;
   Future<void> _getFeed;
+
+  @override
+  void initState() {
+    _feedUrl = FeedUrlMap[widget.newsFeed];
+    _getFeed = loadFeed();
+    super.initState();
+  }
 
   Future<void> loadFeed() async {
     try {
@@ -45,12 +56,6 @@ class _NewsPageState extends State<NewsPage> {
       );
     }
     return null;
-  }
-
-  @override
-  void initState() {
-    _getFeed = loadFeed();
-    super.initState();
   }
 
   @override
