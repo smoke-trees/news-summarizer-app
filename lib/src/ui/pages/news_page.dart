@@ -22,7 +22,13 @@ class _NewsPageState extends State<NewsPage> {
       final response = await client.get(_feedUrl);
       var result = RssFeed.parse(response.body);
       if (result == null || result.toString().isEmpty) {
-        return null;
+        Get.snackbar(
+          "Error",
+          "Looks like nothing here in the feed!",
+          backgroundColor: Colors.orange,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+        );
       }
       setState(() {
         _newsItems = result.items;

@@ -7,6 +7,24 @@ class HomeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          'News Summarizer',
+          style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).accentColor),
+        ),
+        // actions: <Widget>[
+        //   IconButton(
+        //     icon: Icon(Icons.tonality),
+        //     onPressed: () {
+        //       themeProvider.toggleTheme();
+        //     },
+        //   ),
+        // ],
+      ),
       backgroundColor: Theme.of(context).backgroundColor,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
