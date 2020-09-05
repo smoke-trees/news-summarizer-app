@@ -33,6 +33,11 @@ enum NewsFeed {
   NOIDA,
   PUNE,
   GOA,
+  CHANDIGARH,
+  LUCKNOW,
+  PATNA,
+  JAIPUR,
+  NAGPUR,
 }
 
 const Map<NewsFeed, String> FeedUrlMap = {
@@ -83,4 +88,11 @@ const Map<NewsFeed, String> FeedUrlMap = {
   NewsFeed.NOIDA: "http://timesofindia.indiatimes.com/rssfeeds/8021716.cms",
   NewsFeed.PUNE: "http://timesofindia.indiatimes.com/rssfeeds/-2128821991.cms",
   NewsFeed.GOA: "http://timesofindia.indiatimes.com/rssfeeds/3012535.cms",
+  NewsFeed.CHANDIGARH:
+      "http://timesofindia.indiatimes.com/rssfeeds/-2128816762.cms",
+  NewsFeed.LUCKNOW:
+      "http://timesofindia.indiatimes.com/rssfeeds/-2128819658.cms",
+  NewsFeed.PATNA: "http://timesofindia.indiatimes.com/rssfeeds/-2128817995.cms",
+  NewsFeed.JAIPUR: "http://timesofindia.indiatimes.com/rssfeeds/3012544.cms",
+  NewsFeed.NAGPUR: "http://timesofindia.indiatimes.com/rssfeeds/442002.cms",
 };
