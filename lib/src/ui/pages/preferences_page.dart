@@ -15,14 +15,26 @@ class PreferencesPage extends StatefulWidget {
 }
 
 class _PreferencesPageState extends State<PreferencesPage> {
-  List<NewsFeed> popularChosen = [];
-  List<NewsFeed> metroChosen = [];
-  List<NewsFeed> indianCitiesChosen = [];
-  List<NewsFeed> internationalChosen = [];
+  var _newsBox = Hive.box(NEWS_PREFS_BOX);
+
+  var popularChosen = [];
+  var metroChosen = [];
+  var indianCitiesChosen = [];
+  var internationalChosen = [];
+
+  @override
+  void initState() {
+    super.initState();
+    popularChosen = _newsBox.get(NEWS_POPULAR);
+    metroChosen = _newsBox.get(NEWS_METRO);
+    indianCitiesChosen = _newsBox.get(NEWS_OTHER);
+    internationalChosen = _newsBox.get(NEWS_INT);
+  }
 
   void finishSelection() async {
     print("finishSelection called");
     var finList = [];
+    print(popularChosen);
     finList.addAll(popularChosen);
     finList.addAll(metroChosen);
     finList.addAll(indianCitiesChosen);
@@ -36,8 +48,11 @@ class _PreferencesPageState extends State<PreferencesPage> {
         snackPosition: SnackPosition.BOTTOM,
       );
     } else {
-      var newsBox = Hive.box(NEWS_PREFS_BOX);
-      newsBox.put(NEWS_PREFS, finList);
+      _newsBox.put(NEWS_PREFS, finList);
+      _newsBox.put(NEWS_POPULAR, popularChosen);
+      _newsBox.put(NEWS_INT, internationalChosen);
+      _newsBox.put(NEWS_METRO, metroChosen);
+      _newsBox.put(NEWS_OTHER, indianCitiesChosen);
       SharedPrefs.setIsUserLoggedIn(true);
       Navigator.pushNamedAndRemoveUntil(
         context,
@@ -119,7 +134,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
                       ),
                     ),
                     children: [
-                      ChipsChoice<NewsFeed>.multiple(
+                      ChipsChoice<dynamic>.multiple(
                         itemConfig: ChipsChoiceItemConfig(
                           selectedColor: Theme.of(context).accentColor,
                           unselectedColor: Theme.of(context).primaryColor,
@@ -170,7 +185,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
                       ),
                     ),
                     children: [
-                      ChipsChoice<NewsFeed>.multiple(
+                      ChipsChoice<dynamic>.multiple(
                         itemConfig: ChipsChoiceItemConfig(
                           selectedColor: Theme.of(context).accentColor,
                           unselectedColor: Theme.of(context).primaryColor,
@@ -221,7 +236,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
                       ),
                     ),
                     children: [
-                      ChipsChoice<NewsFeed>.multiple(
+                      ChipsChoice<dynamic>.multiple(
                         itemConfig: ChipsChoiceItemConfig(
                           selectedColor: Theme.of(context).accentColor,
                           unselectedColor: Theme.of(context).primaryColor,
@@ -272,7 +287,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
                       ),
                     ),
                     children: [
-                      ChipsChoice<NewsFeed>.multiple(
+                      ChipsChoice<dynamic>.multiple(
                         itemConfig: ChipsChoiceItemConfig(
                           selectedColor: Theme.of(context).accentColor,
                           unselectedColor: Theme.of(context).primaryColor,

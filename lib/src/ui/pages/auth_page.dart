@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:news_summarizer/src/providers/theme_provider.dart';
 import 'package:news_summarizer/src/ui/pages/preferences_page.dart';
-import 'package:news_summarizer/src/utils/shared_prefs.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 
