@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:news_summarizer/src/ui/pages/home_page.dart';
 import 'package:news_summarizer/src/ui/pages/news_container_page.dart';
+import 'package:news_summarizer/src/ui/pages/settings_page.dart';
 
 class BasePage extends StatefulWidget {
   static const routename = "/base";
@@ -14,7 +15,7 @@ class _BasePageState extends State<BasePage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> screens = [HomeWidget(), NewsContainerPage()];
+    List<Widget> screens = [HomeWidget(), NewsContainerPage(), SettingPage()];
 
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
@@ -35,6 +36,10 @@ class _BasePageState extends State<BasePage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.featured_play_list),
             title: Text('News'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            title: Text('Settings'),
           ),
         ],
       ),

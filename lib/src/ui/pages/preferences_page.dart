@@ -39,7 +39,11 @@ class _PreferencesPageState extends State<PreferencesPage> {
       var newsBox = Hive.box(NEWS_PREFS_BOX);
       newsBox.put(NEWS_PREFS, finList);
       SharedPrefs.setIsUserLoggedIn(true);
-      Navigator.popAndPushNamed(context, BasePage.routename);
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        BasePage.routename,
+        (route) => false,
+      );
     }
   }
 
