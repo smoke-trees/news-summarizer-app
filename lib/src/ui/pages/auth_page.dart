@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:news_summarizer/src/providers/theme_provider.dart';
-import 'package:news_summarizer/src/ui/pages/base_page.dart';
 import 'package:news_summarizer/src/ui/pages/preferences_page.dart';
 import 'package:news_summarizer/src/utils/shared_prefs.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -57,7 +56,6 @@ class _AuthPageState extends State<AuthPage> {
       try {
         var authResult = await _auth.signInWithCredential(authCredential);
         if (authResult.user != null) {
-          SharedPrefs.setIsUserLoggedIn(true);
           Navigator.popAndPushNamed(context, PreferencesPage.routename);
         }
       } catch (e) {
@@ -100,7 +98,6 @@ class _AuthPageState extends State<AuthPage> {
           await FirebaseAuth.instance.signInWithCredential(credential);
       User user = authResult.user;
       if (user != null) {
-        SharedPrefs.setIsUserLoggedIn(true);
         setState(() {
           _isLoading = false;
           Navigator.popAndPushNamed(context, PreferencesPage.routename);

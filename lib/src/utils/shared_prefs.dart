@@ -12,4 +12,16 @@ class SharedPrefs {
     final key = 'isUserLoggedIn';
     prefs.setBool(key, value);
   }
+
+  static Future<bool> getHasUserSelectedPrefs() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final key = 'hasUserSelectedPrefs';
+    return prefs.getBool(key);
+  }
+
+  static void setHasUserSelectedPrefs(bool value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final key = 'hasUserSelectedPrefs';
+    prefs.setBool(key, value);
+  }
 }

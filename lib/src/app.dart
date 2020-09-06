@@ -23,7 +23,7 @@ class App extends StatelessWidget {
             (snapshot.connectionState == ConnectionState.done)
                 ? (snapshot.data == false || snapshot.data == null)
                     ? AuthPage()
-                    : PreferencesPage()
+                    : BasePage()
                 : Container(),
       ),
       routes: {

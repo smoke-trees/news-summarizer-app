@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:news_summarizer/src/ui/pages/base_page.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
 import 'package:news_summarizer/src/utils/news_feed_list.dart';
+import 'package:news_summarizer/src/utils/shared_prefs.dart';
 
 class PreferencesPage extends StatefulWidget {
   static const routename = "/preferences";
@@ -37,6 +38,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
     } else {
       var newsBox = Hive.box(NEWS_PREFS_BOX);
       newsBox.put(NEWS_PREFS, finList);
+      SharedPrefs.setIsUserLoggedIn(true);
       Navigator.popAndPushNamed(context, BasePage.routename);
     }
   }
@@ -78,6 +80,17 @@ class _PreferencesPageState extends State<PreferencesPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(height: 24),
+              Container(
+                alignment: Alignment.centerLeft,
+                margin: EdgeInsets.all(16),
+                child: Text(
+                  "Pick the categories that interest you!",
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+              SizedBox(height: 12),
               /*
 
               Popular Card
