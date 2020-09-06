@@ -211,6 +211,26 @@ class _AuthPageState extends State<AuthPage> {
                                     Icon(Icons.phone, color: Color(0xff3B916E)),
                               ),
                             ),
+                            SizedBox(height: 8),
+                            Visibility(
+                              visible: _isOTPWidgetVisible,
+                              child: InkWell(
+                                child: Container(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    "Edit phone number",
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    _isOTPWidgetVisible = false;
+                                  });
+                                },
+                              ),
+                            ),
                           ],
                         ),
                       ),
