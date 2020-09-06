@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:news_summarizer/src/ui/pages/news_page.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
-import 'package:news_summarizer/src/utils/news_feed_list.dart';
 
 class NewsContainerPage extends StatefulWidget {
   @override
@@ -10,13 +9,17 @@ class NewsContainerPage extends StatefulWidget {
 }
 
 class _NewsContainerPageState extends State<NewsContainerPage> {
-  List<NewsFeed> _newsFeeds;
+  var _newsFeeds;
 
   @override
   void initState() {
     super.initState();
-    var box = Hive.box(NEWS_PREFS_BOX);
-    _newsFeeds = box.get(NEWS_PREFS);
+    _getNewsFromHive();
+  }
+
+  _getNewsFromHive() async {
+    var newsBox = Hive.box(NEWS_PREFS_BOX);
+    _newsFeeds = newsBox.get(NEWS_PREFS);
   }
 
   @override

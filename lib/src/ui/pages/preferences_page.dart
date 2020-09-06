@@ -35,8 +35,8 @@ class _PreferencesPageState extends State<PreferencesPage> {
         snackPosition: SnackPosition.BOTTOM,
       );
     } else {
-      var box = await Hive.openBox(NEWS_PREFS_BOX);
-      box.put(NEWS_PREFS, finList);
+      var newsBox = Hive.box(NEWS_PREFS_BOX);
+      newsBox.put(NEWS_PREFS, finList);
       Navigator.popAndPushNamed(context, BasePage.routename);
     }
   }

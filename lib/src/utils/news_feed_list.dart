@@ -1,56 +1,114 @@
+import 'package:hive/hive.dart';
+
+part 'news_feed_list.g.dart';
+
+@HiveType(typeId: 1)
 enum NewsFeed {
+  @HiveField(1)
   INDIA,
+  @HiveField(2)
   WORLD,
+  @HiveField(3)
   NRI,
+  @HiveField(4)
   BUSINESS,
+  @HiveField(5)
   CRICKET,
+  @HiveField(6)
   SPORTS,
+  @HiveField(7)
   SCIENCE,
+  @HiveField(8)
   ENVIRONMENT,
+  @HiveField(9)
   TECH,
+  @HiveField(10)
   EDUCATION,
+  @HiveField(11)
   ENTERTAINMENT,
+  @HiveField(12)
   LIFESTYLE,
+  @HiveField(13)
   ASTROLOGY,
+  @HiveField(14)
   AUTO,
+  @HiveField(15)
   MUMBAI,
+  @HiveField(16)
   DELHI,
+  @HiveField(17)
   BANGALORE,
+  @HiveField(18)
   HYDERABAD,
+  @HiveField(19)
   CHENNAI,
+  @HiveField(20)
   AHEMDABAD,
+  @HiveField(21)
   ALLAHBAD,
+  @HiveField(22)
   BHUBANESHWAR,
+  @HiveField(23)
   COIMBATORE,
+  @HiveField(24)
   GURGAON,
+  @HiveField(25)
   GUWAHATI,
+  @HiveField(26)
   HUBLI,
+  @HiveField(27)
   KANPUR,
+  @HiveField(28)
   KOLKATA,
+  @HiveField(29)
   LUDHIANA,
+  @HiveField(30)
   MANGALORE,
+  @HiveField(31)
   MYSORE,
+  @HiveField(32)
   NOIDA,
+  @HiveField(33)
   PUNE,
+  @HiveField(34)
   GOA,
+  @HiveField(35)
   CHANDIGARH,
+  @HiveField(36)
   LUCKNOW,
+  @HiveField(37)
   PATNA,
+  @HiveField(38)
   JAIPUR,
+  @HiveField(39)
   NAGPUR,
+  @HiveField(40)
   RAJKOT,
+  @HiveField(41)
   RANCHI,
+  @HiveField(42)
   SURAT,
+  @HiveField(43)
   VADODARA,
+  @HiveField(44)
   VARANASI,
+  @HiveField(45)
   THANE,
+  @HiveField(46)
   THIRUVANANTHAPURAM,
+  @HiveField(47)
   USA,
+  @HiveField(48)
   SOUTH_ASIA,
+  @HiveField(49)
   UK,
+  @HiveField(50)
   EUROPE,
+  @HiveField(51)
   CHINA,
+  @HiveField(52)
   MIDDLE_EAST,
+  @HiveField(53)
   REST_OF_WORLD,
 }
 
