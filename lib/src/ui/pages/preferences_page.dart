@@ -34,11 +34,18 @@ class _PreferencesPageState extends State<PreferencesPage> {
   void finishSelection() async {
     print("finishSelection called");
     var finList = [];
-    print(popularChosen);
-    finList.addAll(popularChosen);
-    finList.addAll(metroChosen);
-    finList.addAll(indianCitiesChosen);
-    finList.addAll(internationalChosen);
+    if (!popularChosen.isNullOrBlank) {
+      finList.addAll(popularChosen);
+    }
+    if (!metroChosen.isNullOrBlank) {
+      finList.addAll(metroChosen);
+    }
+    if (!indianCitiesChosen.isNullOrBlank) {
+      finList.addAll(indianCitiesChosen);
+    }
+    if (!internationalChosen.isNullOrBlank) {
+      finList.addAll(internationalChosen);
+    }
     if (finList.length < 3) {
       Get.snackbar(
         "Warning!",
