@@ -129,7 +129,6 @@ class _PreferencesPageState extends State<PreferencesPage> {
                   child: ExpansionTile(
                     initiallyExpanded: true,
                     title: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 16),
                       child: Text(
                         "Popular",
                         style: TextStyle(
@@ -180,7 +179,6 @@ class _PreferencesPageState extends State<PreferencesPage> {
                   color: Theme.of(context).cardColor,
                   child: ExpansionTile(
                     title: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 16),
                       child: Text(
                         "International",
                         style: TextStyle(
@@ -231,7 +229,6 @@ class _PreferencesPageState extends State<PreferencesPage> {
                   color: Theme.of(context).cardColor,
                   child: ExpansionTile(
                     title: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 16),
                       child: Text(
                         "Metro Cities",
                         style: TextStyle(
@@ -282,7 +279,6 @@ class _PreferencesPageState extends State<PreferencesPage> {
                   color: Theme.of(context).cardColor,
                   child: ExpansionTile(
                     title: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 16),
                       child: Text(
                         "Other Cities",
                         style: TextStyle(
