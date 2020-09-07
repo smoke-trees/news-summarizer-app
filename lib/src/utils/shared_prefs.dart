@@ -24,4 +24,16 @@ class SharedPrefs {
     final key = 'hasUserSelectedPrefs';
     prefs.setBool(key, value);
   }
+
+  static Future<bool> getIsDarkMode() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final key = 'isDarkMode';
+    return prefs.getBool(key);
+  }
+
+  static void setIsDarkMode(bool value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final key = 'isDarkMode';
+    prefs.setBool(key, value);
+  }
 }

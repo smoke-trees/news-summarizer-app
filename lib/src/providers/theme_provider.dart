@@ -1,11 +1,27 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:news_summarizer/src/utils/shared_prefs.dart';
 
 class ThemeProvider with ChangeNotifier {
   ThemeData theme;
 
   ThemeProvider() {
-    this.theme = lightTheme;
+    this.theme = darkTheme;
+    getUserTheme();
+  }
+
+  getUserTheme() async {
+    var _isDarkMode = await SharedPrefs.getIsDarkMode();
+    if (_isDarkMode != null) {
+      if (_isDarkMode) {
+        theme = darkTheme;
+      } else {
+        theme = lightTheme;
+      }
+    } else {
+      theme = darkTheme;
+    }
+    notifyListeners();
   }
 
   final darkTheme = ThemeData(
@@ -50,11 +66,13 @@ class ThemeProvider with ChangeNotifier {
 
   void setDarkTheme() {
     theme = darkTheme;
+    SharedPrefs.setIsDarkMode(true);
     notifyListeners();
   }
 
   void setLightTheme() {
     theme = lightTheme;
+    SharedPrefs.setIsDarkMode(false);
     notifyListeners();
   }
 

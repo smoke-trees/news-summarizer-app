@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:news_summarizer/src/ui/widgets/news_card.dart';
@@ -47,15 +49,15 @@ class _NewsPageState extends State<NewsPage>
       });
       print(result.items.length);
       return result.items;
-    } catch (e) {
+    } on SocketException {
       Get.snackbar(
         "Error",
-        "Something went wrong!",
+        "No Internet!",
         backgroundColor: Colors.red,
         colorText: Colors.white,
         snackPosition: SnackPosition.BOTTOM,
       );
-    }
+    } catch (e) {}
     return null;
   }
 
