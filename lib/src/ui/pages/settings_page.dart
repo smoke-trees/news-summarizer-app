@@ -84,7 +84,7 @@ class SettingPage extends StatelessWidget {
             ),
           ),
           Container(
-            margin: EdgeInsets.all(16),
+            margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: InkWell(
               child: Card(
                 child: Container(

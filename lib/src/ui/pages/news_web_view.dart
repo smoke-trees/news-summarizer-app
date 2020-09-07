@@ -11,9 +11,8 @@ class NewsWebView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
-        centerTitle: true,
         title: Text(
-          'News Summarizer',
+          'News',
           style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,
