@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_summarizer/src/models/summary.dart';
 import 'package:news_summarizer/src/providers/api_provider.dart';
-import 'package:news_summarizer/src/providers/theme_provider.dart';
 import 'package:news_summarizer/src/ui/widgets/news_list.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +12,6 @@ class SearchPage extends StatefulWidget {
 class SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
     final apiProvider = Provider.of<ApiProvider>(context);
 
     return Scaffold(
@@ -25,14 +23,6 @@ class SearchPageState extends State<SearchPage> {
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).accentColor)),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.tonality),
-            onPressed: () {
-              themeProvider.toggleTheme();
-            },
-          ),
-        ],
       ),
       body: Center(
         child: FutureBuilder<List<SummaryResponse>>(

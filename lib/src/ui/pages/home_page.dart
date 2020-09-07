@@ -16,14 +16,6 @@ class HomeWidget extends StatelessWidget {
               fontWeight: FontWeight.bold,
               color: Theme.of(context).accentColor),
         ),
-        // actions: <Widget>[
-        //   IconButton(
-        //     icon: Icon(Icons.tonality),
-        //     onPressed: () {
-        //       themeProvider.toggleTheme();
-        //     },
-        //   ),
-        // ],
       ),
       backgroundColor: Theme.of(context).backgroundColor,
       body: Column(
