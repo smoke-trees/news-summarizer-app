@@ -6,7 +6,7 @@ class ApiProvider with ChangeNotifier {
   SummaryResponse response;
   String searchTerm;
   final _dio = Dio(BaseOptions(
-      baseUrl: 'https://54d82a69c608.ngrok.io/',
+      baseUrl: 'https://summary.smoketrees.in/',
       connectTimeout: 60000,
       receiveTimeout: 60000));
 

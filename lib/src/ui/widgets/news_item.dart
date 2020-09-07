@@ -14,7 +14,7 @@ class NewsItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            title,
+            (title != null) ? title : "No Title",
             style: TextStyle(
               color: Colors.greenAccent,
               fontWeight: FontWeight.bold,
@@ -22,7 +22,7 @@ class NewsItem extends StatelessWidget {
             ),
           ),
           Text(
-            body,
+            (body != null) ? body : "",
             style: TextStyle(
               fontSize: 16,
             ),
