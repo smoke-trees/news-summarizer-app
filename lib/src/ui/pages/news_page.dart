@@ -15,7 +15,8 @@ class NewsPage extends StatefulWidget {
   _NewsPageState createState() => _NewsPageState();
 }
 
-class _NewsPageState extends State<NewsPage> {
+class _NewsPageState extends State<NewsPage>
+    with AutomaticKeepAliveClientMixin<NewsPage> {
   String _feedUrl;
   List<RssItem> _newsItems;
   Future<void> _getFeed;
@@ -60,6 +61,7 @@ class _NewsPageState extends State<NewsPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: FutureBuilder(
@@ -79,4 +81,7 @@ class _NewsPageState extends State<NewsPage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

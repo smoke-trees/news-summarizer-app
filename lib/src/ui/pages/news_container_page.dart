@@ -8,7 +8,8 @@ class NewsContainerPage extends StatefulWidget {
   _NewsContainerPageState createState() => _NewsContainerPageState();
 }
 
-class _NewsContainerPageState extends State<NewsContainerPage> {
+class _NewsContainerPageState extends State<NewsContainerPage>
+    with AutomaticKeepAliveClientMixin<NewsContainerPage> {
   var _newsFeeds;
 
   @override
@@ -24,6 +25,7 @@ class _NewsContainerPageState extends State<NewsContainerPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return DefaultTabController(
       length: _newsFeeds.length,
       child: Scaffold(
@@ -61,4 +63,7 @@ class _NewsContainerPageState extends State<NewsContainerPage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
