@@ -1,36 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:news_summarizer/src/providers/theme_provider.dart';
 import 'package:news_summarizer/src/ui/pages/preferences_page.dart';
-import 'package:provider/provider.dart';
+import 'package:news_summarizer/src/ui/widgets/theme_dialog.dart';
 
 class SettingPage extends StatelessWidget {
   Future<void> _showThemeDialog(BuildContext context) async {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
-
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: true,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('AlertDialog Title'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text('This is a demo alert dialog.'),
-                Text('Would you like to approve of this message?'),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Approve'),
-              onPressed: () {
-                themeProvider.toggleTheme();
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
+        return ThemeDialog();
       },
     );
   }
