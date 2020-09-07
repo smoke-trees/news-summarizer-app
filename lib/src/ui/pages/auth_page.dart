@@ -144,7 +144,7 @@ class _AuthPageState extends State<AuthPage> {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         centerTitle: true,
         title: Text(

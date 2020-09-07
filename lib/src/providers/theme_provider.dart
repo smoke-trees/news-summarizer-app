@@ -5,7 +5,7 @@ class ThemeProvider with ChangeNotifier {
   ThemeData theme;
 
   ThemeProvider() {
-    this.theme = darkTheme;
+    this.theme = lightTheme;
   }
 
   final darkTheme = ThemeData(
@@ -30,23 +30,12 @@ class ThemeProvider with ChangeNotifier {
 
   final lightTheme = ThemeData(
     brightness: Brightness.light,
-    accentColor: Color(0xff3B916E),
-    primaryColor: Colors.white,
-    primaryColorDark: Colors.white,
+    accentColor: Color(0xff69F0AE),
+    primaryColor: Color(0xff009688),
+    primaryColorDark: Color(0xff009688),
     backgroundColor: Colors.white,
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(),
-      disabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Color(0xff3B916E)),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Color(0xff3B916E)),
-      ),
-      labelStyle: TextStyle(color: Colors.grey),
-      hintStyle: TextStyle(color: Colors.grey),
-      focusColor: Color(0xff3B916E),
-      helperStyle: TextStyle(color: Colors.grey),
-      fillColor: Color(0xff3B916E),
     ),
     cardColor: Color(0xfffafafa),
     fontFamily: "Circular-Std",

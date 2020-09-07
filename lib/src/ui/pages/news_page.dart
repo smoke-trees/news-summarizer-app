@@ -69,7 +69,7 @@ class _NewsPageState extends State<NewsPage>
         builder: (context, snapshot) => (snapshot.hasData)
             ? RefreshIndicator(
                 onRefresh: loadFeed,
-                backgroundColor: Theme.of(context).cardColor,
+                backgroundColor: Theme.of(context).primaryColor,
                 child: ListView.builder(
                   itemBuilder: (context, index) => NewsCard(
                     newsItem: _newsItems[index],
@@ -77,7 +77,9 @@ class _NewsPageState extends State<NewsPage>
                   itemCount: _newsItems.length,
                 ),
               )
-            : Center(child: CircularProgressIndicator()),
+            : Center(
+                child: Text("Fetching latest news for you..."),
+              ),
       ),
     );
   }

@@ -1,7 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:news_summarizer/src/providers/theme_provider.dart';
 import 'package:news_summarizer/src/ui/pages/preferences_page.dart';
+import 'package:provider/provider.dart';
 
 class SettingPage extends StatelessWidget {
+  Future<void> _showThemeDialog(BuildContext context) async {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('AlertDialog Title'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('This is a demo alert dialog.'),
+                Text('Would you like to approve of this message?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Approve'),
+              onPressed: () {
+                themeProvider.toggleTheme();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,30 +54,38 @@ class SettingPage extends StatelessWidget {
         children: [
           Container(
             margin: EdgeInsets.all(16),
-            child: Card(
-              child: Container(
-                margin: EdgeInsets.all(32),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        "Change Theme",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+            child: InkWell(
+              child: Card(
+                child: Container(
+                  margin: EdgeInsets.all(32),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          "Change Theme",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                    Icon(Icons.navigate_next),
-                  ],
+                      Icon(
+                        Icons.navigate_next,
+                        color: Theme.of(context).accentColor,
+                      ),
+                    ],
+                  ),
                 ),
               ),
+              onTap: () async {
+                _showThemeDialog(context);
+              },
             ),
           ),
           Container(
             margin: EdgeInsets.all(16),
-            child: GestureDetector(
+            child: InkWell(
               child: Card(
                 child: Container(
                   margin: EdgeInsets.all(32),
@@ -60,7 +101,10 @@ class SettingPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Icon(Icons.navigate_next),
+                      Icon(
+                        Icons.navigate_next,
+                        color: Theme.of(context).accentColor,
+                      ),
                     ],
                   ),
                 ),
