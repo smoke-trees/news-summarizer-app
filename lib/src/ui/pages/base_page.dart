@@ -15,7 +15,7 @@ class _BasePageState extends State<BasePage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> screens = [HomeWidget(), NewsContainerPage(), SettingPage()];
+    List<Widget> screens = [NewsContainerPage(), HomeWidget(), SettingPage()];
 
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
@@ -30,12 +30,12 @@ class _BasePageState extends State<BasePage> {
         },
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            title: Text('Search'),
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.featured_play_list),
             title: Text('News'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search),
+            title: Text('Search'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
