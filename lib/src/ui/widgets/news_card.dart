@@ -17,7 +17,7 @@ class NewsCard extends StatelessWidget {
       child: InkWell(
         child: Card(
           elevation: 4,
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
