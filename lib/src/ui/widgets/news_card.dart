@@ -16,36 +16,42 @@ class NewsCard extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: InkWell(
         child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
           elevation: 4,
           color: Theme.of(context).cardColor,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              (getImageUrl(newsItem.description) != null)
-                  ? CachedNetworkImage(
-                      imageUrl: getImageUrl(newsItem.description),
-                    )
-                  : Container(),
-              Container(
-                padding: EdgeInsets.all(16),
-                width: double.infinity,
-                color: Theme.of(context).cardColor,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      newsItem.title,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                      '${DateFormat.yMMMMEEEEd().format(newsItem.pubDate)}',
-                      style: TextStyle(fontSize: 12),
-                    ),
-                  ],
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                (getImageUrl(newsItem.description) != null)
+                    ? CachedNetworkImage(
+                        imageUrl: getImageUrl(newsItem.description),
+                      )
+                    : Container(),
+                Container(
+                  padding: EdgeInsets.all(16),
+                  width: double.infinity,
+                  color: Theme.of(context).cardColor,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        newsItem.title,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        '${DateFormat.yMMMMEEEEd().format(newsItem.pubDate)}',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         onTap: () {
