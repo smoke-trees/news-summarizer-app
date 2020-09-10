@@ -19,7 +19,7 @@ class NewsCard extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
-          elevation: 4,
+          elevation: 2,
           color: Theme.of(context).cardColor,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
