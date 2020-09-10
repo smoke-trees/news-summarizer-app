@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:news_summarizer/src/ui/pages/news_page.dart';
+import 'package:news_summarizer/src/ui/pages/preferences_page.dart';
+import 'package:news_summarizer/src/ui/widgets/theme_dialog.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
 
 class NewsContainerPage extends StatefulWidget {
@@ -23,6 +25,16 @@ class _NewsContainerPageState extends State<NewsContainerPage>
     _newsFeeds = newsBox.get(NEWS_PREFS);
   }
 
+  Future<void> _showThemeDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return ThemeDialog();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -40,6 +52,34 @@ class _NewsContainerPageState extends State<NewsContainerPage>
               color: Theme.of(context).accentColor,
             ),
           ),
+          actions: [
+            PopupMenuButton(
+              onSelected: (value) async {
+                switch (value) {
+                  case 'Change Theme':
+                    _showThemeDialog(context);
+                    break;
+                  case 'Change News Preferences':
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PreferencesPage(),
+                      ),
+                    );
+                    break;
+                }
+              },
+              itemBuilder: (context) {
+                return {'Change Theme', 'Change News Preferences'}
+                    .map((String choice) {
+                  return PopupMenuItem<String>(
+                    value: choice,
+                    child: Text(choice),
+                  );
+                }).toList();
+              },
+            ),
+          ],
           bottom: TabBar(
             tabs: List.generate(
               _newsFeeds.length,
