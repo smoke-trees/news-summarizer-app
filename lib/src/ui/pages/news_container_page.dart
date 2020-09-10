@@ -44,6 +44,7 @@ class _NewsContainerPageState extends State<NewsContainerPage>
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           centerTitle: true,
+          leading: Icon(Icons.search),
           title: Text(
             'News',
             style: TextStyle(
