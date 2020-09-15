@@ -1,14 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:news_summarizer/src/models/article.dart';
 import 'package:news_summarizer/src/ui/pages/news_web_view.dart';
 import 'package:news_summarizer/src/utils/html_utils.dart';
-import 'package:webfeed/domain/rss_item.dart';
 
 class NewsCard extends StatelessWidget {
-  final RssItem newsItem;
+  final Article article;
 
-  NewsCard({this.newsItem});
+  NewsCard({this.article});
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +25,10 @@ class NewsCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                (getImageUrl(newsItem.description) != null)
+                (getImageUrl(article.description) != null)
                     ? CachedNetworkImage(
-                        imageUrl: getImageUrl(newsItem.description),
+                        imageUrl: getImageUrl(article.description),
+
                       )
                     : Container(),
                 Container(
@@ -39,12 +39,13 @@ class NewsCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        newsItem.title,
+                        article.title,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: 20),
                       Text(
-                        '${DateFormat.yMMMMEEEEd().format(newsItem.pubDate)}',
+                        // '${DateFormat.yMMMMEEEEd().format(article.pubDate)}',
+                        '${article.pubDate}',
                         style: TextStyle(fontSize: 12),
                       ),
                     ],
@@ -58,7 +59,7 @@ class NewsCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => NewsWebView(newsItem.link),
+              builder: (context) => NewsWebView(article: article),
             ),
           );
         },

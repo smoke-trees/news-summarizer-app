@@ -139,8 +139,7 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                       }
                     },
                     itemBuilder: (context) {
-                      return {'Change Theme', 'Change News Preferences'}
-                          .map((String choice) {
+                      return {'Change Theme', 'Change News Preferences'}.map((String choice) {
                         return PopupMenuItem<String>(
                           value: choice,
                           child: Text(choice),
@@ -153,11 +152,7 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                   tabs: List.generate(
                     _newsFeeds.length,
                     (index) => Tab(
-                      text: _newsFeeds[index]
-                          .toString()
-                          .split('.')
-                          .last
-                          .replaceAll("_", " "),
+                      text: _newsFeeds[index].toString().split('.').last.replaceAll("_", " "),
                     ),
                   ),
                   isScrollable: true,

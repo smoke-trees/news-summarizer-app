@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_summarizer/src/models/article.dart';
 import 'package:news_summarizer/src/models/summary.dart';
 import 'package:news_summarizer/src/providers/api_provider.dart';
 import 'package:news_summarizer/src/ui/widgets/news_list.dart';
@@ -25,10 +26,10 @@ class SearchPageState extends State<SearchPage> {
                 color: Theme.of(context).accentColor)),
       ),
       body: Center(
-        child: FutureBuilder<List<SummaryResponse>>(
-            future: apiProvider.getSummary(apiProvider.searchTerm),
+        child: FutureBuilder<List<Article>>(
+            future: apiProvider.getArticlesFromSearch(),
             builder: (BuildContext context,
-                AsyncSnapshot<List<SummaryResponse>> snapshot) {
+                AsyncSnapshot<List<Article>> snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.none:
                   return Center(

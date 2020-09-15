@@ -9,7 +9,7 @@ packages:
     source: hosted
     version: "6.0.0"
   analyzer:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
       name: analyzer
       url: "https://pub.dartlang.org"
@@ -541,13 +541,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.9.0"
-  petitparser:
-    dependency: transitive
-    description:
-      name: petitparser
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.4"
   pin_code_fields:
     dependency: "direct main"
     description:
@@ -798,13 +791,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
-  webfeed:
-    dependency: "direct main"
-    description:
-      name: webfeed
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.6.0"
   webview_flutter:
     dependency: "direct main"
     description:
@@ -819,13 +805,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.0"
-  xml:
-    dependency: transitive
-    description:
-      name: xml
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.2.0"
   yaml:
     dependency: transitive
     description:

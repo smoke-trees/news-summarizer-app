@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:news_summarizer/src/models/article.dart';
 import 'package:news_summarizer/src/models/summary.dart';
+import 'package:news_summarizer/src/ui/widgets/news_card.dart';
 import 'package:news_summarizer/src/ui/widgets/news_item.dart';
 
 class NewsList extends StatelessWidget {
-  final List<SummaryResponse> news;
+  final List<Article> articles;
 
-  NewsList(this.news);
+  NewsList(this.articles);
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: news.length,
-      itemBuilder: (BuildContext context, int index) {
-        var item = news[index];
-        return NewsItem(item.headline, item.summary);
-      },
-    );
+    return articles.length == 0
+        ? Center(
+            child: Text("No search results"),
+          )
+        : ListView.builder(
+            itemCount: articles.length,
+            itemBuilder: (BuildContext context, int index) {
+              return NewsCard(
+                article: articles[index],
+              );
+            },
+          );
   }
 }

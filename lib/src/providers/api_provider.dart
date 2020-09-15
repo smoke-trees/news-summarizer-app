@@ -1,14 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:news_summarizer/src/models/article.dart';
 import 'package:news_summarizer/src/models/summary.dart';
 
 class ApiProvider with ChangeNotifier {
   SummaryResponse response;
   String searchTerm;
-  final _dio = Dio(BaseOptions(
-      baseUrl: 'https://summary.smoketrees.in/',
-      connectTimeout: 60000,
-      receiveTimeout: 60000));
+  final _dio =
+      Dio(BaseOptions(baseUrl: 'http://localhost:8000', connectTimeout: 60000, receiveTimeout: 60000));
 
   setSummary(SummaryResponse response) {
     this.response = response;
@@ -20,16 +19,21 @@ class ApiProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<SummaryResponse>> getSummary(String searchTerm) async {
-    try {
-      Response response =
-          await _dio.get('/get_result', queryParameters: {'query': searchTerm});
-      return (response.data as List)
-          .map((e) => SummaryResponse.fromJson(e))
-          .toList();
-    } catch (error, stacktrace) {
-      print("Exception occured: $error stackTrace: $stacktrace");
-      return [SummaryResponse.withError(error.toString())];
-    }
+  Future<List<Article>> getArticlesFromCategory({String category}) async {
+    Response response = await _dio.get("/get_category_news", queryParameters: {'category': category});
+    List<Article> articleList = (response.data as List).map((json) => Article.fromJson(json)).toList();
+    return articleList;
   }
+
+  Future<List<Article>> getArticlesFromSearch() async {
+    Response response = await _dio.get("/get_news", queryParameters: {'query': searchTerm});
+    List<Article> articleList = (response.data as List).map((json) => Article.fromJson(json)).toList();
+    return articleList;
+  }
+
+  void makeView({Article article}) async {
+    await _dio.get("/make_view", queryParameters: {'article_id': article.id});
+    print("increased view of article");
+  }
+
 }
