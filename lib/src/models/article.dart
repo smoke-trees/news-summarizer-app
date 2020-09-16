@@ -1,7 +1,7 @@
 class Article {
   String title;
   String description;
-  String pubDate;
+  DateTime pubDate;
   String category;
   bool archived;
   int viewCount;
@@ -24,7 +24,7 @@ class Article {
     return Article(
         title: json["title"],
         description: json["description"],
-        pubDate: json["pubDate"],
+        pubDate: DateTime.parse(json["pubDate"]),
         category: json["category"],
         archived: json["archived"],
         viewCount: json["viewCount"],

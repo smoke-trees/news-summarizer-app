@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:news_summarizer/src/models/article.dart';
 import 'package:news_summarizer/src/ui/pages/news_web_view.dart';
 import 'package:news_summarizer/src/utils/html_utils.dart';
@@ -28,7 +29,7 @@ class NewsCard extends StatelessWidget {
                 (getImageUrl(article.description) != null)
                     ? CachedNetworkImage(
                         imageUrl: getImageUrl(article.description),
-
+                        fit: BoxFit.cover,
                       )
                     : Container(),
                 Container(
@@ -44,8 +45,8 @@ class NewsCard extends StatelessWidget {
                       ),
                       SizedBox(height: 20),
                       Text(
-                        // '${DateFormat.yMMMMEEEEd().format(article.pubDate)}',
-                        '${article.pubDate}',
+                        '${DateFormat.yMMMMEEEEd().format(article.pubDate)}',
+                        // '${article.pubDate}',
                         style: TextStyle(fontSize: 12),
                       ),
                     ],

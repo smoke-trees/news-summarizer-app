@@ -32,6 +32,9 @@ class _NewsPageState extends State<NewsPage> with AutomaticKeepAliveClientMixin<
       ApiProvider apiProvider = Provider.of<ApiProvider>(context, listen: false);
       String category = widget.newsFeed.toString().split('.').last;
       List<Article> articleList = await apiProvider.getArticlesFromCategory(category: category);
+      if(category=="INDIA"){
+        print(articleList[1].description);
+      }
       _newsItems = articleList;
       return articleList;
     } on SocketException {

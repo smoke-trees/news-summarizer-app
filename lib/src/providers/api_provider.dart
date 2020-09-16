@@ -2,12 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:news_summarizer/src/models/article.dart';
 import 'package:news_summarizer/src/models/summary.dart';
+import 'package:news_summarizer/src/utils/constants.dart';
 
 class ApiProvider with ChangeNotifier {
   SummaryResponse response;
   String searchTerm;
   final _dio =
-      Dio(BaseOptions(baseUrl: 'http://localhost:8000', connectTimeout: 60000, receiveTimeout: 60000));
+      Dio(BaseOptions(baseUrl: BASE_URL, connectTimeout: 60000, receiveTimeout: 60000));
 
   setSummary(SummaryResponse response) {
     this.response = response;
