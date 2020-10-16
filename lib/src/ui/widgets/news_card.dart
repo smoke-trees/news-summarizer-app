@@ -43,12 +43,26 @@ class NewsCard extends StatelessWidget {
                         article.title,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: 10),
                       Text(
                         '${DateFormat.yMMMMEEEEd().format(article.pubDate)}',
                         // '${article.pubDate}',
                         style: TextStyle(fontSize: 12),
                       ),
+                      SizedBox(height: 15),
+                      Divider(
+                        color: Theme.of(context).accentColor,
+                        thickness: 2,
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        "Summary",
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 10),
+                      Container(
+                        child: Text(article.summary),
+                      )
                     ],
                   ),
                 ),

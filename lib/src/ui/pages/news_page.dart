@@ -10,8 +10,10 @@ import 'package:provider/provider.dart';
 
 class NewsPage extends StatefulWidget {
   final NewsFeed newsFeed;
+  final String customPref;
+  final bool isCustomPref;
 
-  NewsPage(this.newsFeed);
+  NewsPage({this.newsFeed, this.customPref, this.isCustomPref});
 
   @override
   _NewsPageState createState() => _NewsPageState();
@@ -30,13 +32,21 @@ class _NewsPageState extends State<NewsPage> with AutomaticKeepAliveClientMixin<
   Future<List<Article>> loadFeed() async {
     try {
       ApiProvider apiProvider = Provider.of<ApiProvider>(context, listen: false);
-      String category = widget.newsFeed.toString().split('.').last;
-      List<Article> articleList = await apiProvider.getArticlesFromCategory(category: category);
-      if(category=="INDIA"){
-        print(articleList[1].description);
+      if (widget.isCustomPref) {
+        List<Article> articleList =
+            await apiProvider.getArticlesFromCustomPreference(customPref: widget.customPref);
+        _newsItems = articleList;
+        return articleList;
+      } else {
+        String category = widget.newsFeed.toString().split('.').last;
+        List<Article> articleList = await apiProvider.getArticlesFromCategory(category: category);
+
+        if (category == "INDIA") {
+          print(articleList[1].description);
+        }
+        _newsItems = articleList;
+        return articleList;
       }
-      _newsItems = articleList;
-      return articleList;
     } on SocketException {
       Get.snackbar(
         "Error",

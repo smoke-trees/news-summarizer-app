@@ -32,6 +32,12 @@ class ApiProvider with ChangeNotifier {
     return articleList;
   }
 
+  Future<List<Article>> getArticlesFromCustomPreference({String customPref}) async {
+    Response response = await _dio.get("/get_news", queryParameters: {'query': customPref});
+    List<Article> articleList = (response.data as List).map((json) => Article.fromJson(json)).toList();
+    return articleList;
+  }
+
   void makeView({Article article}) async {
     await _dio.get("/make_view", queryParameters: {'article_id': article.id});
     print("increased view of article");

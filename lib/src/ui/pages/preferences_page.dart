@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:news_summarizer/src/ui/pages/base_page.dart';
+import 'package:news_summarizer/src/ui/pages/custom_prefs_page.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
 import 'package:news_summarizer/src/utils/news_feed_list.dart';
 import 'package:news_summarizer/src/utils/shared_prefs.dart';
@@ -21,6 +22,11 @@ class _PreferencesPageState extends State<PreferencesPage> {
   var metroChosen = [];
   var indianCitiesChosen = [];
   var internationalChosen = [];
+  // var customPrefsChosen = [];
+  //
+  // var customPrefsPresent = [];
+  // TextEditingController customPrefsController = new TextEditingController();
+  // final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -29,6 +35,8 @@ class _PreferencesPageState extends State<PreferencesPage> {
     metroChosen = _newsBox.get(NEWS_METRO);
     indianCitiesChosen = _newsBox.get(NEWS_OTHER);
     internationalChosen = _newsBox.get(NEWS_INT);
+    // customPrefsChosen = _newsBox.get(NEWS_CUSTOM) ?? [];
+    // customPrefsPresent.addAll(customPrefsChosen);
   }
 
   void finishSelection() async {
@@ -46,6 +54,9 @@ class _PreferencesPageState extends State<PreferencesPage> {
     if (!internationalChosen.isNullOrBlank) {
       finList.addAll(internationalChosen);
     }
+    // if (!customPrefsChosen.isNullOrBlank) {
+    //   finList.addAll(customPrefsChosen);
+    // }
     if (finList.length < 3) {
       Get.snackbar(
         "Warning!",
@@ -60,10 +71,11 @@ class _PreferencesPageState extends State<PreferencesPage> {
       _newsBox.put(NEWS_INT, internationalChosen);
       _newsBox.put(NEWS_METRO, metroChosen);
       _newsBox.put(NEWS_OTHER, indianCitiesChosen);
+      // _newsBox.put(NEWS_CUSTOM, customPrefsChosen);
       SharedPrefs.setIsUserLoggedIn(true);
       Navigator.pushNamedAndRemoveUntil(
         context,
-        BasePage.routename,
+        CustomPrefsPage.routename,
         (route) => false,
       );
     }
@@ -151,11 +163,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
                         options: ChipsChoiceOption.listFrom(
                           source: NewsFeed.values.sublist(0, 14),
                           value: (index, item) => item,
-                          label: (index, item) => item
-                              .toString()
-                              .split(".")
-                              .last
-                              .replaceAll("_", " "),
+                          label: (index, item) => item.toString().split(".").last.replaceAll("_", " "),
                         ),
                         onChanged: (val) {
                           setState(() => popularChosen = val);
@@ -201,11 +209,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
                         options: ChipsChoiceOption.listFrom(
                           source: NewsFeed.values.sublist(46, 53),
                           value: (index, item) => item,
-                          label: (index, item) => item
-                              .toString()
-                              .split(".")
-                              .last
-                              .replaceAll("_", " "),
+                          label: (index, item) => item.toString().split(".").last.replaceAll("_", " "),
                         ),
                         onChanged: (val) {
                           setState(() => internationalChosen = val);
@@ -251,11 +255,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
                         options: ChipsChoiceOption.listFrom(
                           source: NewsFeed.values.sublist(14, 19),
                           value: (index, item) => item,
-                          label: (index, item) => item
-                              .toString()
-                              .split(".")
-                              .last
-                              .replaceAll("_", " "),
+                          label: (index, item) => item.toString().split(".").last.replaceAll("_", " "),
                         ),
                         onChanged: (val) {
                           setState(() => metroChosen = val);
@@ -301,11 +301,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
                         options: ChipsChoiceOption.listFrom(
                           source: NewsFeed.values.sublist(19, 46),
                           value: (index, item) => item,
-                          label: (index, item) => item
-                              .toString()
-                              .split(".")
-                              .last
-                              .replaceAll("_", " "),
+                          label: (index, item) => item.toString().split(".").last.replaceAll("_", " "),
                         ),
                         onChanged: (val) {
                           setState(() => indianCitiesChosen = val);
@@ -317,6 +313,76 @@ class _PreferencesPageState extends State<PreferencesPage> {
                   ),
                 ),
               ),
+              SizedBox(
+                height: 8,
+              ),
+              // Container(
+              //   margin: EdgeInsets.all(8),
+              //   child: Card(
+              //     color: Theme.of(context).cardColor,
+              //     child: ExpansionTile(
+              //         title: Container(
+              //           child: Text(
+              //             "Custom",
+              //             style: TextStyle(
+              //               fontWeight: FontWeight.bold,
+              //               fontSize: 18,
+              //               decoration: TextDecoration.underline,
+              //               decorationColor: Theme.of(context).accentColor,
+              //             ),
+              //           ),
+              //         ),
+              //         children: [
+              //           ChipsChoice<dynamic>.multiple(
+              //             itemConfig: ChipsChoiceItemConfig(
+              //               selectedColor: Theme.of(context).accentColor,
+              //               unselectedColor: Theme.of(context).primaryColor,
+              //               unselectedBrightness: Theme.of(context).brightness,
+              //               selectedBrightness: Theme.of(context).brightness,
+              //             ),
+              //             value: customPrefsChosen,
+              //             options: ChipsChoiceOption.listFrom(
+              //               source: customPrefsChosen,
+              //               value: (index, item) => item,
+              //               label: (index, item) => item,
+              //             ),
+              //             onChanged: (val) {
+              //               setState(() => customPrefsChosen = val);
+              //             },
+              //             padding: EdgeInsets.all(8),
+              //             isWrapped: true,
+              //           ),
+              //           Container(
+              //             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              //             child: Form(
+              //               key: formKey,
+              //               child: TextFormField(
+              //                 autofocus: true,
+              //                 decoration: InputDecoration(hintText: "Enter your custom preference"),
+              //                 textInputAction: TextInputAction.next,
+              //                 controller: customPrefsController,
+              //                 validator: (value) {
+              //                   if (value.isEmpty) {
+              //                     return 'Please enter a preference';
+              //                   }
+              //                   return null;
+              //                 },
+              //                 onSaved: (value) {},
+              //                 onFieldSubmitted: (value) {
+              //                   if (formKey.currentState.validate()) {
+              //                     setState(() {
+              //                       customPrefsChosen.add(value);
+              //                       customPrefsPresent.add(value);
+              //                       customPrefsController.clear();
+              //                     });
+              //                   }
+              //                 },
+              //               ),
+              //             ),
+              //           ),
+              //         ]),
+              //   ),
+              // ),
               SizedBox(height: 56),
             ],
           ),

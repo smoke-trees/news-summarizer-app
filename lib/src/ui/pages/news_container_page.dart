@@ -27,6 +27,8 @@ class _NewsContainerPageState extends State<NewsContainerPage>
   _getNewsFromHive() async {
     var newsBox = Hive.box(NEWS_PREFS_BOX);
     _newsFeeds = newsBox.get(NEWS_PREFS);
+
+    // print(_newsFeeds);
   }
 
   Future<void> _showThemeDialog(BuildContext context) async {
@@ -151,9 +153,17 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                 bottom: TabBar(
                   tabs: List.generate(
                     _newsFeeds.length,
-                    (index) => Tab(
-                      text: _newsFeeds[index].toString().split('.').last.replaceAll("_", " "),
-                    ),
+                    (index) {
+                      if (_newsFeeds[index].runtimeType == String) {
+                        return Tab(
+                          text: (_newsFeeds[index] as String).toUpperCase(),
+                        ); //Very bad method but eet ees what eet ees
+                      } else {
+                        return Tab(
+                          text: _newsFeeds[index].toString().split('.').last.replaceAll("_", " "),
+                        );
+                      }
+                    },
                   ),
                   isScrollable: true,
                 ),
@@ -162,7 +172,19 @@ class _NewsContainerPageState extends State<NewsContainerPage>
         body: TabBarView(
           children: List.generate(
             _newsFeeds.length,
-            (index) => NewsPage(_newsFeeds[index]),
+            (index) {
+              if (_newsFeeds[index].runtimeType == String) {
+                return NewsPage(
+                  customPref: _newsFeeds[index],
+                  isCustomPref: true,
+                ); //Very bad method but eet ees what eet ees
+              } else {
+                return NewsPage(
+                  newsFeed: _newsFeeds[index],
+                  isCustomPref: false,
+                );
+              }
+            },
           ),
         ),
       ),
