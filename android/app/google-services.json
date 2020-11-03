@@ -8,18 +8,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:326777913936:android:4dae90d5f685b4c7a58755",
+        "mobilesdk_app_id": "1:326777913936:android:2808b31df77c1fb2a58755",
         "android_client_info": {
           "package_name": "dev.smoketrees.news_summarizer"
         }
       },
       "oauth_client": [
         {
-          "client_id": "326777913936-0tekjmpiio6cj9cs9hkc3apvc5takmvc.apps.googleusercontent.com",
+          "client_id": "326777913936-0kd6trakmqbvedrisbnjmos1hlmfkeli.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "dev.smoketrees.news_summarizer",
-            "certificate_hash": "478dca615f7271918ee3e00d57b1549c3a3aecc5"
+            "certificate_hash": "dab33d602b13a68633ee738848c3b1cae0ea5704"
           }
         },
         {

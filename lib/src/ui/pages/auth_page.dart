@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:news_summarizer/src/providers/auth_provider.dart';
 import 'package:news_summarizer/src/providers/theme_provider.dart';
+import 'package:news_summarizer/src/providers/user_provider.dart';
 import 'package:news_summarizer/src/ui/pages/preferences_page.dart';
 import 'package:news_summarizer/src/ui/widgets/or_divider.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -22,8 +23,6 @@ class _AuthPageState extends State<AuthPage> {
   String _otpString = "";
   String _verificationCode;
   final TextEditingController _phoneController = TextEditingController();
-
-  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
   Future<void> initPhoneAuth(BuildContext ctx) async {
     FirebaseAuth _auth = FirebaseAuth.instance;
@@ -160,205 +159,206 @@ class _AuthPageState extends State<AuthPage> {
         // ],
       ),
       body: FutureBuilder(
-        future: _initialization,
+        future: Firebase.initializeApp(),
         builder: (context, snapshot) => (snapshot.connectionState == ConnectionState.done)
             ? Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // SizedBox(height: 40),
-                Container(
-                  // margin: EdgeInsets.all(24),
-                  // alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Let's get you started!",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // SizedBox(height: 40),
+                  Container(
+                    // margin: EdgeInsets.all(24),
+                    // alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Let's get you started!",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(height: 50),
-                // Padding(
-                //   padding: EdgeInsets.all(24),
-                //   child: Form(
-                //     key: _formkey,
-                //     child: Column(
-                //       children: [
-                //         TextFormField(
-                //           enabled: !_isOTPWidgetVisible,
-                //           validator: (value) {
-                //             if (value.length < 10) {
-                //               return 'Please enter a valid number!';
-                //             }
-                //             return null;
-                //           },
-                //           controller: _phoneController,
-                //           maxLength: 10,
-                //           keyboardType: TextInputType.number,
-                //           decoration: InputDecoration(
-                //             border: OutlineInputBorder(),
-                //             labelText: 'Phone Number',
-                //             hintText: '8197513721',
-                //             icon: Icon(Icons.phone, color: Color(0xff3B916E)),
-                //           ),
-                //         ),
-                //         SizedBox(height: 8),
-                //         Visibility(
-                //           visible: _isOTPWidgetVisible,
-                //           child: InkWell(
-                //             child: Container(
-                //               alignment: Alignment.centerRight,
-                //               child: Text(
-                //                 "Edit phone number",
-                //                 style: TextStyle(
-                //                   color: Colors.grey,
-                //                 ),
-                //               ),
-                //             ),
-                //             onTap: () {
-                //               setState(() {
-                //                 _isOTPWidgetVisible = false;
-                //               });
-                //             },
-                //           ),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
-                // Visibility(
-                //   visible: _isOTPWidgetVisible,
-                //   child: Column(
-                //     children: [
-                //       Container(
-                //         margin: EdgeInsets.symmetric(
-                //           horizontal: 24,
-                //           vertical: 24,
-                //         ),
-                //         alignment: Alignment.centerLeft,
-                //         child: Text("Enter the OTP received"),
-                //       ),
-                //       SizedBox(height: 20),
-                //       Container(
-                //         margin: EdgeInsets.symmetric(horizontal: 32),
-                //         child: PinCodeTextField(
-                //           animationType: AnimationType.slide,
-                //           textInputType: TextInputType.number,
-                //           length: 6,
-                //           backgroundColor: Colors.transparent,
-                //           enabled: !_isLoading,
-                //           textStyle: TextStyle(
-                //             color: (themeProvider.theme == themeProvider.darkTheme)
-                //                 ? Colors.white
-                //                 : Colors.black,
-                //             fontSize: 18,
-                //           ),
-                //           pinTheme: PinTheme(
-                //             selectedColor: Theme.of(context).accentColor,
-                //             activeColor: Theme.of(context).accentColor,
-                //             inactiveColor: Theme.of(context).accentColor,
-                //             fieldWidth: 40,
-                //           ),
-                //           onCompleted: (value) {
-                //             setState(() {
-                //               _otpString = value;
-                //             });
-                //           },
-                //           onChanged: (value) {
-                //             setState(() {});
-                //           },
-                //         ),
-                //       ),
-                //       SizedBox(height: 40),
-                //     ],
-                //   ),
-                // ),
-                // Container(
-                //   margin: EdgeInsets.all(24),
-                //   width: 100,
-                //   height: 45,
-                //   child: MaterialButton(
-                //     child: (!_isLoading)
-                //         ? Text(
-                //             "NEXT",
-                //             style: TextStyle(
-                //               fontWeight: FontWeight.bold,
-                //               color: Theme.of(context).primaryColor,
-                //             ),
-                //           )
-                //         : Container(
-                //             height: 25,
-                //             width: 25,
-                //             child: CircularProgressIndicator(
-                //               valueColor: AlwaysStoppedAnimation<Color>(
-                //                 Colors.white,
-                //               ),
-                //             ),
-                //           ),
-                //     disabledColor: Theme.of(context).accentColor.withOpacity(0.7),
-                //     onPressed: (!_isLoading)
-                //         ? () {
-                //             if (_isOTPWidgetVisible) {
-                //               signInPhoneNumber(_otpString);
-                //             } else {
-                //               if (_formkey.currentState.validate()) {
-                //                 initPhoneAuth(context);
-                //               }
-                //             }
-                //           }
-                //         : null,
-                //     color: Theme.of(context).accentColor,
-                //   ),
-                // ),
-                // Padding(
-                //   padding: const EdgeInsets.all(20),
-                //   child: OrDivider(
-                //     color: Color(0xff3B916E),
-                //     thickness: 3,
-                //   ),
-                // ),
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: OutlineButton(
-                    onPressed: () async {
-                      // await firebaseAuthController.autoSignInGoogle();
-                      AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
-                      User user = await authProvider.autoSignInGoogle();
-                      if (user != null) {
-                        Navigator.popAndPushNamed(context, PreferencesPage.routename);
-                      } else {}
-                    },
-                    padding: EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    borderSide: BorderSide(color: Color(0xff3B916E)),
-                    highlightedBorderColor: Colors.transparent,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          "assets/icons/google_logo.png",
-                          width: 20,
-                          height: 20,
-                        ),
-                        SizedBox(
-                          width: 18,
-                        ),
-                        Text(
-                          "Continue with Google",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                  SizedBox(height: 50),
+                  // Padding(
+                  //   padding: EdgeInsets.all(24),
+                  //   child: Form(
+                  //     key: _formkey,
+                  //     child: Column(
+                  //       children: [
+                  //         TextFormField(
+                  //           enabled: !_isOTPWidgetVisible,
+                  //           validator: (value) {
+                  //             if (value.length < 10) {
+                  //               return 'Please enter a valid number!';
+                  //             }
+                  //             return null;
+                  //           },
+                  //           controller: _phoneController,
+                  //           maxLength: 10,
+                  //           keyboardType: TextInputType.number,
+                  //           decoration: InputDecoration(
+                  //             border: OutlineInputBorder(),
+                  //             labelText: 'Phone Number',
+                  //             hintText: '8197513721',
+                  //             icon: Icon(Icons.phone, color: Color(0xff3B916E)),
+                  //           ),
+                  //         ),
+                  //         SizedBox(height: 8),
+                  //         Visibility(
+                  //           visible: _isOTPWidgetVisible,
+                  //           child: InkWell(
+                  //             child: Container(
+                  //               alignment: Alignment.centerRight,
+                  //               child: Text(
+                  //                 "Edit phone number",
+                  //                 style: TextStyle(
+                  //                   color: Colors.grey,
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //             onTap: () {
+                  //               setState(() {
+                  //                 _isOTPWidgetVisible = false;
+                  //               });
+                  //             },
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  // Visibility(
+                  //   visible: _isOTPWidgetVisible,
+                  //   child: Column(
+                  //     children: [
+                  //       Container(
+                  //         margin: EdgeInsets.symmetric(
+                  //           horizontal: 24,
+                  //           vertical: 24,
+                  //         ),
+                  //         alignment: Alignment.centerLeft,
+                  //         child: Text("Enter the OTP received"),
+                  //       ),
+                  //       SizedBox(height: 20),
+                  //       Container(
+                  //         margin: EdgeInsets.symmetric(horizontal: 32),
+                  //         child: PinCodeTextField(
+                  //           animationType: AnimationType.slide,
+                  //           textInputType: TextInputType.number,
+                  //           length: 6,
+                  //           backgroundColor: Colors.transparent,
+                  //           enabled: !_isLoading,
+                  //           textStyle: TextStyle(
+                  //             color: (themeProvider.theme == themeProvider.darkTheme)
+                  //                 ? Colors.white
+                  //                 : Colors.black,
+                  //             fontSize: 18,
+                  //           ),
+                  //           pinTheme: PinTheme(
+                  //             selectedColor: Theme.of(context).accentColor,
+                  //             activeColor: Theme.of(context).accentColor,
+                  //             inactiveColor: Theme.of(context).accentColor,
+                  //             fieldWidth: 40,
+                  //           ),
+                  //           onCompleted: (value) {
+                  //             setState(() {
+                  //               _otpString = value;
+                  //             });
+                  //           },
+                  //           onChanged: (value) {
+                  //             setState(() {});
+                  //           },
+                  //         ),
+                  //       ),
+                  //       SizedBox(height: 40),
+                  //     ],
+                  //   ),
+                  // ),
+                  // Container(
+                  //   margin: EdgeInsets.all(24),
+                  //   width: 100,
+                  //   height: 45,
+                  //   child: MaterialButton(
+                  //     child: (!_isLoading)
+                  //         ? Text(
+                  //             "NEXT",
+                  //             style: TextStyle(
+                  //               fontWeight: FontWeight.bold,
+                  //               color: Theme.of(context).primaryColor,
+                  //             ),
+                  //           )
+                  //         : Container(
+                  //             height: 25,
+                  //             width: 25,
+                  //             child: CircularProgressIndicator(
+                  //               valueColor: AlwaysStoppedAnimation<Color>(
+                  //                 Colors.white,
+                  //               ),
+                  //             ),
+                  //           ),
+                  //     disabledColor: Theme.of(context).accentColor.withOpacity(0.7),
+                  //     onPressed: (!_isLoading)
+                  //         ? () {
+                  //             if (_isOTPWidgetVisible) {
+                  //               signInPhoneNumber(_otpString);
+                  //             } else {
+                  //               if (_formkey.currentState.validate()) {
+                  //                 initPhoneAuth(context);
+                  //               }
+                  //             }
+                  //           }
+                  //         : null,
+                  //     color: Theme.of(context).accentColor,
+                  //   ),
+                  // ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(20),
+                  //   child: OrDivider(
+                  //     color: Color(0xff3B916E),
+                  //     thickness: 3,
+                  //   ),
+                  // ),
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: OutlineButton(
+                      onPressed: () async {
+                        AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
+                        User user = await authProvider.autoSignInGoogle();
+                        if (user != null) {
+                          UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+                          userProvider.createUserInFirebase(user: user);
+                          Navigator.popAndPushNamed(context, PreferencesPage.routename);
+                        } else {}
+                      },
+                      padding: EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      borderSide: BorderSide(color: Color(0xff3B916E)),
+                      highlightedBorderColor: Colors.transparent,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            "assets/icons/google_logo.png",
+                            width: 20,
+                            height: 20,
                           ),
-                        ),
-                      ],
+                          SizedBox(
+                            width: 18,
+                          ),
+                          Text(
+                            "Continue with Google",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            )
+                ],
+              )
             : Container(),
       ),
     );

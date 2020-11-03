@@ -7,8 +7,9 @@ import 'package:news_summarizer/src/utils/html_utils.dart';
 
 class NewsCard extends StatelessWidget {
   final Article article;
+  final bool isBlog;
 
-  NewsCard({this.article});
+  NewsCard({this.article, this.isBlog = false});
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +75,7 @@ class NewsCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => NewsWebView(article: article),
+              builder: (context) => NewsWebView(article: article, isBlog: isBlog,),
             ),
           );
         },

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:news_summarizer/src/ui/pages/base_page.dart';
+import 'package:news_summarizer/src/ui/pages/blogs_prefs_page.dart';
 import 'package:news_summarizer/src/ui/widgets/listview_card.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
 
@@ -41,7 +42,7 @@ class _ReorderPrefsPageState extends State<ReorderPrefsPage> {
     _newsBox.put(NEWS_PREFS, preferences);
     Navigator.pushNamedAndRemoveUntil(
       context,
-      BasePage.routename,
+      BlogsPrefsPage.routeName,
           (route) => false,
     );
   }

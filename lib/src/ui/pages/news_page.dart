@@ -12,8 +12,10 @@ class NewsPage extends StatefulWidget {
   final NewsFeed newsFeed;
   final String customPref;
   final bool isCustomPref;
+  final bool isBlogAuthor;
+  final String blogAuthor;
 
-  NewsPage({this.newsFeed, this.customPref, this.isCustomPref});
+  NewsPage({this.newsFeed, this.customPref, this.isCustomPref, this.isBlogAuthor = false, this.blogAuthor});
 
   @override
   _NewsPageState createState() => _NewsPageState();
@@ -21,12 +23,15 @@ class NewsPage extends StatefulWidget {
 
 class _NewsPageState extends State<NewsPage> with AutomaticKeepAliveClientMixin<NewsPage> {
   List<Article> _newsItems;
-  Future<List<Article>> _getFeed;
+  List<Article> _blogItems;
+  Future<List<Article>> _newsFeedFuture;
+  Future<List<Article>> _blogFeedFuture;
 
   @override
   void initState() {
-    _getFeed = loadFeed();
     super.initState();
+    _newsFeedFuture = loadFeed();
+    _blogFeedFuture = loadBlogFeed();
   }
 
   Future<List<Article>> loadFeed() async {
@@ -37,16 +42,36 @@ class _NewsPageState extends State<NewsPage> with AutomaticKeepAliveClientMixin<
             await apiProvider.getArticlesFromCustomPreference(customPref: widget.customPref);
         _newsItems = articleList;
         return articleList;
+      } else if (widget.isBlogAuthor != null && widget.isBlogAuthor) {
+        List<Article> articleList = await apiProvider.getArticlesFromBlogAuthor(author: widget.blogAuthor);
+        _newsItems = articleList;
+        return articleList;
       } else {
         String category = widget.newsFeed.toString().split('.').last;
         List<Article> articleList = await apiProvider.getArticlesFromCategory(category: category);
-
-        if (category == "INDIA") {
-          print(articleList[1].description);
-        }
         _newsItems = articleList;
         return articleList;
       }
+    } on SocketException {
+      Get.snackbar(
+        "Error",
+        "No Internet!",
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
+  Future<List<Article>> loadBlogFeed() async {
+    try {
+      ApiProvider apiProvider = Provider.of<ApiProvider>(context, listen: false);
+      List<Article> articleList = await apiProvider.getArticlesFromBlogAuthor(author: widget.blogAuthor);
+      _blogItems = articleList;
+      return articleList;
     } on SocketException {
       Get.snackbar(
         "Error",
@@ -66,27 +91,51 @@ class _NewsPageState extends State<NewsPage> with AutomaticKeepAliveClientMixin<
     super.build(context);
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: FutureBuilder(
-        future: _getFeed,
-        builder: (context, snapshot) => (snapshot.hasData)
-            ? RefreshIndicator(
-                onRefresh: loadFeed,
-                backgroundColor: Theme.of(context).primaryColor,
-                child: snapshot.data.length == 0
-                    ? Center(
-                        child: Text("No news available"),
-                      )
-                    : ListView.builder(
-                        itemBuilder: (context, index) => NewsCard(
-                          article: _newsItems[index],
-                        ),
-                        itemCount: _newsItems.length,
-                      ),
-              )
-            : Center(
-                child: Text("Fetching latest news for you..."),
-              ),
-      ),
+      body: widget.isBlogAuthor
+          ? FutureBuilder(
+              future: _blogFeedFuture,
+              builder: (context, snapshot) => (snapshot.hasData)
+                  ? RefreshIndicator(
+                      onRefresh: loadBlogFeed,
+                      backgroundColor: Theme.of(context).primaryColor,
+                      child: snapshot.data.length == 0
+                          ? Center(
+                              child: Text("No blogs available"),
+                            )
+                          : ListView.builder(
+                              itemBuilder: (context, index) => NewsCard(
+                                isBlog: widget.isBlogAuthor,
+                                article: _blogItems[index],
+                              ),
+                              itemCount: _blogItems.length,
+                            ),
+                    )
+                  : Center(
+                      child: Text("Fetching latest blogs for you..."),
+                    ),
+            )
+          : FutureBuilder(
+              future: _newsFeedFuture,
+              builder: (context, snapshot) => (snapshot.hasData)
+                  ? RefreshIndicator(
+                      onRefresh: loadFeed,
+                      backgroundColor: Theme.of(context).primaryColor,
+                      child: snapshot.data.length == 0
+                          ? Center(
+                              child: Text("No news available"),
+                            )
+                          : ListView.builder(
+                              itemBuilder: (context, index) => NewsCard(
+                                isBlog: widget.isBlogAuthor,
+                                article: _newsItems[index],
+                              ),
+                              itemCount: _newsItems.length,
+                            ),
+                    )
+                  : Center(
+                      child: Text("Fetching latest news for you..."),
+                    ),
+            ),
     );
   }
 

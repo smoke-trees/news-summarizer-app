@@ -4,6 +4,7 @@ import 'package:news_summarizer/src/app.dart';
 import 'package:news_summarizer/src/providers/api_provider.dart';
 import 'package:news_summarizer/src/providers/auth_provider.dart';
 import 'package:news_summarizer/src/providers/theme_provider.dart';
+import 'package:news_summarizer/src/providers/user_provider.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
 import 'package:news_summarizer/src/utils/news_feed_list.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
@@ -20,7 +21,8 @@ void main() async {
       providers: [
         ChangeNotifierProvider<ThemeProvider>(create: (_) => ThemeProvider()),
         ChangeNotifierProvider<ApiProvider>(create: (_) => ApiProvider()),
-        ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider())
+        ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
+        ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider()),
       ],
       child: App(),
     ),

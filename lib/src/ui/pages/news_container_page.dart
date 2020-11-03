@@ -16,7 +16,9 @@ class NewsContainerPage extends StatefulWidget {
 class _NewsContainerPageState extends State<NewsContainerPage>
     with AutomaticKeepAliveClientMixin<NewsContainerPage> {
   var _newsFeeds;
+  var _blogsFeeds;
   bool _isSearchActive = false;
+  bool _isBlogsSelected = false;
 
   @override
   void initState() {
@@ -27,8 +29,7 @@ class _NewsContainerPageState extends State<NewsContainerPage>
   _getNewsFromHive() async {
     var newsBox = Hive.box(NEWS_PREFS_BOX);
     _newsFeeds = newsBox.get(NEWS_PREFS);
-
-    // print(_newsFeeds);
+    _blogsFeeds = newsBox.get(NEWS_BLOGS_AUTHORS);
   }
 
   Future<void> _showThemeDialog(BuildContext context) async {
@@ -99,96 +100,230 @@ class _NewsContainerPageState extends State<NewsContainerPage>
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    return DefaultTabController(
-      length: _newsFeeds.length,
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: (!_isSearchActive)
-            ? AppBar(
-                centerTitle: true,
-                leading: InkWell(
-                  child: Icon(Icons.search),
-                  onTap: () => setState(() {
-                    _isSearchActive = true;
-                  }),
-                ),
-                title: Text(
-                  'News',
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).accentColor,
-                  ),
-                ),
-                actions: [
-                  PopupMenuButton(
-                    onSelected: (value) async {
-                      switch (value) {
-                        case 'Change Theme':
-                          _showThemeDialog(context);
-                          break;
-                        case 'Change News Preferences':
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => PreferencesPage(),
-                            ),
-                          );
-                          break;
-                      }
-                    },
-                    itemBuilder: (context) {
-                      return {'Change Theme', 'Change News Preferences'}.map((String choice) {
-                        return PopupMenuItem<String>(
-                          value: choice,
-                          child: Text(choice),
-                        );
-                      }).toList();
-                    },
-                  ),
-                ],
-                bottom: TabBar(
-                  tabs: List.generate(
-                    _newsFeeds.length,
-                    (index) {
-                      if (_newsFeeds[index].runtimeType == String) {
-                        return Tab(
-                          text: (_newsFeeds[index] as String).toUpperCase(),
-                        ); //Very bad method but eet ees what eet ees
-                      } else {
-                        return Tab(
-                          text: _newsFeeds[index].toString().split('.').last.replaceAll("_", " "),
-                        );
-                      }
-                    },
-                  ),
-                  isScrollable: true,
-                ),
-              )
-            : _searchAppBar(context),
-        body: TabBarView(
-          children: List.generate(
-            _newsFeeds.length,
-            (index) {
-              if (_newsFeeds[index].runtimeType == String) {
-                return NewsPage(
-                  customPref: _newsFeeds[index],
-                  isCustomPref: true,
-                ); //Very bad method but eet ees what eet ees
-              } else {
-                return NewsPage(
-                  newsFeed: _newsFeeds[index],
-                  isCustomPref: false,
-                );
-              }
-            },
-          ),
+  Drawer drawerWidget() {
+    return Drawer(
+      child: Container(
+        color: Theme.of(context).primaryColor,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              child: Text(
+                'News Summarizer',
+                style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20),
+              ),
+              decoration: BoxDecoration(
+                color: Theme.of(context).accentColor,
+              ),
+            ),
+            ListTile(
+              title: Text(
+                'News',
+                style: TextStyle(color: Theme.of(context).accentColor, fontSize: 18),
+              ),
+              focusColor: Theme.of(context).accentColor,
+              onTap: () {
+                setState(() {
+                  _isBlogsSelected = false;
+                });
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text(
+                'Blogs',
+                style: TextStyle(color: Theme.of(context).accentColor, fontSize: 18),
+              ),
+              focusColor: Theme.of(context).accentColor,
+              onTap: () {
+                setState(() {
+                  _isBlogsSelected = true;
+                });
+                Navigator.pop(context);
+              },
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // super.build(context);
+    return _isBlogsSelected
+        ? DefaultTabController(
+            length: _blogsFeeds.length,
+            child: Scaffold(
+              appBar: (!_isSearchActive)
+                  ? AppBar(
+                      centerTitle: true,
+                      title: Text(
+                        'Blogs',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).accentColor,
+                        ),
+                      ),
+                      actions: [
+                        InkWell(
+                          child: Icon(Icons.search),
+                          onTap: () => setState(() {
+                            _isSearchActive = true;
+                          }),
+                        ),
+                        PopupMenuButton(
+                          onSelected: (value) async {
+                            switch (value) {
+                              case 'Change Theme':
+                                _showThemeDialog(context);
+                                break;
+                              case 'Change News Preferences':
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PreferencesPage(),
+                                  ),
+                                );
+                                break;
+                            }
+                          },
+                          itemBuilder: (context) {
+                            return {'Change Theme', 'Change News Preferences'}.map((String choice) {
+                              return PopupMenuItem<String>(
+                                value: choice,
+                                child: Text(choice),
+                              );
+                            }).toList();
+                          },
+                        ),
+                      ],
+                      bottom: _blogsFeeds.isEmpty
+                          ? PreferredSize(
+                              preferredSize: Size.fromHeight(0),
+                              child: SizedBox.shrink(),
+                            )
+                          : TabBar(
+                              tabs: List.generate(
+                                _blogsFeeds.length,
+                                (index) {
+                                  return Tab(
+                                    text: (_blogsFeeds[index] as String).toUpperCase(),
+                                  ); //Very bad method but eet ees what eet ees
+                                },
+                              ),
+                              isScrollable: true,
+                            ),
+                    )
+                  : _searchAppBar(context),
+              drawer: drawerWidget(),
+              backgroundColor: Colors.transparent,
+              body: _blogsFeeds.isEmpty
+                  ? Center(
+                      child: Text("Add a blog to your preferences"),
+                    )
+                  : TabBarView(
+                      children: List.generate(
+                        _blogsFeeds.length,
+                        (index) {
+                          return NewsPage(
+                            blogAuthor: _blogsFeeds[index],
+                            isBlogAuthor: true,
+                            isCustomPref: false,
+                          ); //Very bad method but eet ees what eet ees
+                        },
+                      ),
+                    ),
+            ))
+        : DefaultTabController(
+            length: _newsFeeds.length,
+            child: Scaffold(
+              drawer: drawerWidget(),
+              backgroundColor: Colors.transparent,
+              appBar: (!_isSearchActive)
+                  ? AppBar(
+                      centerTitle: true,
+                      title: Text(
+                        'News',
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).accentColor,
+                        ),
+                      ),
+                      actions: [
+                        InkWell(
+                          child: Icon(Icons.search),
+                          onTap: () => setState(() {
+                            _isSearchActive = true;
+                          }),
+                        ),
+                        PopupMenuButton(
+                          onSelected: (value) async {
+                            switch (value) {
+                              case 'Change Theme':
+                                _showThemeDialog(context);
+                                break;
+                              case 'Change News Preferences':
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PreferencesPage(),
+                                  ),
+                                );
+                                break;
+                            }
+                          },
+                          itemBuilder: (context) {
+                            return {'Change Theme', 'Change News Preferences'}.map((String choice) {
+                              return PopupMenuItem<String>(
+                                value: choice,
+                                child: Text(choice),
+                              );
+                            }).toList();
+                          },
+                        ),
+                      ],
+                      bottom: TabBar(
+                        tabs: List.generate(
+                          _newsFeeds.length,
+                          (index) {
+                            if (_newsFeeds[index].runtimeType == String) {
+                              return Tab(
+                                text: (_newsFeeds[index] as String).toUpperCase(),
+                              ); //Very bad method but eet ees what eet ees
+                            } else {
+                              return Tab(
+                                text: _newsFeeds[index].toString().split('.').last.replaceAll("_", " "),
+                              );
+                            }
+                          },
+                        ),
+                        isScrollable: true,
+                      ),
+                    )
+                  : _searchAppBar(context),
+              body: TabBarView(
+                children: List.generate(
+                  _newsFeeds.length,
+                  (index) {
+                    if (_newsFeeds[index].runtimeType == String) {
+                      return NewsPage(
+                        customPref: _newsFeeds[index],
+                        isCustomPref: true,
+                      ); //Very bad method but eet ees what eet ees
+                    } else {
+                      return NewsPage(
+                        newsFeed: _newsFeeds[index],
+                        isCustomPref: false,
+                      );
+                    }
+                  },
+                ),
+              ),
+            ),
+          );
   }
 
   @override

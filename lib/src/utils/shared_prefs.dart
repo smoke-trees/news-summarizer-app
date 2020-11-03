@@ -36,4 +36,16 @@ class SharedPrefs {
     final key = 'isDarkMode';
     prefs.setBool(key, value);
   }
+
+  static Future<String> getUserFCMToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final key = 'userFCMToken';
+    return prefs.getString(key);
+  }
+
+  static void setUserFCMToken(String value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final key = 'userFCMToken';
+    prefs.setString(key, value);
+  }
 }

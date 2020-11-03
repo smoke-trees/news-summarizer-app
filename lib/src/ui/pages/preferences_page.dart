@@ -2,11 +2,13 @@ import 'package:chips_choice/chips_choice.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
+import 'package:news_summarizer/src/providers/user_provider.dart';
 import 'package:news_summarizer/src/ui/pages/base_page.dart';
 import 'package:news_summarizer/src/ui/pages/custom_prefs_page.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
 import 'package:news_summarizer/src/utils/news_feed_list.dart';
 import 'package:news_summarizer/src/utils/shared_prefs.dart';
+import 'package:provider/provider.dart';
 
 class PreferencesPage extends StatefulWidget {
   static const routename = "/preferences";
@@ -22,6 +24,9 @@ class _PreferencesPageState extends State<PreferencesPage> {
   var metroChosen = [];
   var indianCitiesChosen = [];
   var internationalChosen = [];
+
+  var allPrefs = [];
+
   // var customPrefsChosen = [];
   //
   // var customPrefsPresent = [];
@@ -35,11 +40,18 @@ class _PreferencesPageState extends State<PreferencesPage> {
     metroChosen = _newsBox.get(NEWS_METRO);
     indianCitiesChosen = _newsBox.get(NEWS_OTHER);
     internationalChosen = _newsBox.get(NEWS_INT);
+    allPrefs = _newsBox.get(NEWS_PREFS) ?? [];
+    // allDuplicate.addAll(popularChosen);
+    // allDuplicate.addAll(metroChosen);
+    // allDuplicate.addAll(indianCitiesChosen);
+    // allDuplicate.addAll(popularChosen);
+
     // customPrefsChosen = _newsBox.get(NEWS_CUSTOM) ?? [];
     // customPrefsPresent.addAll(customPrefsChosen);
   }
 
   void finishSelection() async {
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     print("finishSelection called");
     var finList = [];
     if (!popularChosen.isNullOrBlank) {
@@ -71,6 +83,18 @@ class _PreferencesPageState extends State<PreferencesPage> {
       _newsBox.put(NEWS_INT, internationalChosen);
       _newsBox.put(NEWS_METRO, metroChosen);
       _newsBox.put(NEWS_OTHER, indianCitiesChosen);
+
+      allPrefs.forEach((element) {
+        if (!finList.contains(element)) {
+          userProvider.unsubscribeToTopic(topic: element.toString());
+        }
+      });
+      finList.forEach((element) {
+        if (allPrefs.contains(element)) {
+          userProvider.subscribeToTopic(topic: element.toString());
+        }
+      });
+
       // _newsBox.put(NEWS_CUSTOM, customPrefsChosen);
       SharedPrefs.setIsUserLoggedIn(true);
       Navigator.pushNamedAndRemoveUntil(

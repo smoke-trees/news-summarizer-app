@@ -21,6 +21,7 @@ class ApiProvider with ChangeNotifier {
   }
 
   Future<List<Article>> getArticlesFromCategory({String category}) async {
+
     Response response = await _dio.get("/get_category_news", queryParameters: {'category': category});
     List<Article> articleList = (response.data as List).map((json) => Article.fromJson(json)).toList();
     return articleList;
@@ -34,6 +35,12 @@ class ApiProvider with ChangeNotifier {
 
   Future<List<Article>> getArticlesFromCustomPreference({String customPref}) async {
     Response response = await _dio.get("/get_news", queryParameters: {'query': customPref});
+    List<Article> articleList = (response.data as List).map((json) => Article.fromJson(json)).toList();
+    return articleList;
+  }
+
+  Future<List<Article>> getArticlesFromBlogAuthor({String author}) async {
+    Response response = await _dio.get("/get_author_blog", queryParameters: {'query': author});
     List<Article> articleList = (response.data as List).map((json) => Article.fromJson(json)).toList();
     return articleList;
   }

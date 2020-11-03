@@ -5,4 +5,5 @@ const String NEWS_INT = "newsInt";
 const String NEWS_METRO = "newsMetro";
 const String NEWS_OTHER = "newsOther";
 const String NEWS_CUSTOM = "newsCustom";
+const String NEWS_BLOGS_AUTHORS = "blogsAuthors";
 const String BASE_URL = "http://164.52.207.142/";

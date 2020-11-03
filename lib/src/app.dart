@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:news_summarizer/src/providers/theme_provider.dart';
 import 'package:news_summarizer/src/ui/pages/auth_page.dart';
 import 'package:news_summarizer/src/ui/pages/base_page.dart';
+import 'package:news_summarizer/src/ui/pages/blogs_prefs_page.dart';
 import 'package:news_summarizer/src/ui/pages/custom_prefs_page.dart';
 import 'package:news_summarizer/src/ui/pages/home_page.dart';
 import 'package:news_summarizer/src/ui/pages/preferences_page.dart';
@@ -34,6 +35,7 @@ class App extends StatelessWidget {
         PreferencesPage.routename: (context) => PreferencesPage(),
         CustomPrefsPage.routename: (context) => CustomPrefsPage(),
         ReorderPrefsPage.routeName: (context) => ReorderPrefsPage(),
+        BlogsPrefsPage.routeName: (context) => BlogsPrefsPage(),
       },
     );
   }

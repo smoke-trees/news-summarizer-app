@@ -4,8 +4,9 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 class NewsWebView extends StatefulWidget {
   final Article article;
+  final bool isBlog;
 
-  NewsWebView({this.article});
+  NewsWebView({this.article, this.isBlog = false});
 
   @override
   _NewsWebViewState createState() => _NewsWebViewState();
@@ -20,7 +21,7 @@ class _NewsWebViewState extends State<NewsWebView> {
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         title: Text(
-          'News',
+          widget.isBlog ? "Blog" : 'News',
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Theme.of(context).accentColor),
         ),
       ),
