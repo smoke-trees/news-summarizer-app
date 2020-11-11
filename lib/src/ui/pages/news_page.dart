@@ -23,15 +23,11 @@ class NewsPage extends StatefulWidget {
 
 class _NewsPageState extends State<NewsPage> with AutomaticKeepAliveClientMixin<NewsPage> {
   List<Article> _newsItems;
-  List<Article> _blogItems;
-  Future<List<Article>> _newsFeedFuture;
-  Future<List<Article>> _blogFeedFuture;
+  Future<List<Article>> _newsFeed;
 
   @override
   void initState() {
     super.initState();
-    _newsFeedFuture = loadFeed();
-    _blogFeedFuture = loadBlogFeed();
   }
 
   Future<List<Article>> loadFeed() async {
@@ -66,76 +62,33 @@ class _NewsPageState extends State<NewsPage> with AutomaticKeepAliveClientMixin<
     return null;
   }
 
-  Future<List<Article>> loadBlogFeed() async {
-    try {
-      ApiProvider apiProvider = Provider.of<ApiProvider>(context, listen: false);
-      List<Article> articleList = await apiProvider.getArticlesFromBlogAuthor(author: widget.blogAuthor);
-      _blogItems = articleList;
-      return articleList;
-    } on SocketException {
-      Get.snackbar(
-        "Error",
-        "No Internet!",
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM,
-      );
-    } catch (e) {
-      print(e);
-    }
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: widget.isBlogAuthor
-          ? FutureBuilder(
-              future: _blogFeedFuture,
-              builder: (context, snapshot) => (snapshot.hasData)
-                  ? RefreshIndicator(
-                      onRefresh: loadBlogFeed,
-                      backgroundColor: Theme.of(context).primaryColor,
-                      child: snapshot.data.length == 0
-                          ? Center(
-                              child: Text("No blogs available"),
-                            )
-                          : ListView.builder(
-                              itemBuilder: (context, index) => NewsCard(
-                                isBlog: widget.isBlogAuthor,
-                                article: _blogItems[index],
-                              ),
-                              itemCount: _blogItems.length,
-                            ),
-                    )
-                  : Center(
-                      child: Text("Fetching latest blogs for you..."),
-                    ),
-            )
-          : FutureBuilder(
-              future: _newsFeedFuture,
-              builder: (context, snapshot) => (snapshot.hasData)
-                  ? RefreshIndicator(
-                      onRefresh: loadFeed,
-                      backgroundColor: Theme.of(context).primaryColor,
-                      child: snapshot.data.length == 0
-                          ? Center(
-                              child: Text("No news available"),
-                            )
-                          : ListView.builder(
-                              itemBuilder: (context, index) => NewsCard(
-                                isBlog: widget.isBlogAuthor,
-                                article: _newsItems[index],
-                              ),
-                              itemCount: _newsItems.length,
-                            ),
-                    )
-                  : Center(
-                      child: Text("Fetching latest news for you..."),
-                    ),
-            ),
+      body: FutureBuilder(
+        future: loadFeed(),
+        builder: (context, snapshot) => (snapshot.hasData)
+            ? RefreshIndicator(
+                onRefresh: loadFeed,
+                backgroundColor: Theme.of(context).primaryColor,
+                child: snapshot.data.length == 0
+                    ? Center(
+                        child: Text("No news available"),
+                      )
+                    : ListView.builder(
+                        itemBuilder: (context, index) => NewsCard(
+                          isBlog: widget.isBlogAuthor,
+                          article: _newsItems[index],
+                        ),
+                        itemCount: _newsItems.length,
+                      ),
+              )
+            : Center(
+                child: Text("Fetching latest news for you..."),
+              ),
+      ),
     );
   }
 

@@ -1,3 +1,4 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -10,7 +11,7 @@ class AuthProvider extends ChangeNotifier {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future<User> autoSignInGoogle() async {
+  Future<UserCredential> autoSignInGoogle() async {
     try {
       GoogleSignInAccount googleSignInAccount;
       googleSignInAccount = await _googleSignIn.signInSilently();
@@ -26,8 +27,7 @@ class AuthProvider extends ChangeNotifier {
       );
 
       UserCredential userCred = await _auth.signInWithCredential(credential);
-      User user = userCred.user;
-      return user;
+      return userCred;
     } catch (e) {
       Get.snackbar("Error creating Account", e.message,
           snackPosition: SnackPosition.BOTTOM, snackStyle: SnackStyle.FLOATING);

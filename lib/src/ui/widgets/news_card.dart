@@ -2,8 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:news_summarizer/src/models/article.dart';
+import 'package:news_summarizer/src/providers/api_provider.dart';
 import 'package:news_summarizer/src/ui/pages/news_web_view.dart';
 import 'package:news_summarizer/src/utils/html_utils.dart';
+import 'package:provider/provider.dart';
 
 class NewsCard extends StatelessWidget {
   final Article article;
@@ -13,6 +15,7 @@ class NewsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ApiProvider apiProvider = Provider.of<ApiProvider>(context, listen: false);
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: InkWell(
@@ -72,6 +75,10 @@ class NewsCard extends StatelessWidget {
           ),
         ),
         onTap: () {
+          if(!isBlog){
+
+            apiProvider.makeView(article: article);
+          }
           Navigator.push(
             context,
             MaterialPageRoute(

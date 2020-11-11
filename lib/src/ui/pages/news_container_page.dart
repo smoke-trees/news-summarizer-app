@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:news_summarizer/src/providers/api_provider.dart';
+import 'package:news_summarizer/src/ui/pages/get_location_page.dart';
 import 'package:news_summarizer/src/ui/pages/news_page.dart';
 import 'package:news_summarizer/src/ui/pages/preferences_page.dart';
 import 'package:news_summarizer/src/ui/pages/search_page.dart';
@@ -19,6 +20,7 @@ class _NewsContainerPageState extends State<NewsContainerPage>
   var _blogsFeeds;
   bool _isSearchActive = false;
   bool _isBlogsSelected = false;
+  int _selectedTab = 0;
 
   @override
   void initState() {
@@ -148,57 +150,100 @@ class _NewsContainerPageState extends State<NewsContainerPage>
     );
   }
 
+  AppBar _withoutSearchAppBar({Widget bottom}) {
+    return AppBar(
+        centerTitle: true,
+        leading: InkWell(
+          child: Icon(Icons.search),
+          onTap: () => setState(() {
+            _isSearchActive = true;
+          }),
+        ),
+        title: Text(
+          'Blogs',
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).accentColor,
+          ),
+        ),
+        actions: [
+          PopupMenuButton(
+            onSelected: (value) async {
+              switch (value) {
+                case 'Change Theme':
+                  _showThemeDialog(context);
+                  break;
+                case 'Change News Preferences':
+                  Navigator.pushNamed(context, PreferencesPage.routename);
+                  break;
+                case "Change Location":
+                  Navigator.pushNamed(context, GetLocationPage.routeName);
+              }
+            },
+            itemBuilder: (context) {
+              return {'Change Theme', 'Change News Preferences', "Change Location"}.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
+          ),
+        ],
+        bottom: bottom);
+  }
+
+  BottomNavigationBar _bottomNavigationBar() {
+    return BottomNavigationBar(
+      backgroundColor: Theme.of(context).primaryColor,
+      // fixedColor: Theme.of(context).accentColor,
+      selectedItemColor: Theme.of(context).accentColor,
+      elevation: 50,
+      items: const <BottomNavigationBarItem>[
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          title: Text('News'),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.business),
+          title: Text('Expert Opinion'),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.location_on),
+          title: Text('Around Me'),
+        ),
+      ],
+      currentIndex: _selectedTab,
+
+      onTap: (index) {
+        if (index == 0) {
+          setState(() {
+            _selectedTab = 0;
+          });
+        } else if (index == 1) {
+          setState(() {
+            _selectedTab = 1;
+          });
+        } else if (_selectedTab == 2) {
+          setState(() {
+            _selectedTab = 2;
+          });
+        }
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // super.build(context);
-    return _isBlogsSelected
+    return _selectedTab == 1
         ? DefaultTabController(
             length: _blogsFeeds.length,
             child: Scaffold(
+              bottomNavigationBar: _bottomNavigationBar(),
               appBar: (!_isSearchActive)
-                  ? AppBar(
-                      centerTitle: true,
-                      title: Text(
-                        'Blogs',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).accentColor,
-                        ),
-                      ),
-                      actions: [
-                        InkWell(
-                          child: Icon(Icons.search),
-                          onTap: () => setState(() {
-                            _isSearchActive = true;
-                          }),
-                        ),
-                        PopupMenuButton(
-                          onSelected: (value) async {
-                            switch (value) {
-                              case 'Change Theme':
-                                _showThemeDialog(context);
-                                break;
-                              case 'Change News Preferences':
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => PreferencesPage(),
-                                  ),
-                                );
-                                break;
-                            }
-                          },
-                          itemBuilder: (context) {
-                            return {'Change Theme', 'Change News Preferences'}.map((String choice) {
-                              return PopupMenuItem<String>(
-                                value: choice,
-                                child: Text(choice),
-                              );
-                            }).toList();
-                          },
-                        ),
-                      ],
+                  ? _withoutSearchAppBar(
                       bottom: _blogsFeeds.isEmpty
                           ? PreferredSize(
                               preferredSize: Size.fromHeight(0),
@@ -217,7 +262,7 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                             ),
                     )
                   : _searchAppBar(context),
-              drawer: drawerWidget(),
+              // drawer: drawerWidget(),
               backgroundColor: Colors.transparent,
               body: _blogsFeeds.isEmpty
                   ? Center(
@@ -239,65 +284,24 @@ class _NewsContainerPageState extends State<NewsContainerPage>
         : DefaultTabController(
             length: _newsFeeds.length,
             child: Scaffold(
-              drawer: drawerWidget(),
+              bottomNavigationBar: _bottomNavigationBar(),
+              // drawer: drawerWidget(),
               backgroundColor: Colors.transparent,
               appBar: (!_isSearchActive)
-                  ? AppBar(
-                      centerTitle: true,
-                      title: Text(
-                        'News',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).accentColor,
-                        ),
-                      ),
-                      actions: [
-                        InkWell(
-                          child: Icon(Icons.search),
-                          onTap: () => setState(() {
-                            _isSearchActive = true;
-                          }),
-                        ),
-                        PopupMenuButton(
-                          onSelected: (value) async {
-                            switch (value) {
-                              case 'Change Theme':
-                                _showThemeDialog(context);
-                                break;
-                              case 'Change News Preferences':
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => PreferencesPage(),
-                                  ),
-                                );
-                                break;
-                            }
-                          },
-                          itemBuilder: (context) {
-                            return {'Change Theme', 'Change News Preferences'}.map((String choice) {
-                              return PopupMenuItem<String>(
-                                value: choice,
-                                child: Text(choice),
-                              );
-                            }).toList();
-                          },
-                        ),
-                      ],
+                  ? _withoutSearchAppBar(
                       bottom: TabBar(
                         tabs: List.generate(
                           _newsFeeds.length,
                           (index) {
-                            if (_newsFeeds[index].runtimeType == String) {
-                              return Tab(
-                                text: (_newsFeeds[index] as String).toUpperCase(),
-                              ); //Very bad method but eet ees what eet ees
-                            } else {
-                              return Tab(
-                                text: _newsFeeds[index].toString().split('.').last.replaceAll("_", " "),
-                              );
-                            }
+
+                            return Tab(
+                              text: _newsFeeds[index]
+                                  .toString()
+                                  .split('.')
+                                  .last
+                                  .replaceAll("_", " ")
+                                  .toUpperCase(),
+                            );
                           },
                         ),
                         isScrollable: true,
@@ -310,7 +314,7 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                   (index) {
                     if (_newsFeeds[index].runtimeType == String) {
                       return NewsPage(
-                        customPref: _newsFeeds[index],
+                        customPref: _newsFeeds[index].toString().split('.').last.replaceAll("_", " "),
                         isCustomPref: true,
                       ); //Very bad method but eet ees what eet ees
                     } else {

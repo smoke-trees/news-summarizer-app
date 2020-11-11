@@ -4,6 +4,7 @@ import 'package:news_summarizer/src/utils/shared_prefs.dart';
 
 class ThemeProvider with ChangeNotifier {
   ThemeData theme;
+  ProfileHive sp = new ProfileHive();
 
   ThemeProvider() {
     this.theme = darkTheme;
@@ -11,7 +12,8 @@ class ThemeProvider with ChangeNotifier {
   }
 
   getUserTheme() async {
-    var _isDarkMode = await SharedPrefs.getIsDarkMode();
+
+    var _isDarkMode = sp.getIsDarkMode();
     if (_isDarkMode != null) {
       if (_isDarkMode) {
         theme = darkTheme;
@@ -66,13 +68,13 @@ class ThemeProvider with ChangeNotifier {
 
   void setDarkTheme() {
     theme = darkTheme;
-    SharedPrefs.setIsDarkMode(true);
+    sp.setIsDarkMode(true);
     notifyListeners();
   }
 
   void setLightTheme() {
     theme = lightTheme;
-    SharedPrefs.setIsDarkMode(false);
+    sp.setIsDarkMode(false);
     notifyListeners();
   }
 

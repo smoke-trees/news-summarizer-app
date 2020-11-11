@@ -27,7 +27,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
 
   var allPrefs = [];
 
-  // var customPrefsChosen = [];
+  var customPrefsChosen = [];
   //
   // var customPrefsPresent = [];
   // TextEditingController customPrefsController = new TextEditingController();
@@ -46,11 +46,11 @@ class _PreferencesPageState extends State<PreferencesPage> {
     // allDuplicate.addAll(indianCitiesChosen);
     // allDuplicate.addAll(popularChosen);
 
-    // customPrefsChosen = _newsBox.get(NEWS_CUSTOM) ?? [];
+    customPrefsChosen = _newsBox.get(NEWS_CUSTOM) ?? [];
     // customPrefsPresent.addAll(customPrefsChosen);
   }
 
-  void finishSelection() async {
+  void finishSelection() {
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     print("finishSelection called");
     var finList = [];
@@ -84,24 +84,24 @@ class _PreferencesPageState extends State<PreferencesPage> {
       _newsBox.put(NEWS_METRO, metroChosen);
       _newsBox.put(NEWS_OTHER, indianCitiesChosen);
 
+      // print(allPrefs);
+      // print(finList);
+
       allPrefs.forEach((element) {
-        if (!finList.contains(element)) {
+        if (!finList.contains(element) && !customPrefsChosen.contains(element)) {
           userProvider.unsubscribeToTopic(topic: element.toString());
         }
       });
       finList.forEach((element) {
-        if (allPrefs.contains(element)) {
+        if (!customPrefsChosen.contains(element)) {
           userProvider.subscribeToTopic(topic: element.toString());
         }
       });
 
-      // _newsBox.put(NEWS_CUSTOM, customPrefsChosen);
-      SharedPrefs.setIsUserLoggedIn(true);
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        CustomPrefsPage.routename,
-        (route) => false,
-      );
+      userProvider.setNewsPreferences(prefsList: finList);
+
+      ProfileHive().setIsUserLoggedIn(true);
+      Navigator.pushNamed(context, CustomPrefsPage.routename);
     }
   }
 

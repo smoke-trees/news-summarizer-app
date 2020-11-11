@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:news_summarizer/src/providers/user_provider.dart';
 import 'package:news_summarizer/src/ui/pages/base_page.dart';
 import 'package:news_summarizer/src/ui/pages/blogs_prefs_page.dart';
 import 'package:news_summarizer/src/ui/widgets/listview_card.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
+import 'package:provider/provider.dart';
 
 class ReorderPrefsPage extends StatefulWidget {
   static String routeName = "/reorder_prefs_page";
@@ -40,6 +42,7 @@ class _ReorderPrefsPageState extends State<ReorderPrefsPage> {
 
   void finishReordering() {
     _newsBox.put(NEWS_PREFS, preferences);
+
     Navigator.pushNamedAndRemoveUntil(
       context,
       BlogsPrefsPage.routeName,

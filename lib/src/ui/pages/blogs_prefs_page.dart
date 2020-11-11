@@ -41,13 +41,10 @@ class _BlogsPrefsPageState extends State<BlogsPrefsPage> {
     print("finishSelection called");
     var finList = authorsChosen.cast<String>();
     _newsBox.put(NEWS_BLOGS_AUTHORS, finList);
-
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    userProvider.setBlogPreferences(prefsList: finList);
     print("Saved to blogs authors, now list is: $finList");
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      BasePage.routename,
-      (route) => false,
-    );
+    Navigator.pushNamed(context, BasePage.routename);
   }
 
   @override
@@ -80,57 +77,59 @@ class _BlogsPrefsPageState extends State<BlogsPrefsPage> {
           ),
         ],
       ),
-      body: Container(
-        margin: EdgeInsets.all(8),
-        child: FutureBuilder(
-            future: authorsListFuture,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Card(
-                  color: Theme.of(context).cardColor,
-                  child: ExpansionTile(
-                    title: Container(
-                      child: Text(
-                        "Blog Authors",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          decoration: TextDecoration.underline,
-                          decorationColor: Theme.of(context).accentColor,
+      body: SingleChildScrollView(
+        child: Container(
+          margin: EdgeInsets.all(8),
+          child: FutureBuilder(
+              future: authorsListFuture,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Card(
+                    color: Theme.of(context).cardColor,
+                    child: ExpansionTile(
+                      title: Container(
+                        child: Text(
+                          "Blog Authors",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            decoration: TextDecoration.underline,
+                            decorationColor: Theme.of(context).accentColor,
+                          ),
                         ),
                       ),
+                      children: [
+                        ChipsChoice<dynamic>.multiple(
+                          itemConfig: ChipsChoiceItemConfig(
+                            selectedColor: Theme.of(context).accentColor,
+                            unselectedColor: Theme.of(context).primaryColor,
+                            unselectedBrightness: Theme.of(context).brightness,
+                            selectedBrightness: Theme.of(context).brightness,
+                          ),
+                          value: authorsChosen,
+                          options: ChipsChoiceOption.listFrom(
+                            source: snapshot.data,
+                            value: (index, item) => item,
+                            label: (index, item) => item.toString().split(".").last.replaceAll("_", " "),
+                          ),
+                          onChanged: (val) {
+                            setState(() => authorsChosen = val);
+                          },
+                          padding: EdgeInsets.all(8),
+                          isWrapped: true,
+                        ),
+                      ],
                     ),
-                    children: [
-                      ChipsChoice<dynamic>.multiple(
-                        itemConfig: ChipsChoiceItemConfig(
-                          selectedColor: Theme.of(context).accentColor,
-                          unselectedColor: Theme.of(context).primaryColor,
-                          unselectedBrightness: Theme.of(context).brightness,
-                          selectedBrightness: Theme.of(context).brightness,
-                        ),
-                        value: authorsChosen,
-                        options: ChipsChoiceOption.listFrom(
-                          source: snapshot.data,
-                          value: (index, item) => item,
-                          label: (index, item) => item.toString().split(".").last.replaceAll("_", " "),
-                        ),
-                        onChanged: (val) {
-                          setState(() => authorsChosen = val);
-                        },
-                        padding: EdgeInsets.all(8),
-                        isWrapped: true,
-                      ),
-                    ],
-                  ),
-                );
-              } else {
-                return Card(
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              }
-            }),
+                  );
+                } else {
+                  return Card(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                }
+              }),
+        ),
       ),
     );
   }

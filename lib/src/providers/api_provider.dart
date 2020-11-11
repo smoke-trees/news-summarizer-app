@@ -46,7 +46,7 @@ class ApiProvider with ChangeNotifier {
   }
 
   void makeView({Article article}) async {
-    await _dio.get("/make_view", queryParameters: {'article_id': article.id});
+    await _dio.post("/make_view_news/", queryParameters: {'article_id': article.id});
     print("increased view of article");
   }
 

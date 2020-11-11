@@ -3,13 +3,21 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
+import 'package:news_summarizer/src/models/user.dart';
 import 'package:news_summarizer/src/providers/auth_provider.dart';
 import 'package:news_summarizer/src/providers/theme_provider.dart';
 import 'package:news_summarizer/src/providers/user_provider.dart';
+import 'package:news_summarizer/src/ui/pages/onboarding_pages.dart';
+import 'package:news_summarizer/src/ui/pages/phone_auth_page.dart';
 import 'package:news_summarizer/src/ui/pages/preferences_page.dart';
 import 'package:news_summarizer/src/ui/widgets/or_divider.dart';
+import 'package:news_summarizer/src/utils/constants.dart';
+import 'package:news_summarizer/src/utils/shared_prefs.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
+
+import 'base_page.dart';
 
 class AuthPage extends StatefulWidget {
   @override
@@ -17,130 +25,10 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
-  final _formkey = GlobalKey<FormState>();
-  bool _isLoading = false;
-  bool _isOTPWidgetVisible = false;
-  String _otpString = "";
-  String _verificationCode;
-  final TextEditingController _phoneController = TextEditingController();
-
-  Future<void> initPhoneAuth(BuildContext ctx) async {
-    FirebaseAuth _auth = FirebaseAuth.instance;
-
-    final PhoneVerificationFailed verificationFailed = (e) {
-      setState(() {
-        print(e.message);
-        _isLoading = false;
-      });
-      Get.snackbar(
-        "Error",
-        "Something went wrong!",
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM,
-      );
-    };
-
-    final PhoneCodeSent codeSent = (String verificationId, [int forceResendingToken]) async {
-      print("code sent");
-      setState(() {
-        _isLoading = false;
-        _isOTPWidgetVisible = true;
-        _verificationCode = verificationId;
-      });
-    };
-
-    final PhoneVerificationCompleted verificationCompleted = (AuthCredential authCredential) async {
-      try {
-        var authResult = await _auth.signInWithCredential(authCredential);
-        if (authResult.user != null) {
-          Navigator.popAndPushNamed(context, PreferencesPage.routename);
-        }
-      } catch (e) {
-        Get.snackbar(
-          "Error",
-          "Something went wrong!",
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
-        );
-      }
-    };
-
-    setState(() {
-      _isLoading = true;
-    });
-    await _auth.verifyPhoneNumber(
-      phoneNumber: "+91" + _phoneController.text,
-      timeout: Duration(seconds: 90),
-      verificationCompleted: verificationCompleted,
-      verificationFailed: verificationFailed,
-      codeSent: codeSent,
-      codeAutoRetrievalTimeout: (String verificationId) {
-        print(verificationId);
-        print("Timeout");
-      },
-    );
-  }
-
-  Future<void> signInPhoneNumber(String smsCode) async {
-    final AuthCredential credential = PhoneAuthProvider.credential(
-      verificationId: _verificationCode,
-      smsCode: smsCode,
-    );
-    try {
-      setState(() {
-        _isLoading = true;
-      });
-      var authResult = await FirebaseAuth.instance.signInWithCredential(credential);
-      User user = authResult.user;
-      if (user != null) {
-        setState(() {
-          _isLoading = false;
-          Navigator.popAndPushNamed(context, PreferencesPage.routename);
-        });
-      }
-    } on PlatformException catch (err) {
-      if (err.code == "ERROR_INVALID_VERIFICATION_CODE") {
-        Get.snackbar(
-          "Error",
-          "Invalid OTP",
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
-        );
-      } else {
-        Get.snackbar(
-          "Error",
-          "Something went wrong!",
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-          snackPosition: SnackPosition.BOTTOM,
-        );
-      }
-      setState(() {
-        _isLoading = false;
-      });
-    } catch (e) {
-      print(e);
-      _isLoading = false;
-      Get.snackbar(
-        "Error",
-        "Something went wrong!",
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM,
-      );
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
+  var _newsBox = Hive.box(NEWS_PREFS_BOX);
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
-
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
@@ -177,157 +65,89 @@ class _AuthPageState extends State<AuthPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 50),
-                  // Padding(
-                  //   padding: EdgeInsets.all(24),
-                  //   child: Form(
-                  //     key: _formkey,
-                  //     child: Column(
-                  //       children: [
-                  //         TextFormField(
-                  //           enabled: !_isOTPWidgetVisible,
-                  //           validator: (value) {
-                  //             if (value.length < 10) {
-                  //               return 'Please enter a valid number!';
-                  //             }
-                  //             return null;
-                  //           },
-                  //           controller: _phoneController,
-                  //           maxLength: 10,
-                  //           keyboardType: TextInputType.number,
-                  //           decoration: InputDecoration(
-                  //             border: OutlineInputBorder(),
-                  //             labelText: 'Phone Number',
-                  //             hintText: '8197513721',
-                  //             icon: Icon(Icons.phone, color: Color(0xff3B916E)),
-                  //           ),
-                  //         ),
-                  //         SizedBox(height: 8),
-                  //         Visibility(
-                  //           visible: _isOTPWidgetVisible,
-                  //           child: InkWell(
-                  //             child: Container(
-                  //               alignment: Alignment.centerRight,
-                  //               child: Text(
-                  //                 "Edit phone number",
-                  //                 style: TextStyle(
-                  //                   color: Colors.grey,
-                  //                 ),
-                  //               ),
-                  //             ),
-                  //             onTap: () {
-                  //               setState(() {
-                  //                 _isOTPWidgetVisible = false;
-                  //               });
-                  //             },
-                  //           ),
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
-                  // Visibility(
-                  //   visible: _isOTPWidgetVisible,
-                  //   child: Column(
-                  //     children: [
-                  //       Container(
-                  //         margin: EdgeInsets.symmetric(
-                  //           horizontal: 24,
-                  //           vertical: 24,
-                  //         ),
-                  //         alignment: Alignment.centerLeft,
-                  //         child: Text("Enter the OTP received"),
-                  //       ),
-                  //       SizedBox(height: 20),
-                  //       Container(
-                  //         margin: EdgeInsets.symmetric(horizontal: 32),
-                  //         child: PinCodeTextField(
-                  //           animationType: AnimationType.slide,
-                  //           textInputType: TextInputType.number,
-                  //           length: 6,
-                  //           backgroundColor: Colors.transparent,
-                  //           enabled: !_isLoading,
-                  //           textStyle: TextStyle(
-                  //             color: (themeProvider.theme == themeProvider.darkTheme)
-                  //                 ? Colors.white
-                  //                 : Colors.black,
-                  //             fontSize: 18,
-                  //           ),
-                  //           pinTheme: PinTheme(
-                  //             selectedColor: Theme.of(context).accentColor,
-                  //             activeColor: Theme.of(context).accentColor,
-                  //             inactiveColor: Theme.of(context).accentColor,
-                  //             fieldWidth: 40,
-                  //           ),
-                  //           onCompleted: (value) {
-                  //             setState(() {
-                  //               _otpString = value;
-                  //             });
-                  //           },
-                  //           onChanged: (value) {
-                  //             setState(() {});
-                  //           },
-                  //         ),
-                  //       ),
-                  //       SizedBox(height: 40),
-                  //     ],
-                  //   ),
-                  // ),
-                  // Container(
-                  //   margin: EdgeInsets.all(24),
-                  //   width: 100,
-                  //   height: 45,
-                  //   child: MaterialButton(
-                  //     child: (!_isLoading)
-                  //         ? Text(
-                  //             "NEXT",
-                  //             style: TextStyle(
-                  //               fontWeight: FontWeight.bold,
-                  //               color: Theme.of(context).primaryColor,
-                  //             ),
-                  //           )
-                  //         : Container(
-                  //             height: 25,
-                  //             width: 25,
-                  //             child: CircularProgressIndicator(
-                  //               valueColor: AlwaysStoppedAnimation<Color>(
-                  //                 Colors.white,
-                  //               ),
-                  //             ),
-                  //           ),
-                  //     disabledColor: Theme.of(context).accentColor.withOpacity(0.7),
-                  //     onPressed: (!_isLoading)
-                  //         ? () {
-                  //             if (_isOTPWidgetVisible) {
-                  //               signInPhoneNumber(_otpString);
-                  //             } else {
-                  //               if (_formkey.currentState.validate()) {
-                  //                 initPhoneAuth(context);
-                  //               }
-                  //             }
-                  //           }
-                  //         : null,
-                  //     color: Theme.of(context).accentColor,
-                  //   ),
-                  // ),
-                  // Padding(
-                  //   padding: const EdgeInsets.all(20),
-                  //   child: OrDivider(
-                  //     color: Color(0xff3B916E),
-                  //     thickness: 3,
-                  //   ),
-                  // ),
+                  SizedBox(height: 70),
                   Padding(
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    child: OutlineButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, PhoneAuthPage.routeName);
+                      },
+                      padding: EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      borderSide: BorderSide(color: Color(0xff3B916E)),
+                      highlightedBorderColor: Colors.transparent,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.phone),
+                          SizedBox(
+                            width: 18,
+                          ),
+                          Text(
+                            "Continue with Phone Number",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    child: OutlineButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, PhoneAuthPage.routeName);
+                      },
+                      padding: EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      borderSide: BorderSide(color: Color(0xff3B916E)),
+                      highlightedBorderColor: Colors.transparent,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.mail),
+                          SizedBox(
+                            width: 18,
+                          ),
+                          Text(
+                            "Continue with Email",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     child: OutlineButton(
                       onPressed: () async {
+                        UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
                         AuthProvider authProvider = Provider.of<AuthProvider>(context, listen: false);
-                        User user = await authProvider.autoSignInGoogle();
-                        if (user != null) {
-                          UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-                          userProvider.createUserInFirebase(user: user);
-                          Navigator.popAndPushNamed(context, PreferencesPage.routename);
-                        } else {}
+                        UserCredential credential = await authProvider.autoSignInGoogle();
+                        if (credential.additionalUserInfo.isNewUser) {
+                          userProvider.createNewUser(newUser: credential.user);
+                          Navigator.popAndPushNamed(context, OnboardingPages.routeName);
+                        } else {
+                          print("[] Old User but not in Hive");
+                          ApiUser userr =
+                              await userProvider.getUserFromFirebase(firebaseUid: credential.user.uid);
+                          userProvider.setUserInProvider(setUser: userr);
+                          userProvider.saveToHive(user: userr);
+                          _newsBox.put(NEWS_PREFS, userr.newsPreferences);
+                          _newsBox.put(NEWS_BLOGS_AUTHORS, userr.blogPreferences);
+                          _newsBox.put(NEWS_CUSTOM, userr.customPreferences);
+                          ProfileHive().setIsUserLoggedIn(true);
+                          Navigator.popAndPushNamed(context, BasePage.routename);
+                        }
                       },
                       padding: EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(

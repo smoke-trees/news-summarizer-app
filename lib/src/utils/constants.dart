@@ -1,4 +1,5 @@
 const String NEWS_PREFS_BOX = "newsPrefsBox";
+const String USER_BOX = "userBox";
 const String NEWS_PREFS = "newsPrefs";
 const String NEWS_POPULAR = "newsPopular";
 const String NEWS_INT = "newsInt";
@@ -7,3 +8,4 @@ const String NEWS_OTHER = "newsOther";
 const String NEWS_CUSTOM = "newsCustom";
 const String NEWS_BLOGS_AUTHORS = "blogsAuthors";
 const String BASE_URL = "http://164.52.207.142/";
+const String PROFILE_BOX = 'loginBox';

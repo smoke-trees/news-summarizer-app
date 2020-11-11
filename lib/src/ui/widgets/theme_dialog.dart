@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_summarizer/src/providers/theme_provider.dart';
+import 'package:news_summarizer/src/utils/shared_prefs.dart';
 import 'package:provider/provider.dart';
 
 class ThemeDialog extends StatefulWidget {
@@ -9,6 +10,14 @@ class ThemeDialog extends StatefulWidget {
 
 class _ThemeDialogState extends State<ThemeDialog> {
   int _selectedRadio = 0;
+  ProfileHive sp = new ProfileHive();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _selectedRadio = sp.getIsDarkMode() ? 0 : 1;
+  }
 
   @override
   Widget build(BuildContext context) {
