@@ -7,5 +7,6 @@ const String NEWS_METRO = "newsMetro";
 const String NEWS_OTHER = "newsOther";
 const String NEWS_CUSTOM = "newsCustom";
 const String NEWS_BLOGS_AUTHORS = "blogsAuthors";
+const String NOTIFICATION_ENABLED = "notifEnabled";
 const String BASE_URL = "http://164.52.207.142/";
 const String PROFILE_BOX = 'loginBox';

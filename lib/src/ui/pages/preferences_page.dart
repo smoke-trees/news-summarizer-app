@@ -28,10 +28,6 @@ class _PreferencesPageState extends State<PreferencesPage> {
   var allPrefs = [];
 
   var customPrefsChosen = [];
-  //
-  // var customPrefsPresent = [];
-  // TextEditingController customPrefsController = new TextEditingController();
-  // final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -41,13 +37,8 @@ class _PreferencesPageState extends State<PreferencesPage> {
     indianCitiesChosen = _newsBox.get(NEWS_OTHER);
     internationalChosen = _newsBox.get(NEWS_INT);
     allPrefs = _newsBox.get(NEWS_PREFS) ?? [];
-    // allDuplicate.addAll(popularChosen);
-    // allDuplicate.addAll(metroChosen);
-    // allDuplicate.addAll(indianCitiesChosen);
-    // allDuplicate.addAll(popularChosen);
 
     customPrefsChosen = _newsBox.get(NEWS_CUSTOM) ?? [];
-    // customPrefsPresent.addAll(customPrefsChosen);
   }
 
   void finishSelection() {
@@ -66,9 +57,6 @@ class _PreferencesPageState extends State<PreferencesPage> {
     if (!internationalChosen.isNullOrBlank) {
       finList.addAll(internationalChosen);
     }
-    // if (!customPrefsChosen.isNullOrBlank) {
-    //   finList.addAll(customPrefsChosen);
-    // }
     if (finList.length < 3) {
       Get.snackbar(
         "Warning!",
@@ -84,9 +72,6 @@ class _PreferencesPageState extends State<PreferencesPage> {
       _newsBox.put(NEWS_METRO, metroChosen);
       _newsBox.put(NEWS_OTHER, indianCitiesChosen);
 
-      // print(allPrefs);
-      // print(finList);
-
       allPrefs.forEach((element) {
         if (!finList.contains(element) && !customPrefsChosen.contains(element)) {
           userProvider.unsubscribeToTopic(topic: element.toString());
@@ -99,6 +84,15 @@ class _PreferencesPageState extends State<PreferencesPage> {
       });
 
       userProvider.setNewsPreferences(prefsList: finList);
+      if (userProvider.user.notifEnabledPrefs.isNull) {
+        userProvider.user.notifEnabledPrefs = finList.map((e) => e.toString()).toList();
+        userProvider.setNotificationPrefs(prefsList: userProvider.user.notifEnabledPrefs);
+
+      } else {
+        userProvider.user.notifEnabledPrefs.addAll(finList.map((e) => e.toString()).toList());
+        userProvider.user.notifEnabledPrefs = userProvider.user.notifEnabledPrefs.toSet().toList();
+        userProvider.setNotificationPrefs(prefsList: userProvider.user.notifEnabledPrefs);
+      }
 
       ProfileHive().setIsUserLoggedIn(true);
       Navigator.pushNamed(context, CustomPrefsPage.routename);

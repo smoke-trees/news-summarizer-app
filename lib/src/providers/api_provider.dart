@@ -50,8 +50,11 @@ class ApiProvider with ChangeNotifier {
     return articleList;
   }
 
-  void makeView({Article article}) async {
+  void makeViewNews({Article article}) async {
     await _dio.post("/make_view_news/", queryParameters: {'article_id': article.id});
-    print("increased view of article");
+  }
+
+  void makeViewBlog({Article article}) async {
+    await _dio.post("/make_view_blogs/", queryParameters: {'article_id': article.id});
   }
 }

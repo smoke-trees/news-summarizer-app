@@ -19,8 +19,8 @@ class ApiUserAdapter extends TypeAdapter<ApiUser> {
     return ApiUser(
       email: fields[4] as String,
       name: fields[3] as String,
-      blogPreferences: (fields[0] as List)?.cast<dynamic>(),
-      customPreferences: (fields[2] as List)?.cast<dynamic>(),
+      blogPreferences: (fields[0] as List)?.cast<String>(),
+      customPreferences: (fields[2] as List)?.cast<String>(),
       newsPreferences: (fields[1] as List)?.cast<dynamic>(),
       fcmToken: fields[5] as String,
       photoUrl: fields[6] as String,
@@ -28,13 +28,14 @@ class ApiUserAdapter extends TypeAdapter<ApiUser> {
       phoneNumber: fields[8] as String,
       latitude: fields[9] as double,
       longitude: fields[10] as double,
+      notifEnabledPrefs: (fields[11] as List)?.cast<String>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, ApiUser obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.blogPreferences)
       ..writeByte(1)
@@ -56,7 +57,9 @@ class ApiUserAdapter extends TypeAdapter<ApiUser> {
       ..writeByte(9)
       ..write(obj.latitude)
       ..writeByte(10)
-      ..write(obj.longitude);
+      ..write(obj.longitude)
+      ..writeByte(11)
+      ..write(obj.notifEnabledPrefs);
   }
 
   @override

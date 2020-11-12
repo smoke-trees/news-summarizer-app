@@ -3,6 +3,7 @@ import 'package:hive/hive.dart';
 import 'package:news_summarizer/src/providers/api_provider.dart';
 import 'package:news_summarizer/src/ui/pages/get_location_page.dart';
 import 'package:news_summarizer/src/ui/pages/news_page.dart';
+import 'package:news_summarizer/src/ui/pages/notifs_checklist_page.dart';
 import 'package:news_summarizer/src/ui/pages/preferences_page.dart';
 import 'package:news_summarizer/src/ui/pages/search_page.dart';
 import 'package:news_summarizer/src/ui/widgets/theme_dialog.dart';
@@ -179,10 +180,14 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                   break;
                 case "Change Location":
                   Navigator.pushNamed(context, GetLocationPage.routeName);
+                  break;
+                case "Notification Center":
+                  Navigator.pushNamed(context, NotifsChecklistPage.routeName);
               }
             },
             itemBuilder: (context) {
-              return {'Change Theme', 'Change News Preferences', "Change Location"}.map((String choice) {
+              return {'Change Theme', 'Change News Preferences', "Change Location", "Notification Center"}
+                  .map((String choice) {
                 return PopupMenuItem<String>(
                   value: choice,
                   child: Text(choice),

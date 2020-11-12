@@ -73,6 +73,7 @@ class UserProvider extends ChangeNotifier {
         setFCMtokenInFirebase(fcmtoken: user.fcmToken);
       }
     });
+
   }
 
   void setFCMtokenInFirebase({String fcmtoken}) {
@@ -124,6 +125,16 @@ class UserProvider extends ChangeNotifier {
         .collection('user')
         .doc(user.firebaseUid)
         .update({'blogPreferences': prefsList.cast<String>()});
+    user.blogPreferences = prefsList;
+    saveToHive(user: user);
+  }
+
+  void setNotificationPrefs({List<String> prefsList}) {
+    print("[UserProvider] Set notification in Firebase");
+    FirebaseFirestore.instance
+        .collection('user')
+        .doc(user.firebaseUid)
+        .update({'notifEnabledPrefs': prefsList});
     user.blogPreferences = prefsList;
     saveToHive(user: user);
   }

@@ -46,11 +46,11 @@ class _ListViewCard extends State<ListViewCard> {
                               .substring(9)
                               .toLowerCase()
                               .split("_")
-                              .map((e) => e.capitalizeFirst("123")).join(" ")
+                              .map((e) => e.capitalizeFirst).join(" ")
                               .toString()
                           : widget.listItems[widget.index]
                               .split("_")
-                              .map((e) => e.capitalizeFirst("123")).join(" ")
+                              .map((e) => e.capitalizeFirst).join(" ")
                               .toString(),
                       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: themeProvider.theme.accentColor),
                       textAlign: TextAlign.left,

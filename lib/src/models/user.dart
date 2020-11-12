@@ -6,13 +6,13 @@ part 'user.g.dart';
 @HiveType(typeId: 0)
 class ApiUser extends HiveObject {
   @HiveField(0)
-  List blogPreferences;
+  List<String> blogPreferences;
 
   @HiveField(1)
   List newsPreferences;
 
   @HiveField(2)
-  List customPreferences;
+  List<String> customPreferences;
 
   @HiveField(3)
   String name;
@@ -38,6 +38,9 @@ class ApiUser extends HiveObject {
   @HiveField(10)
   double longitude;
 
+  @HiveField(11)
+  List<String> notifEnabledPrefs;
+
   ApiUser(
       {this.email,
       this.name,
@@ -49,7 +52,8 @@ class ApiUser extends HiveObject {
       this.firebaseUid,
       this.phoneNumber,
       this.latitude,
-      this.longitude,});
+      this.longitude,
+      this.notifEnabledPrefs});
 
   factory ApiUser.fromJson(json) {
     return ApiUser(
@@ -63,7 +67,8 @@ class ApiUser extends HiveObject {
         firebaseUid: json['firebaseUid'],
         phoneNumber: json['phoneNumber'],
         latitude: json['location']['latitude'],
-        longitude: json['location']['longitude']);
+        longitude: json['location']['longitude'],
+        notifEnabledPrefs: json['notifEnabledPrefs'] ?? []);
   }
 
   Map<String, dynamic> toJson(ApiUser user) {
@@ -77,8 +82,10 @@ class ApiUser extends HiveObject {
     data['photoUrl'] = user.photoUrl;
     data['firebaseUid'] = user.firebaseUid;
     data['phoneNumber'] = user.phoneNumber;
-    data['location.latitude'] = user.latitude;
-    data['location.longitude'] = user.longitude;
+    data['location'] = Map<String, double>();
+    data['location']['latitude'] = user.latitude;
+    data['location']['longitude'] = user.longitude;
+    data['notifEnabledPrefs'] = user.notifEnabledPrefs ?? [];
     return data;
   }
 }

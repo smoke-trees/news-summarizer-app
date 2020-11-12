@@ -29,19 +29,30 @@ class _BlogsPrefsPageState extends State<BlogsPrefsPage> {
   }
 
   var authorsChosen = [];
+  List<String> previousAuthors = [];
 
   @override
   void initState() {
     super.initState();
     authorsListFuture = getAuthorsList();
     authorsChosen = _newsBox.get(NEWS_BLOGS_AUTHORS) ?? [];
+    previousAuthors = authorsChosen.cast<String>();
   }
 
   void finishSelection() {
     print("finishSelection called");
-    var finList = authorsChosen.cast<String>();
-    _newsBox.put(NEWS_BLOGS_AUTHORS, finList);
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    var finList = authorsChosen.cast<String>();
+    previousAuthors.forEach((element) {
+      userProvider.unsubscribeToTopic(topic: element.replaceAll(' ', ''));
+    });
+    finList.forEach((element) {
+      userProvider.subscribeToTopic(topic: element.replaceAll(' ', ''));
+    });
+    userProvider.user.notifEnabledPrefs.addAll(finList);
+    userProvider.user.notifEnabledPrefs = userProvider.user.notifEnabledPrefs.toSet().toList();
+    userProvider.setNotificationPrefs(prefsList: userProvider.user.notifEnabledPrefs);
+    _newsBox.put(NEWS_BLOGS_AUTHORS, finList);
     userProvider.setBlogPreferences(prefsList: finList);
     print("Saved to blogs authors, now list is: $finList");
     Navigator.pushNamed(context, BasePage.routename);

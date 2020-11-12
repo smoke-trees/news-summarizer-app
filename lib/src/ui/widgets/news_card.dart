@@ -75,14 +75,18 @@ class NewsCard extends StatelessWidget {
           ),
         ),
         onTap: () {
-          if(!isBlog){
-
-            apiProvider.makeView(article: article);
+          if (isBlog) {
+            apiProvider.makeViewBlog(article: article);
+          } else {
+            apiProvider.makeViewNews(article: article);
           }
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => NewsWebView(article: article, isBlog: isBlog,),
+              builder: (context) => NewsWebView(
+                article: article,
+                isBlog: isBlog,
+              ),
             ),
           );
         },
