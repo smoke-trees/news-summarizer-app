@@ -150,7 +150,7 @@ class _NewsContainerPageState extends State<NewsContainerPage>
     );
   }
 
-  AppBar _withoutSearchAppBar({Widget bottom}) {
+  AppBar _withoutSearchAppBar({Widget bottom, String titleText}) {
     return AppBar(
         centerTitle: true,
         leading: InkWell(
@@ -160,7 +160,7 @@ class _NewsContainerPageState extends State<NewsContainerPage>
           }),
         ),
         title: Text(
-          'Blogs',
+          titleText,
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
@@ -225,7 +225,7 @@ class _NewsContainerPageState extends State<NewsContainerPage>
           setState(() {
             _selectedTab = 1;
           });
-        } else if (_selectedTab == 2) {
+        } else if (index == 2) {
           setState(() {
             _selectedTab = 2;
           });
@@ -244,6 +244,7 @@ class _NewsContainerPageState extends State<NewsContainerPage>
               bottomNavigationBar: _bottomNavigationBar(),
               appBar: (!_isSearchActive)
                   ? _withoutSearchAppBar(
+                      titleText: "Expert Opinion",
                       bottom: _blogsFeeds.isEmpty
                           ? PreferredSize(
                               preferredSize: Size.fromHeight(0),
@@ -281,53 +282,65 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                       ),
                     ),
             ))
-        : DefaultTabController(
-            length: _newsFeeds.length,
-            child: Scaffold(
-              bottomNavigationBar: _bottomNavigationBar(),
-              // drawer: drawerWidget(),
-              backgroundColor: Colors.transparent,
-              appBar: (!_isSearchActive)
-                  ? _withoutSearchAppBar(
-                      bottom: TabBar(
-                        tabs: List.generate(
-                          _newsFeeds.length,
-                          (index) {
-
-                            return Tab(
-                              text: _newsFeeds[index]
-                                  .toString()
-                                  .split('.')
-                                  .last
-                                  .replaceAll("_", " ")
-                                  .toUpperCase(),
-                            );
-                          },
-                        ),
-                        isScrollable: true,
-                      ),
-                    )
-                  : _searchAppBar(context),
-              body: TabBarView(
-                children: List.generate(
-                  _newsFeeds.length,
-                  (index) {
-                    if (_newsFeeds[index].runtimeType == String) {
-                      return NewsPage(
-                        customPref: _newsFeeds[index].toString().split('.').last.replaceAll("_", " "),
-                        isCustomPref: true,
-                      ); //Very bad method but eet ees what eet ees
-                    } else {
-                      return NewsPage(
-                        newsFeed: _newsFeeds[index],
-                        isCustomPref: false,
-                      );
-                    }
-                  },
+        : _selectedTab == 2
+            ? Scaffold(
+                bottomNavigationBar: _bottomNavigationBar(),
+                appBar: (!_isSearchActive)
+                    ? _withoutSearchAppBar(titleText: "Around Me")
+                    : _searchAppBar(context),
+                // drawer: drawerWidget(),
+                backgroundColor: Colors.transparent,
+                body: NewsPage(
+                  isAroundMe: true,
                 ),
-              ),
-            ),
-          );
+              )
+            : DefaultTabController(
+                length: _newsFeeds.length,
+                child: Scaffold(
+                  bottomNavigationBar: _bottomNavigationBar(),
+                  // drawer: drawerWidget(),
+                  backgroundColor: Colors.transparent,
+                  appBar: (!_isSearchActive)
+                      ? _withoutSearchAppBar(
+                          titleText: "News",
+                          bottom: TabBar(
+                            tabs: List.generate(
+                              _newsFeeds.length,
+                              (index) {
+                                return Tab(
+                                  text: _newsFeeds[index]
+                                      .toString()
+                                      .split('.')
+                                      .last
+                                      .replaceAll("_", " ")
+                                      .toUpperCase(),
+                                );
+                              },
+                            ),
+                            isScrollable: true,
+                          ),
+                        )
+                      : _searchAppBar(context),
+                  body: TabBarView(
+                    children: List.generate(
+                      _newsFeeds.length,
+                      (index) {
+                        if (_newsFeeds[index].runtimeType == String) {
+                          return NewsPage(
+                            customPref: _newsFeeds[index].toString().split('.').last.replaceAll("_", " "),
+                            isCustomPref: true,
+                          ); //Very bad method but eet ees what eet ees
+                        } else {
+                          return NewsPage(
+                            newsFeed: _newsFeeds[index],
+                            isCustomPref: false,
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                ),
+              );
   }
 
   @override

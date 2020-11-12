@@ -49,7 +49,7 @@ class ApiUser extends HiveObject {
       this.firebaseUid,
       this.phoneNumber,
       this.latitude,
-      this.longitude});
+      this.longitude,});
 
   factory ApiUser.fromJson(json) {
     return ApiUser(

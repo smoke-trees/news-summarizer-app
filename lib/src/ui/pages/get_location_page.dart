@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/route_manager.dart';
 import 'package:news_summarizer/src/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -30,11 +31,17 @@ class _GetLocationPageState extends State<GetLocationPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              "Allow us to view your location, so that we can serve you news related to your surroundings",
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 18),
-            ),
+            userProvider.user.longitude == null
+                ? Text(
+                    "Allow us to view your location, so that we can serve you news related to your surroundings",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 18),
+                  )
+                : Text(
+                    "You have already set your location before. You can still change your location",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 18),
+                  ),
             SizedBox(
               height: 40,
             ),
@@ -47,6 +54,7 @@ class _GetLocationPageState extends State<GetLocationPage> {
                   });
                   Position position =
                       await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.low);
+
                   userProvider.setUserLocation(position: position);
                   setState(() {
                     _isLoading = false;
@@ -77,6 +85,13 @@ class _GetLocationPageState extends State<GetLocationPage> {
                                   color: Theme.of(context).primaryColor,
                                 ),
                               ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Text(
+                                "Refresh to see the news around you.",
+                                style: TextStyle(color: Get.theme.accentColor),
+                              )
                             ],
                           )
                         : Row(
@@ -89,14 +104,23 @@ class _GetLocationPageState extends State<GetLocationPage> {
                               SizedBox(
                                 width: 18,
                               ),
-                              Text(
-                                "Allow",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color: Theme.of(context).accentColor,
-                                ),
-                              ),
+                              userProvider.user.longitude == null
+                                  ? Text(
+                                      "Allow",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: Theme.of(context).accentColor,
+                                      ),
+                                    )
+                                  : Text(
+                                      "Change location",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: Theme.of(context).accentColor,
+                                      ),
+                                    ),
                             ],
                           ),
               ),

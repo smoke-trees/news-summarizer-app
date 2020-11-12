@@ -7,8 +7,7 @@ import 'package:news_summarizer/src/utils/constants.dart';
 class ApiProvider with ChangeNotifier {
   SummaryResponse response;
   String searchTerm;
-  final _dio =
-      Dio(BaseOptions(baseUrl: BASE_URL, connectTimeout: 60000, receiveTimeout: 60000));
+  final _dio = Dio(BaseOptions(baseUrl: BASE_URL, connectTimeout: 60000, receiveTimeout: 60000));
 
   setSummary(SummaryResponse response) {
     this.response = response;
@@ -21,7 +20,6 @@ class ApiProvider with ChangeNotifier {
   }
 
   Future<List<Article>> getArticlesFromCategory({String category}) async {
-
     Response response = await _dio.get("/get_category_news", queryParameters: {'category': category});
     List<Article> articleList = (response.data as List).map((json) => Article.fromJson(json)).toList();
     return articleList;
@@ -45,9 +43,15 @@ class ApiProvider with ChangeNotifier {
     return articleList;
   }
 
+  Future<List<Article>> getArticlesFromLocation({double latitude, double longitude}) async {
+    Response response =
+        await _dio.get("/get_location_news", queryParameters: {'latitude': latitude, 'longitude': longitude});
+    List<Article> articleList = (response.data as List).map((json) => Article.fromJson(json)).toList();
+    return articleList;
+  }
+
   void makeView({Article article}) async {
     await _dio.post("/make_view_news/", queryParameters: {'article_id': article.id});
     print("increased view of article");
   }
-
 }

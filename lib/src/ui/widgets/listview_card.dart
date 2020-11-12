@@ -52,7 +52,7 @@ class _ListViewCard extends State<ListViewCard> {
                               .split("_")
                               .map((e) => e.capitalizeFirst("123")).join(" ")
                               .toString(),
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: themeProvider.theme.primaryColor),
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: themeProvider.theme.accentColor),
                       textAlign: TextAlign.left,
                       maxLines: 5,
                     ),
