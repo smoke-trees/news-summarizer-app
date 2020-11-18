@@ -65,7 +65,7 @@ class NewsCard extends StatelessWidget {
                       ),
                       SizedBox(height: 10),
                       Container(
-                        child: Text(article.description),
+                        child: Text(isBlog ? article.description : article.summary),
                       )
                     ],
                   ),

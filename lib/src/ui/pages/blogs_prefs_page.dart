@@ -64,7 +64,7 @@ class _BlogsPrefsPageState extends State<BlogsPrefsPage> {
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         title: Text(
-          'Blog Preferences',
+          'Expert Opinion',
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
@@ -98,6 +98,7 @@ class _BlogsPrefsPageState extends State<BlogsPrefsPage> {
                   return Card(
                     color: Theme.of(context).cardColor,
                     child: ExpansionTile(
+                      initiallyExpanded: true,
                       title: Container(
                         child: Text(
                           "Blog Authors",

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:news_summarizer/src/providers/user_provider.dart';
 import 'package:news_summarizer/src/ui/pages/base_page.dart';
@@ -14,8 +15,6 @@ class ReorderPrefsPage extends StatefulWidget {
   _ReorderPrefsPageState createState() => _ReorderPrefsPageState();
 }
 
-
-
 class _ReorderPrefsPageState extends State<ReorderPrefsPage> {
   var _newsBox = Hive.box(NEWS_PREFS_BOX);
   var preferences = [];
@@ -25,7 +24,6 @@ class _ReorderPrefsPageState extends State<ReorderPrefsPage> {
     super.initState();
     preferences = _newsBox.get(NEWS_PREFS) ?? [];
     // preferences = preferences.map((e) => e.toString()).toList();
-
   }
 
   void _onReorder(int oldIndex, int newIndex) {
@@ -43,11 +41,7 @@ class _ReorderPrefsPageState extends State<ReorderPrefsPage> {
   void finishReordering() {
     _newsBox.put(NEWS_PREFS, preferences);
 
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      BlogsPrefsPage.routeName,
-          (route) => false,
-    );
+    Get.toNamed(BlogsPrefsPage.routeName);
   }
 
   @override
@@ -81,13 +75,18 @@ class _ReorderPrefsPageState extends State<ReorderPrefsPage> {
         ],
       ),
       body: Theme(
-        data: ThemeData(
-            canvasColor: Colors.transparent
-        ),
+        data: ThemeData(canvasColor: Get.theme.scaffoldBackgroundColor),
         child: ReorderableListView(
+          header: Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16, top: 8),
+            child: Text(
+              "Reorder the preferences according to your level of interest!",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 20),
+            ),
+          ),
           padding: EdgeInsets.only(left: 10, right: 10, top: 10),
           onReorder: _onReorder,
-
           children: List.generate(
             preferences.length,
             (index) {

@@ -38,7 +38,7 @@ dependencies:
   google_sign_in: ^4.5.1
   get: ^3.8.0
   pin_code_fields: ^4.0.0
-  shared_preferences: ^0.5.10
+#    shared_preferences: ^0.5.10
   http: ^0.12.2
   cached_network_image: ^2.3.1
   html: ^0.14.0+3

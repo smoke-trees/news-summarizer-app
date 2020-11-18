@@ -57,7 +57,10 @@ class _NewsPageState extends State<NewsPage> with AutomaticKeepAliveClientMixin<
         _newsItems = articleList;
         return articleList;
       } else {
-        String category = widget.newsFeed.toString().split('.').last;
+        String category = widget.newsFeed.toString().split('.').sublist(1).join("").replaceAll("_", " ");
+        if(category=="USA"){
+          category="U.S.A";
+        }
         List<Article> articleList = await apiProvider.getArticlesFromCategory(category: category);
         _newsItems = articleList;
         return articleList;
@@ -112,11 +115,7 @@ class _NewsPageState extends State<NewsPage> with AutomaticKeepAliveClientMixin<
                   Text("You haven't saved your location yet."),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("Tap the \""),
-                      Icon(Icons.more_vert),
-                      Text("\" icon to set it.")
-                    ],
+                    children: [Text("Tap the \""), Icon(Icons.more_vert), Text("\" icon to set it.")],
                   ),
                 ],
               ),
