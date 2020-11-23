@@ -1,6 +1,8 @@
 import 'package:chips_choice/chips_choice.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:news_summarizer/src/providers/user_provider.dart';
 import 'package:news_summarizer/src/ui/pages/base_page.dart';
@@ -15,6 +17,7 @@ class BlogsPrefsPage extends StatefulWidget {
 }
 
 class _BlogsPrefsPageState extends State<BlogsPrefsPage> {
+  bool isNewUser = Get.arguments ?? false;
   var _newsBox = Hive.box(NEWS_PREFS_BOX);
 
   Future<List<String>> authorsListFuture;
@@ -24,7 +27,21 @@ class _BlogsPrefsPageState extends State<BlogsPrefsPage> {
     if (response.statusCode == 200) {
       return (response.data as List).cast<String>();
     }
-    return ["Pranjal Srivastava", "Akash", "Ashish"];
+    return [
+      'Anurag Guha',
+      'Bachi Karkaria',
+      'Jug Suraiya',
+      'Maureen Dowd',
+      'Emily Dreyfuss',
+      'Nicholas Kristof',
+      'Ruchir Joshi',
+      'Aakar Patel',
+      'Jane De Suza',
+      'Rahul Verma',
+      'J Mathrubootham',
+      'Meera Iyer',
+      'Nidhi Adlakha'
+    ];
     // return response.data;
   }
 
@@ -55,20 +72,20 @@ class _BlogsPrefsPageState extends State<BlogsPrefsPage> {
     _newsBox.put(NEWS_BLOGS_AUTHORS, finList);
     userProvider.setBlogPreferences(prefsList: finList);
     print("Saved to blogs authors, now list is: $finList");
-    Navigator.pushNamed(context, BasePage.routename);
+    Get.toNamed(BasePage.routename);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Get.theme.backgroundColor,
       appBar: AppBar(
         title: Text(
           'Expert Opinion',
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
-            color: Theme.of(context).accentColor,
+            color: Get.theme.accentColor,
           ),
         ),
         actions: [
@@ -91,56 +108,105 @@ class _BlogsPrefsPageState extends State<BlogsPrefsPage> {
       body: SingleChildScrollView(
         child: Container(
           margin: EdgeInsets.all(8),
+          padding: EdgeInsets.all(8),
           child: FutureBuilder(
               future: authorsListFuture,
               builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Card(
-                    color: Theme.of(context).cardColor,
-                    child: ExpansionTile(
-                      initiallyExpanded: true,
-                      title: Container(
-                        child: Text(
-                          "Blog Authors",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            decoration: TextDecoration.underline,
-                            decorationColor: Theme.of(context).accentColor,
-                          ),
+                if (snapshot.hasError || !snapshot.hasData) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                return Card(
+                  color: Get.theme.cardColor,
+                  child: ExpansionTile(
+                    initiallyExpanded: true,
+                    title: Container(
+                      child: Text(
+                        "Experts",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          decoration: TextDecoration.underline,
+                          decorationColor: Get.theme.accentColor,
                         ),
                       ),
-                      children: [
-                        ChipsChoice<dynamic>.multiple(
-                          itemConfig: ChipsChoiceItemConfig(
-                            selectedColor: Theme.of(context).accentColor,
-                            unselectedColor: Theme.of(context).primaryColor,
-                            unselectedBrightness: Theme.of(context).brightness,
-                            selectedBrightness: Theme.of(context).brightness,
-                          ),
-                          value: authorsChosen,
-                          options: ChipsChoiceOption.listFrom(
-                            source: snapshot.data,
-                            value: (index, item) => item,
-                            label: (index, item) => item.toString().split(".").last.replaceAll("_", " "),
-                          ),
-                          onChanged: (val) {
-                            setState(() => authorsChosen = val);
-                          },
-                          padding: EdgeInsets.all(8),
-                          isWrapped: true,
+                    ),
+                    children: [
+                      ChipsChoice<dynamic>.multiple(
+                        itemConfig: ChipsChoiceItemConfig(
+                          selectedColor: Get.theme.accentColor,
+                          unselectedColor: Get.theme.primaryColor,
+                          unselectedBrightness: Get.theme.brightness,
+                          selectedBrightness: Get.theme.brightness,
                         ),
-                      ],
-                    ),
-                  );
-                } else {
-                  return Card(
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
-                }
+                        value: authorsChosen,
+                        options: ChipsChoiceOption.listFrom(
+                          source: snapshot.data,
+                          value: (index, item) => item,
+                          label: (index, item) => item.toString().split(".").last.replaceAll("_", " "),
+                        ),
+                        onChanged: (val) {
+                          setState(() => authorsChosen = val);
+                        },
+                        padding: EdgeInsets.all(8),
+                        isWrapped: true,
+                      ),
+                    ],
+                  ),
+                );
               }),
+          // child: FutureBuilder(
+          //     future: authorsListFuture,
+          //     builder: (context, snapshot) {
+          //       if (snapshot.hasData) {
+          //         return Container(
+          //           padding: EdgeInsets.all(8),
+          //           child: Card(
+          //             color: Get.theme.cardColor,
+          //             child: ExpansionTile(
+          //               initiallyExpanded: true,
+          //               title: Container(
+          //                 child: Text(
+          //                   "Experts",
+          //                   style: TextStyle(
+          //                     fontWeight: FontWeight.bold,
+          //                     fontSize: 18,
+          //                     decoration: TextDecoration.underline,
+          //                     decorationColor: Get.theme.accentColor,
+          //                   ),
+          //                 ),
+          //               ),
+          //               children: [
+          //                 ChipsChoice<dynamic>.multiple(
+          //                   itemConfig: ChipsChoiceItemConfig(
+          //                     selectedColor: Get.theme.accentColor,
+          //                     unselectedColor: Get.theme.primaryColor,
+          //                     unselectedBrightness: Get.theme.brightness,
+          //                     selectedBrightness: Get.theme.brightness,
+          //                   ),
+          //                   value: authorsChosen,
+          //                   options: ChipsChoiceOption.listFrom(
+          //                     source: snapshot.data,
+          //                     value: (index, item) => item,
+          //                     label: (index, item) => item.toString().split(".").last.replaceAll("_", " "),
+          //                   ),
+          //                   onChanged: (val) {
+          //                     setState(() => authorsChosen = val);
+          //                   },
+          //                   padding: EdgeInsets.all(8),
+          //                   isWrapped: true,
+          //                 ),
+          //               ],
+          //             ),
+          //           ),
+          //         );
+          //       } else {
+          //         return Card(
+          //           child: Center(
+          //             child: CircularProgressIndicator(),
+          //           ),
+          //         );
+          //       }
+          //     }),
         ),
       ),
     );

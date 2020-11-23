@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:news_summarizer/src/models/article.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -18,11 +19,11 @@ class _NewsWebViewState extends State<NewsWebView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Get.theme.backgroundColor,
       appBar: AppBar(
         title: Text(
-          widget.isBlog ? "Blog" : 'News',
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Theme.of(context).accentColor),
+          widget.isBlog ? "Expert Opinion" : 'News',
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Get.theme.accentColor),
         ),
       ),
       body: WebView(

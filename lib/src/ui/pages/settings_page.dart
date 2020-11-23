@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:news_summarizer/src/ui/pages/preferences_page.dart';
 import 'package:news_summarizer/src/ui/widgets/theme_dialog.dart';
 
@@ -24,7 +25,7 @@ class SettingPage extends StatelessWidget {
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
-            color: Theme.of(context).accentColor,
+            color: Get.theme.accentColor,
           ),
         ),
       ),
@@ -50,7 +51,7 @@ class SettingPage extends StatelessWidget {
                       ),
                       Icon(
                         Icons.navigate_next,
-                        color: Theme.of(context).accentColor,
+                        color: Get.theme.accentColor,
                       ),
                     ],
                   ),
@@ -81,7 +82,7 @@ class SettingPage extends StatelessWidget {
                       ),
                       Icon(
                         Icons.navigate_next,
-                        color: Theme.of(context).accentColor,
+                        color: Get.theme.accentColor,
                       ),
                     ],
                   ),

@@ -3,26 +3,27 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:news_summarizer/src/providers/user_provider.dart';
-import 'package:news_summarizer/src/ui/pages/base_page.dart';
-import 'package:news_summarizer/src/ui/pages/custom_prefs_page.dart';
+import 'package:news_summarizer/src/ui/pages/reorder_prefs_onboarding_page.dart';
 import 'package:news_summarizer/src/ui/pages/reorder_prefs_page.dart';
 import 'package:news_summarizer/src/ui/widgets/or_divider.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
 import 'package:news_summarizer/src/utils/news_feed_list.dart';
-import 'package:news_summarizer/src/utils/shared_prefs.dart';
+import 'package:news_summarizer/src/utils/hive_prefs.dart';
 import 'package:provider/provider.dart';
 
 class PreferencesPage extends StatefulWidget {
-  static const routename = "/preferences";
+  static const routeName = "/preferences";
 
   @override
   _PreferencesPageState createState() => _PreferencesPageState();
 }
 
 class _PreferencesPageState extends State<PreferencesPage> {
+  bool isNewUser = Get.arguments ?? false;
   var _newsBox = Hive.box(NEWS_PREFS_BOX);
 
   var popularChosen = [];
+
   // var metroChosen = [];
   // var indianCitiesChosen = [];
   var internationalChosen = [];
@@ -110,21 +111,25 @@ class _PreferencesPageState extends State<PreferencesPage> {
       userProvider.setCustomPreferences(prefsList: stringCustomPreferences);
 
       ProfileHive().setIsUserLoggedIn(true);
-      Navigator.pushNamed(context, ReorderPrefsPage.routeName);
+      if (isNewUser) {
+        Get.toNamed(ReorderPrefsOnboardingPage.routeName);
+      } else {
+        Get.toNamed(ReorderPrefsPage.routeName);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Get.theme.backgroundColor,
       appBar: AppBar(
         title: Text(
           'News Preferences',
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
-            color: Theme.of(context).accentColor,
+            color: Get.theme.accentColor,
           ),
         ),
         actions: [
@@ -168,10 +173,10 @@ class _PreferencesPageState extends State<PreferencesPage> {
                   children: [
                     ChipsChoice<dynamic>.multiple(
                       itemConfig: ChipsChoiceItemConfig(
-                        selectedColor: Theme.of(context).accentColor,
-                        unselectedColor: Theme.of(context).primaryColor,
-                        unselectedBrightness: Theme.of(context).brightness,
-                        selectedBrightness: Theme.of(context).brightness,
+                        selectedColor: Get.theme.accentColor,
+                        unselectedColor: Get.theme.primaryColor,
+                        unselectedBrightness: Get.theme.brightness,
+                        selectedBrightness: Get.theme.brightness,
                       ),
                       value: customPrefsChosen,
                       options: ChipsChoiceOption.listFrom(
@@ -218,10 +223,10 @@ class _PreferencesPageState extends State<PreferencesPage> {
                             ),
                           ),
                           CircleAvatar(
-                            backgroundColor: Theme.of(context).accentColor,
+                            backgroundColor: Get.theme.accentColor,
                             child: IconButton(
                               icon: Icon(Icons.add),
-                              color: Theme.of(context).primaryColor,
+                              color: Get.theme.primaryColor,
                               onPressed: () {
                                 if (formKey.currentState.validate()) {
                                   setState(() {
@@ -259,7 +264,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
               Container(
                 margin: EdgeInsets.all(8),
                 child: Card(
-                  color: Theme.of(context).cardColor,
+                  color: Get.theme.cardColor,
                   child: ExpansionTile(
                     initiallyExpanded: true,
                     title: Container(
@@ -269,17 +274,17 @@ class _PreferencesPageState extends State<PreferencesPage> {
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
                           decoration: TextDecoration.underline,
-                          decorationColor: Theme.of(context).accentColor,
+                          decorationColor: Get.theme.accentColor,
                         ),
                       ),
                     ),
                     children: [
                       ChipsChoice<dynamic>.multiple(
                         itemConfig: ChipsChoiceItemConfig(
-                          selectedColor: Theme.of(context).accentColor,
-                          unselectedColor: Theme.of(context).primaryColor,
-                          unselectedBrightness: Theme.of(context).brightness,
-                          selectedBrightness: Theme.of(context).brightness,
+                          selectedColor: Get.theme.accentColor,
+                          unselectedColor: Get.theme.primaryColor,
+                          unselectedBrightness: Get.theme.brightness,
+                          selectedBrightness: Get.theme.brightness,
                         ),
                         value: popularChosen,
                         options: ChipsChoiceOption.listFrom(
@@ -306,7 +311,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
               Container(
                 margin: EdgeInsets.all(8),
                 child: Card(
-                  color: Theme.of(context).cardColor,
+                  color: Get.theme.cardColor,
                   child: ExpansionTile(
                     initiallyExpanded: true,
                     title: Container(
@@ -316,17 +321,17 @@ class _PreferencesPageState extends State<PreferencesPage> {
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
                           decoration: TextDecoration.underline,
-                          decorationColor: Theme.of(context).accentColor,
+                          decorationColor: Get.theme.accentColor,
                         ),
                       ),
                     ),
                     children: [
                       ChipsChoice<dynamic>.multiple(
                         itemConfig: ChipsChoiceItemConfig(
-                          selectedColor: Theme.of(context).accentColor,
-                          unselectedColor: Theme.of(context).primaryColor,
-                          unselectedBrightness: Theme.of(context).brightness,
-                          selectedBrightness: Theme.of(context).brightness,
+                          selectedColor: Get.theme.accentColor,
+                          unselectedColor: Get.theme.primaryColor,
+                          unselectedBrightness: Get.theme.brightness,
+                          selectedBrightness: Get.theme.brightness,
                         ),
                         value: internationalChosen,
                         options: ChipsChoiceOption.listFrom(
@@ -353,7 +358,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
               // Container(
               //   margin: EdgeInsets.all(8),
               //   child: Card(
-              //     color: Theme.of(context).cardColor,
+              //     color: Get.theme.cardColor,
               //     child: ExpansionTile(
               //       title: Container(
               //         child: Text(
@@ -362,17 +367,17 @@ class _PreferencesPageState extends State<PreferencesPage> {
               //             fontWeight: FontWeight.bold,
               //             fontSize: 18,
               //             decoration: TextDecoration.underline,
-              //             decorationColor: Theme.of(context).accentColor,
+              //             decorationColor: Get.theme.accentColor,
               //           ),
               //         ),
               //       ),
               //       children: [
               //         ChipsChoice<dynamic>.multiple(
               //           itemConfig: ChipsChoiceItemConfig(
-              //             selectedColor: Theme.of(context).accentColor,
-              //             unselectedColor: Theme.of(context).primaryColor,
-              //             unselectedBrightness: Theme.of(context).brightness,
-              //             selectedBrightness: Theme.of(context).brightness,
+              //             selectedColor: Get.theme.accentColor,
+              //             unselectedColor: Get.theme.primaryColor,
+              //             unselectedBrightness: Get.theme.brightness,
+              //             selectedBrightness: Get.theme.brightness,
               //           ),
               //           value: metroChosen,
               //           options: ChipsChoiceOption.listFrom(
@@ -399,7 +404,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
               // Container(
               //   margin: EdgeInsets.all(8),
               //   child: Card(
-              //     color: Theme.of(context).cardColor,
+              //     color: Get.theme.cardColor,
               //     child: ExpansionTile(
               //       title: Container(
               //         child: Text(
@@ -408,17 +413,17 @@ class _PreferencesPageState extends State<PreferencesPage> {
               //             fontWeight: FontWeight.bold,
               //             fontSize: 18,
               //             decoration: TextDecoration.underline,
-              //             decorationColor: Theme.of(context).accentColor,
+              //             decorationColor: Get.theme.accentColor,
               //           ),
               //         ),
               //       ),
               //       children: [
               //         ChipsChoice<dynamic>.multiple(
               //           itemConfig: ChipsChoiceItemConfig(
-              //             selectedColor: Theme.of(context).accentColor,
-              //             unselectedColor: Theme.of(context).primaryColor,
-              //             unselectedBrightness: Theme.of(context).brightness,
-              //             selectedBrightness: Theme.of(context).brightness,
+              //             selectedColor: Get.theme.accentColor,
+              //             unselectedColor: Get.theme.primaryColor,
+              //             unselectedBrightness: Get.theme.brightness,
+              //             selectedBrightness: Get.theme.brightness,
               //           ),
               //           value: indianCitiesChosen,
               //           options: ChipsChoiceOption.listFrom(
@@ -442,7 +447,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
               // Container(
               //   margin: EdgeInsets.all(8),
               //   child: Card(
-              //     color: Theme.of(context).cardColor,
+              //     color: Get.theme.cardColor,
               //     child: ExpansionTile(
               //         title: Container(
               //           child: Text(
@@ -451,17 +456,17 @@ class _PreferencesPageState extends State<PreferencesPage> {
               //               fontWeight: FontWeight.bold,
               //               fontSize: 18,
               //               decoration: TextDecoration.underline,
-              //               decorationColor: Theme.of(context).accentColor,
+              //               decorationColor: Get.theme.accentColor,
               //             ),
               //           ),
               //         ),
               //         children: [
               //           ChipsChoice<dynamic>.multiple(
               //             itemConfig: ChipsChoiceItemConfig(
-              //               selectedColor: Theme.of(context).accentColor,
-              //               unselectedColor: Theme.of(context).primaryColor,
-              //               unselectedBrightness: Theme.of(context).brightness,
-              //               selectedBrightness: Theme.of(context).brightness,
+              //               selectedColor: Get.theme.accentColor,
+              //               unselectedColor: Get.theme.primaryColor,
+              //               unselectedBrightness: Get.theme.brightness,
+              //               selectedBrightness: Get.theme.brightness,
               //             ),
               //             value: customPrefsChosen,
               //             options: ChipsChoiceOption.listFrom(

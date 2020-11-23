@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:news_summarizer/src/models/article.dart';
 import 'package:news_summarizer/src/models/summary.dart';
 import 'package:news_summarizer/src/providers/api_provider.dart';
@@ -16,14 +17,14 @@ class SearchPageState extends State<SearchPage> {
     final apiProvider = Provider.of<ApiProvider>(context);
 
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Get.theme.backgroundColor,
       appBar: AppBar(
         centerTitle: true,
         title: Text('Search results',
             style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).accentColor)),
+                color: Get.theme.accentColor)),
       ),
       body: Center(
         child: FutureBuilder<List<Article>>(
@@ -34,19 +35,19 @@ class SearchPageState extends State<SearchPage> {
                 case ConnectionState.none:
                   return Center(
                     child: CircularProgressIndicator(
-                      backgroundColor: Theme.of(context).backgroundColor,
+                      backgroundColor: Get.theme.backgroundColor,
                     ),
                   );
                 case ConnectionState.active:
                   return Center(
                     child: CircularProgressIndicator(
-                      backgroundColor: Theme.of(context).backgroundColor,
+                      backgroundColor: Get.theme.backgroundColor,
                     ),
                   );
                 case ConnectionState.waiting:
                   return Center(
                     child: CircularProgressIndicator(
-                      backgroundColor: Theme.of(context).backgroundColor,
+                      backgroundColor: Get.theme.backgroundColor,
                     ),
                   );
                 case ConnectionState.done:

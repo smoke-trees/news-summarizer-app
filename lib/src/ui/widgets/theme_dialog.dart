@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:news_summarizer/src/providers/theme_provider.dart';
-import 'package:news_summarizer/src/utils/shared_prefs.dart';
+import 'package:news_summarizer/src/utils/hive_prefs.dart';
 import 'package:provider/provider.dart';
 
 class ThemeDialog extends StatefulWidget {
@@ -14,7 +15,6 @@ class _ThemeDialogState extends State<ThemeDialog> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _selectedRadio = sp.getIsDarkMode() ? 0 : 1;
   }
@@ -24,7 +24,7 @@ class _ThemeDialogState extends State<ThemeDialog> {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     return AlertDialog(
       title: Text('Choose a theme'),
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Get.theme.backgroundColor,
       content: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[

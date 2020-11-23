@@ -1,5 +1,6 @@
 import 'package:fancy_on_boarding/fancy_on_boarding.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:news_summarizer/src/ui/pages/preferences_page.dart';
 
 final pageList = [
@@ -137,8 +138,8 @@ class OnboardingPages extends StatelessWidget {
         doneButtonText: "Done",
         skipButtonText: "Skip",
         pageList: pageList,
-        onDoneButtonPressed: () => Navigator.of(context).pushReplacementNamed(PreferencesPage.routename),
-        onSkipButtonPressed: () => Navigator.of(context).pushReplacementNamed(PreferencesPage.routename),
+        onDoneButtonPressed: () => Get.toNamed(PreferencesPage.routeName),
+        onSkipButtonPressed: () => Get.toNamed(PreferencesPage.routeName),
       ),
     );
   }

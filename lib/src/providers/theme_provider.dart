@@ -1,6 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import 'package:news_summarizer/src/utils/shared_prefs.dart';
+import 'package:news_summarizer/src/utils/hive_prefs.dart';
 
 class ThemeProvider with ChangeNotifier {
   ThemeData theme;
@@ -32,6 +32,7 @@ class ThemeProvider with ChangeNotifier {
     primaryColor: Color(0xff1d1f3e),
     primaryColorDark: Color(0xff1d1f3e),
     backgroundColor: Color(0xff1d1f3e),
+    scaffoldBackgroundColor: Color(0xff1d1f3e),
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(),
     ),

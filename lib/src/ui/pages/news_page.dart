@@ -91,7 +91,7 @@ class _NewsPageState extends State<NewsPage> with AutomaticKeepAliveClientMixin<
               builder: (context, snapshot) => (snapshot.hasData)
                   ? RefreshIndicator(
                       onRefresh: loadFeed,
-                      backgroundColor: Theme.of(context).primaryColor,
+                      backgroundColor: Get.theme.primaryColor,
                       child: snapshot.data.length == 0
                           ? Center(
                               child: Text("No news available"),

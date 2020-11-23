@@ -7,9 +7,10 @@ import 'package:news_summarizer/src/models/user.dart';
 import 'package:news_summarizer/src/providers/theme_provider.dart';
 import 'package:news_summarizer/src/providers/user_provider.dart';
 import 'package:news_summarizer/src/ui/pages/onboarding_pages.dart';
+import 'package:news_summarizer/src/ui/pages/preferences_onboarding_page.dart';
 import 'package:news_summarizer/src/ui/pages/preferences_page.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
-import 'package:news_summarizer/src/utils/shared_prefs.dart';
+import 'package:news_summarizer/src/utils/hive_prefs.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 
@@ -63,8 +64,10 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
         var authResult = await _auth.signInWithCredential(authCredential);
         if (authResult.user != null && authResult.additionalUserInfo.isNewUser) {
           userProvider.createNewUser(newUser: authResult.user, phoneNumber: _phoneController.text.trim());
-          Navigator.popAndPushNamed(context, OnboardingPages.routeName);
+          // Navigator.popAndPushNamed(context, OnboardingPages.routeName);
+          Get.toNamed(PreferencesOnboardingPage.routeName);
         } else {
+
           print("[] Old User but not in Hive");
           ApiUser userr = await userProvider.getUserFromFirebase(firebaseUid: authResult.user.uid);
           userProvider.setUserInProvider(setUser: userr);
@@ -119,7 +122,8 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
           _isLoading = false;
         });
         userProvider.createNewUser(newUser: authResult.user, phoneNumber: _phoneController.text.trim());
-        Navigator.popAndPushNamed(context, OnboardingPages.routeName);
+        // Navigator.popAndPushNamed(context, OnboardingPages.routeName);
+        Get.toNamed(PreferencesOnboardingPage.routeName);
       } else {
         print("[] Old User but not in Hive");
         ApiUser userr = await userProvider.getUserFromFirebase(firebaseUid: authResult.user.uid);
@@ -172,12 +176,12 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Get.theme.backgroundColor,
       appBar: AppBar(
           centerTitle: true,
           title: Text(
             'News Summarizer',
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Theme.of(context).accentColor),
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Get.theme.accentColor),
           )),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -256,9 +260,9 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                       fontSize: 18,
                     ),
                     pinTheme: PinTheme(
-                      selectedColor: Theme.of(context).accentColor,
-                      activeColor: Theme.of(context).accentColor,
-                      inactiveColor: Theme.of(context).accentColor,
+                      selectedColor: Get.theme.accentColor,
+                      activeColor: Get.theme.accentColor,
+                      inactiveColor: Get.theme.accentColor,
                       fieldWidth: 40,
                     ),
                     onCompleted: (value) {
@@ -285,7 +289,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                       "NEXT",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Theme.of(context).primaryColor,
+                        color: Get.theme.primaryColor,
                       ),
                     )
                   : Container(
@@ -297,7 +301,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                         ),
                       ),
                     ),
-              disabledColor: Theme.of(context).accentColor.withOpacity(0.7),
+              disabledColor: Get.theme.accentColor.withOpacity(0.7),
               onPressed: (!_isLoading)
                   ? () {
                       if (_isOTPWidgetVisible) {
@@ -309,7 +313,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                       }
                     }
                   : null,
-              color: Theme.of(context).accentColor,
+              color: Get.theme.accentColor,
             ),
           ),
         ],

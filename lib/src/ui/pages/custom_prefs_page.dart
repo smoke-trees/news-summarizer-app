@@ -7,7 +7,7 @@ import 'package:news_summarizer/src/ui/pages/base_page.dart';
 import 'package:news_summarizer/src/ui/pages/blogs_prefs_page.dart';
 import 'package:news_summarizer/src/ui/pages/reorder_prefs_page.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
-import 'package:news_summarizer/src/utils/shared_prefs.dart';
+import 'package:news_summarizer/src/utils/hive_prefs.dart';
 import 'package:provider/provider.dart';
 
 class CustomPrefsPage extends StatefulWidget {
@@ -48,20 +48,20 @@ class _CustomPrefsPageState extends State<CustomPrefsPage> {
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     userProvider.setCustomPreferences(prefsList: stringCustomPreferences);
     // SharedPrefs.setIsUserLoggedIn(true);
-    Navigator.pushNamed(context, ReorderPrefsPage.routeName);
+    Get.toNamed(ReorderPrefsPage.routeName);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Get.theme.backgroundColor,
       appBar: AppBar(
         title: Text(
           'Custom Preferences',
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
-            color: Theme.of(context).accentColor,
+            color: Get.theme.accentColor,
           ),
         ),
         actions: [
@@ -87,10 +87,10 @@ class _CustomPrefsPageState extends State<CustomPrefsPage> {
           children: [
             ChipsChoice<dynamic>.multiple(
               itemConfig: ChipsChoiceItemConfig(
-                selectedColor: Theme.of(context).accentColor,
-                unselectedColor: Theme.of(context).primaryColor,
-                unselectedBrightness: Theme.of(context).brightness,
-                selectedBrightness: Theme.of(context).brightness,
+                selectedColor: Get.theme.accentColor,
+                unselectedColor: Get.theme.primaryColor,
+                unselectedBrightness: Get.theme.brightness,
+                selectedBrightness: Get.theme.brightness,
               ),
               value: customPrefsChosen,
               options: ChipsChoiceOption.listFrom(
@@ -137,10 +137,10 @@ class _CustomPrefsPageState extends State<CustomPrefsPage> {
                     ),
                   ),
                   CircleAvatar(
-                    backgroundColor: Theme.of(context).accentColor,
+                    backgroundColor: Get.theme.accentColor,
                     child: IconButton(
                       icon: Icon(Icons.add),
-                      color: Theme.of(context).primaryColor,
+                      color: Get.theme.primaryColor,
                       onPressed: () {
                         if (formKey.currentState.validate()) {
                           setState(() {

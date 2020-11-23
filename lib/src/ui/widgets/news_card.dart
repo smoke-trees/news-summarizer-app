@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:news_summarizer/src/models/article.dart';
 import 'package:news_summarizer/src/providers/api_provider.dart';
@@ -24,7 +25,7 @@ class NewsCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
           ),
           elevation: 2,
-          color: Theme.of(context).cardColor,
+          color: Get.theme.cardColor,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
             child: Column(
@@ -39,7 +40,7 @@ class NewsCard extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.all(16),
                   width: double.infinity,
-                  color: Theme.of(context).cardColor,
+                  color: Get.theme.cardColor,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -55,14 +56,14 @@ class NewsCard extends StatelessWidget {
                       ),
                       SizedBox(height: 15),
                       Divider(
-                        color: Theme.of(context).accentColor,
+                        color: Get.theme.accentColor,
                         thickness: 2,
                       ),
                       SizedBox(height: 10),
-                      Text(
-                        "Summary",
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
+                      // Text(
+                      //   "Summary",
+                      //   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      // ),
                       SizedBox(height: 10),
                       Container(
                         child: Text(isBlog ? article.description : article.summary),

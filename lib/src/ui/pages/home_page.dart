@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:news_summarizer/src/ui/widgets/search_form.dart';
 
 class HomeWidget extends StatelessWidget {
@@ -14,10 +15,10 @@ class HomeWidget extends StatelessWidget {
           style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,
-              color: Theme.of(context).accentColor),
+              color: Get.theme.accentColor),
         ),
       ),
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Get.theme.backgroundColor,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -36,11 +37,11 @@ class HomeWidget extends StatelessWidget {
                 "Search",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Theme.of(context).primaryColor,
+                  color: Get.theme.primaryColor,
                 ),
               ),
-              disabledColor: Theme.of(context).accentColor.withOpacity(0.7),
-              color: Theme.of(context).accentColor,
+              disabledColor: Get.theme.accentColor.withOpacity(0.7),
+              color: Get.theme.accentColor,
               onPressed: () {
                 if (SearchForm.formkey.currentState.validate()) {
                   SearchForm.formkey.currentState.save();

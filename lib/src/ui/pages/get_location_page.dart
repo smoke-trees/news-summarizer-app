@@ -19,12 +19,12 @@ class _GetLocationPageState extends State<GetLocationPage> {
   Widget build(BuildContext context) {
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Get.theme.primaryColor,
       appBar: AppBar(
           centerTitle: true,
           title: Text(
             'Location',
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Theme.of(context).accentColor),
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Get.theme.accentColor),
           )),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -66,7 +66,7 @@ class _GetLocationPageState extends State<GetLocationPage> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 borderSide: BorderSide(
-                  color: Theme.of(context).accentColor,
+                  color: Get.theme.accentColor,
                 ),
                 highlightedBorderColor: Colors.transparent,
                 child: _isLoading
@@ -79,10 +79,10 @@ class _GetLocationPageState extends State<GetLocationPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               CircleAvatar(
-                                backgroundColor: Theme.of(context).accentColor,
+                                backgroundColor: Get.theme.accentColor,
                                 child: Icon(
                                   Icons.done,
-                                  color: Theme.of(context).primaryColor,
+                                  color: Get.theme.primaryColor,
                                 ),
                               ),
                               SizedBox(
@@ -99,7 +99,7 @@ class _GetLocationPageState extends State<GetLocationPage> {
                             children: [
                               Icon(
                                 Icons.location_on,
-                                color: Theme.of(context).accentColor,
+                                color: Get.theme.accentColor,
                               ),
                               SizedBox(
                                 width: 18,
@@ -110,7 +110,7 @@ class _GetLocationPageState extends State<GetLocationPage> {
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
-                                        color: Theme.of(context).accentColor,
+                                        color: Get.theme.accentColor,
                                       ),
                                     )
                                   : Text(
@@ -118,7 +118,7 @@ class _GetLocationPageState extends State<GetLocationPage> {
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
-                                        color: Theme.of(context).accentColor,
+                                        color: Get.theme.accentColor,
                                       ),
                                     ),
                             ],

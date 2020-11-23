@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:news_summarizer/src/providers/api_provider.dart';
 import 'package:news_summarizer/src/ui/pages/get_location_page.dart';
 import 'package:news_summarizer/src/ui/pages/news_page.dart';
 import 'package:news_summarizer/src/ui/pages/notifs_checklist_page.dart';
+import 'package:news_summarizer/src/ui/pages/preferences_onboarding_page.dart';
 import 'package:news_summarizer/src/ui/pages/preferences_page.dart';
 import 'package:news_summarizer/src/ui/pages/search_page.dart';
 import 'package:news_summarizer/src/ui/widgets/theme_dialog.dart';
@@ -74,7 +76,7 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                 decoration: InputDecoration(
                   hintText: "Search for any news topic!",
                   filled: true,
-                  fillColor: Theme.of(context).cardColor,
+                  fillColor: Get.theme.cardColor,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(
@@ -106,25 +108,25 @@ class _NewsContainerPageState extends State<NewsContainerPage>
   Drawer drawerWidget() {
     return Drawer(
       child: Container(
-        color: Theme.of(context).primaryColor,
+        color: Get.theme.primaryColor,
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
               child: Text(
                 'News Summarizer',
-                style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20),
+                style: TextStyle(color: Get.theme.primaryColor, fontSize: 20),
               ),
               decoration: BoxDecoration(
-                color: Theme.of(context).accentColor,
+                color: Get.theme.accentColor,
               ),
             ),
             ListTile(
               title: Text(
                 'News',
-                style: TextStyle(color: Theme.of(context).accentColor, fontSize: 18),
+                style: TextStyle(color: Get.theme.accentColor, fontSize: 18),
               ),
-              focusColor: Theme.of(context).accentColor,
+              focusColor: Get.theme.accentColor,
               onTap: () {
                 setState(() {
                   _isBlogsSelected = false;
@@ -135,9 +137,9 @@ class _NewsContainerPageState extends State<NewsContainerPage>
             ListTile(
               title: Text(
                 'Blogs',
-                style: TextStyle(color: Theme.of(context).accentColor, fontSize: 18),
+                style: TextStyle(color: Get.theme.accentColor, fontSize: 18),
               ),
-              focusColor: Theme.of(context).accentColor,
+              focusColor: Get.theme.accentColor,
               onTap: () {
                 setState(() {
                   _isBlogsSelected = true;
@@ -165,7 +167,7 @@ class _NewsContainerPageState extends State<NewsContainerPage>
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
-            color: Theme.of(context).accentColor,
+            color: Get.theme.accentColor,
           ),
         ),
         actions: [
@@ -176,13 +178,14 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                   _showThemeDialog(context);
                   break;
                 case 'Change News Preferences':
-                  Navigator.pushNamed(context, PreferencesPage.routename);
+                  // Get.toNamed(PreferencesPage.routeName);
+                  Get.toNamed(PreferencesOnboardingPage.routeName);
                   break;
                 case "Change Location":
-                  Navigator.pushNamed(context, GetLocationPage.routeName);
+                  Get.toNamed(GetLocationPage.routeName);
                   break;
                 case "Notification Center":
-                  Navigator.pushNamed(context, NotifsChecklistPage.routeName);
+                  Get.toNamed(NotifsChecklistPage.routeName);
               }
             },
             itemBuilder: (context) {
@@ -201,9 +204,9 @@ class _NewsContainerPageState extends State<NewsContainerPage>
 
   BottomNavigationBar _bottomNavigationBar() {
     return BottomNavigationBar(
-      backgroundColor: Theme.of(context).primaryColor,
-      // fixedColor: Theme.of(context).accentColor,
-      selectedItemColor: Theme.of(context).accentColor,
+      backgroundColor: Get.theme.primaryColor,
+      // fixedColor: Get.theme.accentColor,
+      selectedItemColor: Get.theme.accentColor,
       elevation: 50,
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
@@ -269,10 +272,10 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                     )
                   : _searchAppBar(context),
               // drawer: drawerWidget(),
-              backgroundColor: Colors.transparent,
+              backgroundColor: Get.theme.scaffoldBackgroundColor,
               body: _blogsFeeds.isEmpty
                   ? Center(
-                      child: Text("Add a blog to your preferences"),
+                      child: Text("Add an expert to your preferences"),
                     )
                   : TabBarView(
                       children: List.generate(
@@ -294,7 +297,7 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                     ? _withoutSearchAppBar(titleText: "Around Me")
                     : _searchAppBar(context),
                 // drawer: drawerWidget(),
-                backgroundColor: Colors.transparent,
+                backgroundColor: Get.theme.scaffoldBackgroundColor,
                 body: NewsPage(
                   isAroundMe: true,
                 ),
@@ -304,7 +307,7 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                 child: Scaffold(
                   bottomNavigationBar: _bottomNavigationBar(),
                   // drawer: drawerWidget(),
-                  backgroundColor: Colors.transparent,
+                  backgroundColor: Get.theme.scaffoldBackgroundColor,
                   appBar: (!_isSearchActive)
                       ? _withoutSearchAppBar(
                           titleText: "News",

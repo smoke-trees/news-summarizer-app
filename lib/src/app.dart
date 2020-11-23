@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:news_summarizer/src/providers/theme_provider.dart';
 import 'package:news_summarizer/src/ui/pages/auth_page.dart';
 import 'package:news_summarizer/src/ui/pages/base_page.dart';
+import 'package:news_summarizer/src/ui/pages/blogs_onboarding_page.dart';
 import 'package:news_summarizer/src/ui/pages/blogs_prefs_page.dart';
 import 'package:news_summarizer/src/ui/pages/custom_prefs_page.dart';
 import 'package:news_summarizer/src/ui/pages/get_location_page.dart';
@@ -11,9 +12,11 @@ import 'package:news_summarizer/src/ui/pages/home_page.dart';
 import 'package:news_summarizer/src/ui/pages/notifs_checklist_page.dart';
 import 'package:news_summarizer/src/ui/pages/onboarding_pages.dart';
 import 'package:news_summarizer/src/ui/pages/phone_auth_page.dart';
+import 'package:news_summarizer/src/ui/pages/preferences_onboarding_page.dart';
 import 'package:news_summarizer/src/ui/pages/preferences_page.dart';
+import 'package:news_summarizer/src/ui/pages/reorder_prefs_onboarding_page.dart';
 import 'package:news_summarizer/src/ui/pages/reorder_prefs_page.dart';
-import 'package:news_summarizer/src/utils/shared_prefs.dart';
+import 'package:news_summarizer/src/utils/hive_prefs.dart';
 import 'package:provider/provider.dart';
 
 class App extends StatelessWidget {
@@ -37,7 +40,7 @@ class App extends StatelessWidget {
               }
             } else {
               return Scaffold(
-                backgroundColor: Theme.of(context).primaryColor,
+                backgroundColor: Get.theme.primaryColor,
                 body: Center(
                   child: Text(
                     "News Summarizer",
@@ -47,10 +50,18 @@ class App extends StatelessWidget {
               );
             }
           }),
+      // getPages: [
+      //   GetPage(
+      //       name: PreferencesOnboardingPage.routeName,
+      //       page: () => PreferencesOnboardingPage(),
+      //       // transition: Transition.noTransition,
+      //       // transitionDuration: Duration(seconds: 1)
+      //   ),
+      // ],
       routes: {
         HomeWidget.routename: (context) => HomeWidget(),
         BasePage.routename: (context) => BasePage(),
-        PreferencesPage.routename: (context) => PreferencesPage(),
+        PreferencesPage.routeName: (context) => PreferencesPage(),
         CustomPrefsPage.routename: (context) => CustomPrefsPage(),
         ReorderPrefsPage.routeName: (context) => ReorderPrefsPage(),
         BlogsPrefsPage.routeName: (context) => BlogsPrefsPage(),
@@ -58,6 +69,9 @@ class App extends StatelessWidget {
         PhoneAuthPage.routeName: (context) => PhoneAuthPage(),
         GetLocationPage.routeName: (context) => GetLocationPage(),
         NotifsChecklistPage.routeName: (context) => NotifsChecklistPage(),
+        PreferencesOnboardingPage.routeName: (context) => PreferencesOnboardingPage(),
+        ReorderPrefsOnboardingPage.routeName: (context) => ReorderPrefsOnboardingPage(),
+        BlogsOnboardingPage.routeName: (context) => BlogsOnboardingPage(),
       },
     );
   }

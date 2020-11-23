@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:news_summarizer/src/providers/user_provider.dart';
 import 'package:news_summarizer/src/ui/pages/base_page.dart';
+import 'package:news_summarizer/src/ui/pages/blogs_onboarding_page.dart';
 import 'package:news_summarizer/src/ui/pages/blogs_prefs_page.dart';
 import 'package:news_summarizer/src/ui/widgets/listview_card.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
@@ -16,6 +17,7 @@ class ReorderPrefsPage extends StatefulWidget {
 }
 
 class _ReorderPrefsPageState extends State<ReorderPrefsPage> {
+  bool isNewUser = Get.arguments ?? false;
   var _newsBox = Hive.box(NEWS_PREFS_BOX);
   var preferences = [];
 
@@ -40,21 +42,24 @@ class _ReorderPrefsPageState extends State<ReorderPrefsPage> {
 
   void finishReordering() {
     _newsBox.put(NEWS_PREFS, preferences);
-
-    Get.toNamed(BlogsPrefsPage.routeName);
+    if (isNewUser) {
+      Get.toNamed(BlogsOnboardingPage.routeName);
+    } else {
+      Get.toNamed(BlogsPrefsPage.routeName);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Get.theme.backgroundColor,
       appBar: AppBar(
         title: Text(
           'Re-order Preferences',
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
-            color: Theme.of(context).accentColor,
+            color: Get.theme.accentColor,
           ),
         ),
         actions: [

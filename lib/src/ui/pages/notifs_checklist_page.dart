@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:news_summarizer/src/providers/user_provider.dart';
 import 'package:news_summarizer/src/ui/pages/base_page.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +29,7 @@ class _NotifsChecklistPageState extends State<NotifsChecklistPage> {
   }
 
   void finishSelection() async {
-    Navigator.pushNamed(context, BasePage.routename);
+    Get.toNamed(BasePage.routename);
   }
 
   @override
@@ -43,7 +44,7 @@ class _NotifsChecklistPageState extends State<NotifsChecklistPage> {
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
-            color: Theme.of(context).accentColor,
+            color: Get.theme.accentColor,
           ),
         ),
         actions: [

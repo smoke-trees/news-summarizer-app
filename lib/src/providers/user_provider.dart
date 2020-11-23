@@ -6,8 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:hive/hive.dart';
 import 'package:news_summarizer/src/models/user.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
-import 'package:news_summarizer/src/utils/news_feed_list.dart';
-import 'package:news_summarizer/src/utils/shared_prefs.dart';
+import 'package:news_summarizer/src/utils/hive_prefs.dart';
 
 class UserProvider extends ChangeNotifier {
   ApiUser user;
@@ -73,68 +72,89 @@ class UserProvider extends ChangeNotifier {
         setFCMtokenInFirebase(fcmtoken: user.fcmToken);
       }
     });
-
   }
 
   void setFCMtokenInFirebase({String fcmtoken}) {
-    FirebaseFirestore.instance.collection('user').doc(user.firebaseUid).update({'fcmToken': fcmtoken});
+    if (user.firebaseUid == null) {
+      print("[UserProvider] No user in firebase, so no FCM saved");
+    } else {
+      FirebaseFirestore.instance.collection('user').doc(user.firebaseUid).update({'fcmToken': fcmtoken});
+    }
     user.fcmToken = fcmtoken;
   }
 
-  Future<String> getFCMtokenFromFirebase() async {
-    var data = await FirebaseFirestore.instance.collection('user').doc(user.firebaseUid).get();
-    user.fcmToken = data.data()['fcmToken'];
-    saveToHive(user: user);
-    return user.fcmToken;
-  }
-
   void setUserLocation({Position position}) {
-    print("[UserProvider] Set user location in Firebase");
-    FirebaseFirestore.instance
-        .collection('user')
-        .doc(user.firebaseUid)
-        .update({'location.latitude': position.latitude, 'location.longitude': position.longitude});
+    if (user.firebaseUid == null) {
+      FirebaseFirestore.instance
+          .collection('user')
+          .doc(user.firebaseUid)
+          .update({'location.latitude': position.latitude, 'location.longitude': position.longitude});
+      print("[UserProvider] Set user location in Firebase");
+    } else {
+      print("[UserProvider] No user in Firebase. Did not Set user location in Firebase");
+    }
+
     user.latitude = position.latitude;
     user.longitude = position.longitude;
     saveToHive(user: user);
   }
 
   void setNewsPreferences({List prefsList}) {
-    print("[UserProvider] Set news preferences in Firebase");
-    FirebaseFirestore.instance
-        .collection('user')
-        .doc(user.firebaseUid)
-        .update({'newsPreferences': prefsList.map((e) => e.toString()).toList()});
+    if (user.firebaseUid != null) {
+      print("[UserProvider] Set news preferences in Firebase");
+      FirebaseFirestore.instance
+          .collection('user')
+          .doc(user.firebaseUid)
+          .update({'newsPreferences': prefsList.map((e) => e.toString()).toList()});
+    } else {
+      print("[UserProvider] No user in Firebase. Did not Set news preferences in Firebase");
+    }
+
     user.newsPreferences = prefsList;
     saveToHive(user: user);
   }
 
   void setCustomPreferences({List prefsList}) {
-    print("[UserProvider] Set custom preferences in Firebase");
-    FirebaseFirestore.instance
-        .collection('user')
-        .doc(user.firebaseUid)
-        .update({'customPreferences': prefsList.map((e) => e.toString()).toList()});
+    if (user.firebaseUid != null) {
+      print("[UserProvider] Set custom preferences in Firebase");
+      FirebaseFirestore.instance
+          .collection('user')
+          .doc(user.firebaseUid)
+          .update({'customPreferences': prefsList.map((e) => e.toString()).toList()});
+    } else {
+      print("[UserProvider] No user in Firebase. Did not Set custom preferences in Firebase");
+    }
+
     user.customPreferences = prefsList;
     saveToHive(user: user);
   }
 
   void setBlogPreferences({List prefsList}) {
-    print("[UserProvider] Set blog preferences in Firebase");
-    FirebaseFirestore.instance
-        .collection('user')
-        .doc(user.firebaseUid)
-        .update({'blogPreferences': prefsList.cast<String>()});
+    if (user.firebaseUid != null) {
+      print("[UserProvider] Set blog preferences in Firebase");
+      FirebaseFirestore.instance
+          .collection('user')
+          .doc(user.firebaseUid)
+          .update({'blogPreferences': prefsList.cast<String>()});
+    } else {
+      print("[UserProvider] No user in Firebase. Did not Set blog preferences in Firebase");
+    }
+
     user.blogPreferences = prefsList;
     saveToHive(user: user);
   }
 
   void setNotificationPrefs({List<String> prefsList}) {
-    print("[UserProvider] Set notification in Firebase");
-    FirebaseFirestore.instance
-        .collection('user')
-        .doc(user.firebaseUid)
-        .update({'notifEnabledPrefs': prefsList});
+    if (user.firebaseUid != null) {
+      print("[UserProvider] Set notification in Firebase");
+      FirebaseFirestore.instance
+          .collection('user')
+          .doc(user.firebaseUid)
+          .update({'notifEnabledPrefs': prefsList});
+    } else {
+      print("[UserProvider] No user in Firebase. Did not Set notif preferences in Firebase");
+    }
+
     user.blogPreferences = prefsList;
     saveToHive(user: user);
   }
