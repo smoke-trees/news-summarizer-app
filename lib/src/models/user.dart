@@ -9,7 +9,7 @@ class ApiUser extends HiveObject {
   List<String> blogPreferences;
 
   @HiveField(1)
-  List newsPreferences;
+  List<String> newsPreferences;
 
   @HiveField(2)
   List<String> customPreferences;
@@ -57,9 +57,9 @@ class ApiUser extends HiveObject {
 
   factory ApiUser.fromJson(json) {
     return ApiUser(
-        blogPreferences: json['blogPreferences'],
-        newsPreferences: json['newsPreferences'],
-        customPreferences: json['customPreferences'],
+        blogPreferences: (json['blogPreferences'] as List).cast<String>() ?? [],
+        newsPreferences: (json['newsPreferences'] as List).cast<String>() ?? [],
+        customPreferences: (json['customPreferences'] as List).cast<String>() ?? [],
         name: json['name'],
         email: json['email'],
         fcmToken: json['fcmToken'],
@@ -68,24 +68,24 @@ class ApiUser extends HiveObject {
         phoneNumber: json['phoneNumber'],
         latitude: json['location']['latitude'],
         longitude: json['location']['longitude'],
-        notifEnabledPrefs: json['notifEnabledPrefs'] ?? []);
+        notifEnabledPrefs: (json['notifEnabledPrefs'] as List).cast<String>() ?? []);
   }
 
-  Map<String, dynamic> toJson(ApiUser user) {
+  Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['blogPreferences'] = user.blogPreferences;
-    data['newsPreferences'] = user.newsPreferences;
-    data['customPreferences'] = user.customPreferences;
-    data['name'] = user.name;
-    data['email'] = user.email;
-    data['fcmToken'] = user.fcmToken;
-    data['photoUrl'] = user.photoUrl;
-    data['firebaseUid'] = user.firebaseUid;
-    data['phoneNumber'] = user.phoneNumber;
+    data['blogPreferences'] = blogPreferences;
+    data['newsPreferences'] = newsPreferences;
+    data['customPreferences'] = customPreferences;
+    data['name'] = name;
+    data['email'] = email;
+    data['fcmToken'] = fcmToken;
+    data['photoUrl'] = photoUrl;
+    data['firebaseUid'] = firebaseUid;
+    data['phoneNumber'] = phoneNumber;
     data['location'] = Map<String, double>();
-    data['location']['latitude'] = user.latitude;
-    data['location']['longitude'] = user.longitude;
-    data['notifEnabledPrefs'] = user.notifEnabledPrefs ?? [];
+    data['location']['latitude'] = latitude;
+    data['location']['longitude'] = longitude;
+    data['notifEnabledPrefs'] = notifEnabledPrefs ?? [];
     return data;
   }
 }

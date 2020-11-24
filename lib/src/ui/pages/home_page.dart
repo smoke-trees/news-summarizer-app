@@ -11,7 +11,7 @@ class HomeWidget extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'News Summarizer',
+          'Terran Tidings',
           style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,

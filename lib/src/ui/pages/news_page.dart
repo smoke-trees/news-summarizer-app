@@ -10,7 +10,7 @@ import 'package:news_summarizer/src/utils/news_feed_list.dart';
 import 'package:provider/provider.dart';
 
 class NewsPage extends StatefulWidget {
-  final NewsFeed newsFeed;
+  final String newsFeed;
   final String customPref;
   final bool isCustomPref;
   final bool isBlogAuthor;

@@ -29,7 +29,7 @@ class _NotifsChecklistPageState extends State<NotifsChecklistPage> {
   }
 
   void finishSelection() async {
-    Get.toNamed(BasePage.routename);
+    Get.toNamed(BasePage.routeName);
   }
 
   @override

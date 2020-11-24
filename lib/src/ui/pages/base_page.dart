@@ -7,7 +7,7 @@ import 'package:news_summarizer/src/ui/pages/news_container_page.dart';
 import 'package:provider/provider.dart';
 
 class BasePage extends StatefulWidget {
-  static const routename = "/base";
+  static const routeName = "/base";
 
   @override
   _BasePageState createState() => _BasePageState();

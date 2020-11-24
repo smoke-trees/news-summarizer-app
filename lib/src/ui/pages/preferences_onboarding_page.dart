@@ -18,6 +18,7 @@ class _PreferencesOnboardingPageState extends State<PreferencesOnboardingPage> {
     semanticsLabel: 'Selection Logo',
     // color: Get.theme.accentColor,
     width: Get.mediaQuery.size.width - 20,
+    height: Get.mediaQuery.size.height * 0.25,
     fit: BoxFit.contain,
     placeholderBuilder: (context) {
       return Center(child: CircularProgressIndicator());
@@ -52,7 +53,29 @@ class _PreferencesOnboardingPageState extends State<PreferencesOnboardingPage> {
             Padding(
               padding: const EdgeInsets.all(20),
               child: Text(
-                "Select topics that interests you, or select from a few of our preset topics.",
+                "Welcome to Terran Tidings. We bring you own personalized tidings from across the world.",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Text(
+                "First, let us help you create your own news channels. Just type a phrase and that becomes your news channel",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Text(
+                "Or pick a few channels from our curated list",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 20),
               ),

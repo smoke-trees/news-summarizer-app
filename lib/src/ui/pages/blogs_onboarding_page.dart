@@ -61,10 +61,21 @@ class _BlogsOnboardingPageState extends State<BlogsOnboardingPage> {
             //
             // ),
             svg,
+            SizedBox(
+              height: 10,
+            ),
             Padding(
               padding: const EdgeInsets.all(20),
               child: Text(
-                "Choose experts you follow, to read what they post.",
+                "We have compiled a list of experts and publications just for you.",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Text(
+                "You can choose a few to check out the latest from them.",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 20),
               ),

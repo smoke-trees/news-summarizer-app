@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:news_summarizer/src/providers/api_provider.dart';
+import 'package:news_summarizer/src/ui/pages/auth_page.dart';
 import 'package:news_summarizer/src/ui/pages/get_location_page.dart';
 import 'package:news_summarizer/src/ui/pages/news_page.dart';
 import 'package:news_summarizer/src/ui/pages/notifs_checklist_page.dart';
@@ -22,7 +23,7 @@ class _NewsContainerPageState extends State<NewsContainerPage>
   var _newsFeeds;
   var _blogsFeeds;
   bool _isSearchActive = false;
-  bool _isBlogsSelected = false;
+  bool _isAuthSelected = false;
   int _selectedTab = 0;
 
   @override
@@ -114,7 +115,7 @@ class _NewsContainerPageState extends State<NewsContainerPage>
           children: <Widget>[
             DrawerHeader(
               child: Text(
-                'News Summarizer',
+                'Terran Tidings',
                 style: TextStyle(color: Get.theme.primaryColor, fontSize: 20),
               ),
               decoration: BoxDecoration(
@@ -123,28 +124,32 @@ class _NewsContainerPageState extends State<NewsContainerPage>
             ),
             ListTile(
               title: Text(
-                'News',
+                'Home',
                 style: TextStyle(color: Get.theme.accentColor, fontSize: 18),
               ),
               focusColor: Get.theme.accentColor,
               onTap: () {
-                setState(() {
-                  _isBlogsSelected = false;
-                });
-                Navigator.pop(context);
+                if (_isAuthSelected) {
+                  setState(() {
+                    _isAuthSelected = false;
+                  });
+                }
+                // Get.toNamed(AuthPage.routeName);
               },
             ),
             ListTile(
               title: Text(
-                'Blogs',
+                'Login',
                 style: TextStyle(color: Get.theme.accentColor, fontSize: 18),
               ),
               focusColor: Get.theme.accentColor,
               onTap: () {
-                setState(() {
-                  _isBlogsSelected = true;
-                });
-                Navigator.pop(context);
+                if (!_isAuthSelected) {
+                  setState(() {
+                    _isAuthSelected = true;
+                  });
+                }
+                // Get.toNamed(AuthPage.routeName);
               },
             ),
           ],
@@ -156,12 +161,12 @@ class _NewsContainerPageState extends State<NewsContainerPage>
   AppBar _withoutSearchAppBar({Widget bottom, String titleText}) {
     return AppBar(
         centerTitle: true,
-        leading: InkWell(
-          child: Icon(Icons.search),
-          onTap: () => setState(() {
-            _isSearchActive = true;
-          }),
-        ),
+        // leading: InkWell(
+        //   child: Icon(Icons.search),
+        //   onTap: () => setState(() {
+        //     _isSearchActive = true;
+        //   }),
+        // ),
         title: Text(
           titleText,
           style: TextStyle(
@@ -171,6 +176,12 @@ class _NewsContainerPageState extends State<NewsContainerPage>
           ),
         ),
         actions: [
+          InkWell(
+            child: Icon(Icons.search),
+            onTap: () => setState(() {
+              _isSearchActive = true;
+            }),
+          ),
           PopupMenuButton(
             onSelected: (value) async {
               switch (value) {
@@ -178,8 +189,8 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                   _showThemeDialog(context);
                   break;
                 case 'Change News Preferences':
-                  // Get.toNamed(PreferencesPage.routeName);
-                  Get.toNamed(PreferencesOnboardingPage.routeName);
+                  Get.toNamed(PreferencesPage.routeName);
+                  // Get.toNamed(PreferencesOnboardingPage.routeName);
                   break;
                 case "Change Location":
                   Get.toNamed(GetLocationPage.routeName);
@@ -211,15 +222,15 @@ class _NewsContainerPageState extends State<NewsContainerPage>
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
-          title: Text('News'),
+          label: 'News',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.business),
-          title: Text('Expert Opinion'),
+          label: 'Expert Opinion',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.location_on),
-          title: Text('Around Me'),
+          label: 'Around Me',
         ),
       ],
       currentIndex: _selectedTab,
@@ -245,110 +256,124 @@ class _NewsContainerPageState extends State<NewsContainerPage>
   @override
   Widget build(BuildContext context) {
     // super.build(context);
-    return _selectedTab == 1
-        ? DefaultTabController(
-            length: _blogsFeeds.length,
-            child: Scaffold(
-              bottomNavigationBar: _bottomNavigationBar(),
-              appBar: (!_isSearchActive)
-                  ? _withoutSearchAppBar(
-                      titleText: "Expert Opinion",
-                      bottom: _blogsFeeds.isEmpty
-                          ? PreferredSize(
-                              preferredSize: Size.fromHeight(0),
-                              child: SizedBox.shrink(),
-                            )
-                          : TabBar(
-                              tabs: List.generate(
-                                _blogsFeeds.length,
-                                (index) {
-                                  return Tab(
-                                    text: (_blogsFeeds[index] as String).toUpperCase(),
-                                  ); //Very bad method but eet ees what eet ees
-                                },
-                              ),
-                              isScrollable: true,
-                            ),
-                    )
-                  : _searchAppBar(context),
-              // drawer: drawerWidget(),
-              backgroundColor: Get.theme.scaffoldBackgroundColor,
-              body: _blogsFeeds.isEmpty
-                  ? Center(
-                      child: Text("Add an expert to your preferences"),
-                    )
-                  : TabBarView(
-                      children: List.generate(
-                        _blogsFeeds.length,
-                        (index) {
-                          return NewsPage(
-                            blogAuthor: _blogsFeeds[index],
-                            isBlogAuthor: true,
-                            isCustomPref: false,
-                          ); //Very bad method but eet ees what eet ees
-                        },
-                      ),
-                    ),
-            ))
-        : _selectedTab == 2
-            ? Scaffold(
-                bottomNavigationBar: _bottomNavigationBar(),
-                appBar: (!_isSearchActive)
-                    ? _withoutSearchAppBar(titleText: "Around Me")
-                    : _searchAppBar(context),
-                // drawer: drawerWidget(),
-                backgroundColor: Get.theme.scaffoldBackgroundColor,
-                body: NewsPage(
-                  isAroundMe: true,
-                ),
-              )
-            : DefaultTabController(
-                length: _newsFeeds.length,
+    return _isAuthSelected
+        ? Scaffold(
+            drawer: drawerWidget(),
+            appBar: AppBar(
+              centerTitle: true,
+              title: Text(
+                'Terran Tidings',
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Get.theme.accentColor),
+              ),
+            ),
+            body: AuthPage())
+        : _selectedTab == 1
+            ? DefaultTabController(
+                length: _blogsFeeds.length,
                 child: Scaffold(
+                  drawer: drawerWidget(),
                   bottomNavigationBar: _bottomNavigationBar(),
-                  // drawer: drawerWidget(),
-                  backgroundColor: Get.theme.scaffoldBackgroundColor,
                   appBar: (!_isSearchActive)
                       ? _withoutSearchAppBar(
-                          titleText: "News",
-                          bottom: TabBar(
-                            tabs: List.generate(
-                              _newsFeeds.length,
-                              (index) {
-                                return Tab(
-                                  text: _newsFeeds[index]
-                                      .toString()
-                                      .split('.')
-                                      .last
-                                      .replaceAll("_", " ")
-                                      .toUpperCase(),
-                                );
-                              },
-                            ),
-                            isScrollable: true,
-                          ),
+                          titleText: "Expert Opinion",
+                          bottom: _blogsFeeds.isEmpty
+                              ? PreferredSize(
+                                  preferredSize: Size.fromHeight(0),
+                                  child: SizedBox.shrink(),
+                                )
+                              : TabBar(
+                                  tabs: List.generate(
+                                    _blogsFeeds.length,
+                                    (index) {
+                                      return Tab(
+                                        text: (_blogsFeeds[index] as String).toUpperCase(),
+                                      ); //Very bad method but eet ees what eet ees
+                                    },
+                                  ),
+                                  isScrollable: true,
+                                ),
                         )
                       : _searchAppBar(context),
-                  body: TabBarView(
-                    children: List.generate(
-                      _newsFeeds.length,
-                      (index) {
-                        if (_newsFeeds[index].runtimeType == String) {
-                          return NewsPage(
-                            customPref: _newsFeeds[index].toString().split('.').last.replaceAll("_", " "),
-                            isCustomPref: true,
-                          ); //Very bad method but eet ees what eet ees
-                        } else {
-                          return NewsPage(
-                            newsFeed: _newsFeeds[index],
-                            isCustomPref: false,
-                          );
-                        }
-                      },
+                  // drawer: drawerWidget(),
+                  backgroundColor: Get.theme.scaffoldBackgroundColor,
+                  body: _blogsFeeds.isEmpty
+                      ? Center(
+                          child: Text("Add an expert to your preferences"),
+                        )
+                      : TabBarView(
+                          children: List.generate(
+                            _blogsFeeds.length,
+                            (index) {
+                              return NewsPage(
+                                blogAuthor: _blogsFeeds[index],
+                                isBlogAuthor: true,
+                                isCustomPref: false,
+                              ); //Very bad method but eet ees what eet ees
+                            },
+                          ),
+                        ),
+                ))
+            : _selectedTab == 2
+                ? Scaffold(
+                    drawer: drawerWidget(),
+                    bottomNavigationBar: _bottomNavigationBar(),
+                    appBar: (!_isSearchActive)
+                        ? _withoutSearchAppBar(titleText: "Around Me")
+                        : _searchAppBar(context),
+                    // drawer: drawerWidget(),
+                    backgroundColor: Get.theme.scaffoldBackgroundColor,
+                    body: NewsPage(
+                      isAroundMe: true,
                     ),
-                  ),
-                ),
-              );
+                  )
+                : DefaultTabController(
+                    length: _newsFeeds.length,
+                    child: Scaffold(
+                      drawer: drawerWidget(),
+                      bottomNavigationBar: _bottomNavigationBar(),
+                      // drawer: drawerWidget(),
+                      backgroundColor: Get.theme.scaffoldBackgroundColor,
+                      appBar: (!_isSearchActive)
+                          ? _withoutSearchAppBar(
+                              titleText: "News",
+                              bottom: TabBar(
+                                tabs: List.generate(
+                                  _newsFeeds.length,
+                                  (index) {
+                                    return Tab(
+                                      text: _newsFeeds[index]
+                                          .toString()
+                                          .split('.')
+                                          .last
+                                          .replaceAll("_", " ")
+                                          .toUpperCase(),
+                                    );
+                                  },
+                                ),
+                                isScrollable: true,
+                              ),
+                            )
+                          : _searchAppBar(context),
+                      body: TabBarView(
+                        children: List.generate(
+                          _newsFeeds.length,
+                          (index) {
+                            if ((_newsFeeds[index] as String).contains("NewsFeed.")) {
+                              return NewsPage(
+                                customPref: _newsFeeds[index].toString().split('.').last.replaceAll("_", " "),
+                                isCustomPref: true,
+                              ); //Very bad method but eet ees what eet ees
+                            } else {
+                              return NewsPage(
+                                newsFeed: _newsFeeds[index],
+                                isCustomPref: false,
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                  );
   }
 
   @override

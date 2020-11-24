@@ -25,7 +25,7 @@ class App extends StatelessWidget {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
 
     return GetMaterialApp(
-      title: 'News Summarizer',
+      title: 'Terran Tidings',
       theme: themeProvider.theme,
       debugShowCheckedModeBanner: false,
       home: FutureBuilder(
@@ -34,7 +34,7 @@ class App extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.done) {
               bool isLoggedIn = ProfileHive().getIsUserLoggedIn();
               if (isLoggedIn == false) {
-                return AuthPage();
+                return PreferencesOnboardingPage();
               } else {
                 return BasePage();
               }
@@ -43,7 +43,7 @@ class App extends StatelessWidget {
                 backgroundColor: Get.theme.primaryColor,
                 body: Center(
                   child: Text(
-                    "News Summarizer",
+                    "Terran Tidings",
                     style: TextStyle(fontSize: 24),
                   ),
                 ),
@@ -60,7 +60,7 @@ class App extends StatelessWidget {
       // ],
       routes: {
         HomeWidget.routename: (context) => HomeWidget(),
-        BasePage.routename: (context) => BasePage(),
+        BasePage.routeName: (context) => BasePage(),
         PreferencesPage.routeName: (context) => PreferencesPage(),
         CustomPrefsPage.routename: (context) => CustomPrefsPage(),
         ReorderPrefsPage.routeName: (context) => ReorderPrefsPage(),
@@ -72,6 +72,7 @@ class App extends StatelessWidget {
         PreferencesOnboardingPage.routeName: (context) => PreferencesOnboardingPage(),
         ReorderPrefsOnboardingPage.routeName: (context) => ReorderPrefsOnboardingPage(),
         BlogsOnboardingPage.routeName: (context) => BlogsOnboardingPage(),
+        AuthPage.routeName: (context) => AuthPage(),
       },
     );
   }

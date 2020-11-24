@@ -63,11 +63,21 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
         UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
         var authResult = await _auth.signInWithCredential(authCredential);
         if (authResult.user != null && authResult.additionalUserInfo.isNewUser) {
-          userProvider.createNewUser(newUser: authResult.user, phoneNumber: _phoneController.text.trim());
-          // Navigator.popAndPushNamed(context, OnboardingPages.routeName);
-          Get.toNamed(PreferencesOnboardingPage.routeName);
-        } else {
+          // ApiUser user = userProvider.createNewUser(newUser: credential.user);
+          userProvider.user.name = authResult.user.displayName;
+          userProvider.user.phoneNumber = authResult.user.phoneNumber;
+          userProvider.user.firebaseUid = authResult.user.uid;
+          userProvider.user.photoUrl = authResult.user.photoURL;
 
+          userProvider.createUserInFirebase(newUser: userProvider.user);
+          userProvider.saveToHive(user: userProvider.user);
+          print(userProvider.user.toJson());
+          // userProvider.setUserInProvider(setUser: use)
+          Get.offAndToNamed(BasePage.routeName);
+          Get.snackbar("Successful",
+              userProvider.user.name == null ? "Welcome!" : "Welcome, ${userProvider.user.name}!",
+              snackPosition: SnackPosition.BOTTOM);
+        } else {
           print("[] Old User but not in Hive");
           ApiUser userr = await userProvider.getUserFromFirebase(firebaseUid: authResult.user.uid);
           userProvider.setUserInProvider(setUser: userr);
@@ -76,8 +86,27 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
           _newsBox.put(NEWS_BLOGS_AUTHORS, userr.blogPreferences);
           _newsBox.put(NEWS_CUSTOM, userr.customPreferences);
           ProfileHive().setIsUserLoggedIn(true);
-          Navigator.popAndPushNamed(context, BasePage.routename);
+          Get.toNamed(BasePage.routeName);
+          Get.snackbar("Successful",
+              userProvider.user.name == null ? "Welcome back!" : "Welcome back, ${userProvider.user.name}!",
+              snackPosition: SnackPosition.BOTTOM);
         }
+        // if (authResult.user != null && authResult.additionalUserInfo.isNewUser) {
+        //   userProvider.createNewUser(newUser: authResult.user, phoneNumber: _phoneController.text.trim());
+        //   // Navigator.popAndPushNamed(context, OnboardingPages.routeName);
+        //   Get.toNamed(PreferencesOnboardingPage.routeName);
+        // } else {
+        //
+        //   print("[] Old User but not in Hive");
+        //   ApiUser userr = await userProvider.getUserFromFirebase(firebaseUid: authResult.user.uid);
+        //   userProvider.setUserInProvider(setUser: userr);
+        //   userProvider.saveToHive(user: userr);
+        //   _newsBox.put(NEWS_PREFS, userr.newsPreferences);
+        //   _newsBox.put(NEWS_BLOGS_AUTHORS, userr.blogPreferences);
+        //   _newsBox.put(NEWS_CUSTOM, userr.customPreferences);
+        //   ProfileHive().setIsUserLoggedIn(true);
+        //   Navigator.popAndPushNamed(context, BasePage.routeName);
+        // }
       } catch (e) {
         Get.snackbar(
           "Error",
@@ -116,14 +145,26 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
         _isLoading = true;
       });
       var authResult = await FirebaseAuth.instance.signInWithCredential(credential);
-      User user = authResult.user;
-      if (user != null && authResult.additionalUserInfo.isNewUser) {
+      // User user = authResult.user;
+
+      if (authResult.user != null && authResult.additionalUserInfo.isNewUser) {
+        // ApiUser user = userProvider.createNewUser(newUser: credential.user);
+        userProvider.user.name = authResult.user.displayName;
+        userProvider.user.phoneNumber = authResult.user.phoneNumber;
+        userProvider.user.firebaseUid = authResult.user.uid;
+        userProvider.user.photoUrl = authResult.user.photoURL;
+
+        userProvider.createUserInFirebase(newUser: userProvider.user);
+        userProvider.saveToHive(user: userProvider.user);
         setState(() {
           _isLoading = false;
         });
-        userProvider.createNewUser(newUser: authResult.user, phoneNumber: _phoneController.text.trim());
-        // Navigator.popAndPushNamed(context, OnboardingPages.routeName);
-        Get.toNamed(PreferencesOnboardingPage.routeName);
+        print(userProvider.user.toJson());
+        // userProvider.setUserInProvider(setUser: use)
+        Get.offAndToNamed(BasePage.routeName);
+        Get.snackbar(
+            "Successful", userProvider.user.name == null ? "Welcome!" : "Welcome, ${userProvider.user.name}!",
+            snackPosition: SnackPosition.BOTTOM);
       } else {
         print("[] Old User but not in Hive");
         ApiUser userr = await userProvider.getUserFromFirebase(firebaseUid: authResult.user.uid);
@@ -133,8 +174,30 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
         _newsBox.put(NEWS_BLOGS_AUTHORS, userr.blogPreferences);
         _newsBox.put(NEWS_CUSTOM, userr.customPreferences);
         ProfileHive().setIsUserLoggedIn(true);
-        Navigator.popAndPushNamed(context, BasePage.routename);
+        Get.toNamed(BasePage.routeName);
+        Get.snackbar("Successful",
+            userProvider.user.name == null ? "Welcome back!" : "Welcome back, ${userProvider.user.name}!",
+            snackPosition: SnackPosition.BOTTOM);
       }
+
+      // if (user != null && authResult.additionalUserInfo.isNewUser) {
+      //   setState(() {
+      //     _isLoading = false;
+      //   });
+      //   userProvider.createNewUser(newUser: authResult.user, phoneNumber: _phoneController.text.trim());
+      //   // Navigator.popAndPushNamed(context, OnboardingPages.routeName);
+      //   Get.toNamed(PreferencesOnboardingPage.routeName);
+      // } else {
+      //   print("[] Old User but not in Hive");
+      //   ApiUser userr = await userProvider.getUserFromFirebase(firebaseUid: authResult.user.uid);
+      //   userProvider.setUserInProvider(setUser: userr);
+      //   userProvider.saveToHive(user: userr);
+      //   _newsBox.put(NEWS_PREFS, userr.newsPreferences);
+      //   _newsBox.put(NEWS_BLOGS_AUTHORS, userr.blogPreferences);
+      //   _newsBox.put(NEWS_CUSTOM, userr.customPreferences);
+      //   ProfileHive().setIsUserLoggedIn(true);
+      //   Navigator.popAndPushNamed(context, BasePage.routeName);
+      // }
     } on PlatformException catch (err) {
       if (err.code == "ERROR_INVALID_VERIFICATION_CODE") {
         Get.snackbar(
@@ -180,7 +243,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
       appBar: AppBar(
           centerTitle: true,
           title: Text(
-            'News Summarizer',
+            'Terran Tidings',
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Get.theme.accentColor),
           )),
       body: Column(

@@ -2,6 +2,7 @@ import 'package:chips_choice/chips_choice.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
+import 'package:news_summarizer/src/models/user.dart';
 import 'package:news_summarizer/src/providers/user_provider.dart';
 import 'package:news_summarizer/src/ui/pages/reorder_prefs_onboarding_page.dart';
 import 'package:news_summarizer/src/ui/pages/reorder_prefs_page.dart';
@@ -22,16 +23,16 @@ class _PreferencesPageState extends State<PreferencesPage> {
   bool isNewUser = Get.arguments ?? false;
   var _newsBox = Hive.box(NEWS_PREFS_BOX);
 
-  var popularChosen = [];
+  List<String> popularChosen = [];
 
   // var metroChosen = [];
   // var indianCitiesChosen = [];
-  var internationalChosen = [];
+  List<String> internationalChosen = [];
 
-  var allPrefs = [];
+  List<String> allPrefs = [];
 
-  var customPrefsChosen = [];
-  var customPrefsPresent = [];
+  List<String> customPrefsChosen = [];
+  List<String> customPrefsPresent = [];
   TextEditingController customPrefsController = new TextEditingController();
   final formKey = GlobalKey<FormState>();
 
@@ -51,7 +52,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
   void finishSelection() {
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     print("finishSelection called");
-    var finList = [];
+    List<String> finList = [];
     if (!popularChosen.isNullOrBlank) {
       finList.addAll(popularChosen);
     }
@@ -64,6 +65,45 @@ class _PreferencesPageState extends State<PreferencesPage> {
     if (!internationalChosen.isNullOrBlank) {
       finList.addAll(internationalChosen);
     }
+
+    // _newsBox.put(NEWS_PREFS, finList);
+
+    // _newsBox.put(NEWS_METRO, metroChosen);
+    // _newsBox.put(NEWS_OTHER, indianCitiesChosen);
+
+    allPrefs.forEach((element) {
+      if (!finList.contains(element) && !customPrefsChosen.contains(element)) {
+        userProvider.unsubscribeToTopic(topic: element.toString());
+      }
+    });
+    finList.forEach((element) {
+      if (!customPrefsChosen.contains(element)) {
+        userProvider.subscribeToTopic(topic: element.toString());
+      }
+    });
+    // userProvider.setUserInProvider(setUser: new ApiUser());
+    if (userProvider.user == null) {
+      print("[] User not in provider, creating new User");
+      userProvider.setUserInProvider(setUser: new ApiUser());
+      userProvider.setNewsPreferences(prefsList: finList);
+    } else {
+      userProvider.setNewsPreferences(prefsList: finList);
+    }
+    if (userProvider.user.notifEnabledPrefs.isNull) {
+      userProvider.user.notifEnabledPrefs = finList.map((e) => e.toString()).toList();
+      userProvider.setNotificationPrefs(prefsList: userProvider.user.notifEnabledPrefs);
+    } else {
+      userProvider.user.notifEnabledPrefs.addAll(finList.map((e) => e.toString()).toList());
+      userProvider.user.notifEnabledPrefs = userProvider.user.notifEnabledPrefs.toSet().toList();
+      userProvider.setNotificationPrefs(prefsList: userProvider.user.notifEnabledPrefs);
+    }
+
+    List<String> stringCustomPreferences = customPrefsChosen.cast<String>();
+    List<String> stringFinList = finList.map((e) => e.toString()).toList();
+
+    stringCustomPreferences.retainWhere((value) => !stringFinList.contains(value));
+    finList.addAll(stringCustomPreferences);
+
     if (finList.length < 3) {
       Get.snackbar(
         "Warning!",
@@ -73,41 +113,10 @@ class _PreferencesPageState extends State<PreferencesPage> {
         snackPosition: SnackPosition.BOTTOM,
       );
     } else {
-      // _newsBox.put(NEWS_PREFS, finList);
-      _newsBox.put(NEWS_POPULAR, popularChosen);
-      _newsBox.put(NEWS_INT, internationalChosen);
-      // _newsBox.put(NEWS_METRO, metroChosen);
-      // _newsBox.put(NEWS_OTHER, indianCitiesChosen);
-
-      allPrefs.forEach((element) {
-        if (!finList.contains(element) && !customPrefsChosen.contains(element)) {
-          userProvider.unsubscribeToTopic(topic: element.toString());
-        }
-      });
-      finList.forEach((element) {
-        if (!customPrefsChosen.contains(element)) {
-          userProvider.subscribeToTopic(topic: element.toString());
-        }
-      });
-
-      userProvider.setNewsPreferences(prefsList: finList);
-      if (userProvider.user.notifEnabledPrefs.isNull) {
-        userProvider.user.notifEnabledPrefs = finList.map((e) => e.toString()).toList();
-        userProvider.setNotificationPrefs(prefsList: userProvider.user.notifEnabledPrefs);
-      } else {
-        userProvider.user.notifEnabledPrefs.addAll(finList.map((e) => e.toString()).toList());
-        userProvider.user.notifEnabledPrefs = userProvider.user.notifEnabledPrefs.toSet().toList();
-        userProvider.setNotificationPrefs(prefsList: userProvider.user.notifEnabledPrefs);
-      }
-
-      List<String> stringCustomPreferences = customPrefsChosen.cast<String>();
-      List<String> stringFinList = finList.map((e) => e.toString()).toList();
-
-      stringCustomPreferences.retainWhere((value) => !stringFinList.contains(value));
-      finList.addAll(stringCustomPreferences);
-
       _newsBox.put(NEWS_CUSTOM, stringCustomPreferences);
       _newsBox.put(NEWS_PREFS, finList);
+      _newsBox.put(NEWS_POPULAR, popularChosen);
+      _newsBox.put(NEWS_INT, internationalChosen);
       userProvider.setCustomPreferences(prefsList: stringCustomPreferences);
 
       ProfileHive().setIsUserLoggedIn(true);
@@ -185,7 +194,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
                         label: (index, item) => item,
                       ),
                       onChanged: (val) {
-                        setState(() => customPrefsChosen = val);
+                        setState(() => customPrefsChosen = val.cast<String>());
                       },
                       padding: EdgeInsets.all(8),
                       isWrapped: true,
@@ -200,7 +209,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
                             child: Container(
                               width: Get.mediaQuery.size.width * 0.7,
                               child: TextFormField(
-                                decoration: InputDecoration(hintText: "Enter your custom preference"),
+                                // decoration: InputDecoration(hintText: "Enter your custom preference"),
                                 textInputAction: TextInputAction.next,
                                 controller: customPrefsController,
                                 validator: (value) {
@@ -288,12 +297,12 @@ class _PreferencesPageState extends State<PreferencesPage> {
                         ),
                         value: popularChosen,
                         options: ChipsChoiceOption.listFrom(
-                          source: NewsFeed.values.sublist(0, 14),
+                          source: NewsFeed.values.sublist(0, 14).map((e) => e.toString()).toList(),
                           value: (index, item) => item,
                           label: (index, item) => item.toString().split(".").last.replaceAll("_", " "),
                         ),
                         onChanged: (val) {
-                          setState(() => popularChosen = val);
+                          setState(() => popularChosen = val.cast<String>());
                         },
                         padding: EdgeInsets.all(8),
                         isWrapped: true,
@@ -335,12 +344,12 @@ class _PreferencesPageState extends State<PreferencesPage> {
                         ),
                         value: internationalChosen,
                         options: ChipsChoiceOption.listFrom(
-                          source: NewsFeed.values.sublist(46, 53),
+                          source: NewsFeed.values.sublist(46, 53).map((e) => e.toString()).toList(),
                           value: (index, item) => item,
                           label: (index, item) => item.toString().split(".").last.replaceAll("_", " "),
                         ),
                         onChanged: (val) {
-                          setState(() => internationalChosen = val);
+                          setState(() => internationalChosen = val.cast<String>());
                         },
                         padding: EdgeInsets.all(8),
                         isWrapped: true,

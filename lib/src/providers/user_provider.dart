@@ -18,14 +18,15 @@ class UserProvider extends ChangeNotifier {
   void setUserInProvider({ApiUser setUser}) {
     print("[UserProvider] Set user in provider");
     user = setUser;
+    saveToHive(user: user);
   }
 
   void createUserInFirebase({ApiUser newUser}) {
     print("[UserProvider] Creating user in firebase");
-    FirebaseFirestore.instance.collection('user').doc(newUser.firebaseUid).set(newUser.toJson(newUser));
+    FirebaseFirestore.instance.collection('user').doc(newUser.firebaseUid).set(newUser.toJson());
   }
 
-  void createNewUser({User newUser, String phoneNumber = ""}) {
+  ApiUser createNewUser({User newUser, String phoneNumber = ""}) {
     print("[UserProvider] Creating user in provider");
     user = ApiUser(
         photoUrl: newUser.photoURL,
@@ -33,14 +34,15 @@ class UserProvider extends ChangeNotifier {
         name: newUser.displayName,
         firebaseUid: newUser.uid,
         phoneNumber: phoneNumber);
-    createUserInFirebase(newUser: user);
-    saveToHive(user: user);
+    // createUserInFirebase(newUser: user);
+    // saveToHive(user: user);
+    return user;
   }
 
   Future<ApiUser> getUserFromFirebase({String firebaseUid}) async {
     var response = await FirebaseFirestore.instance.collection('user').doc(firebaseUid).get();
     ApiUser fireUser = ApiUser.fromJson(response.data());
-    print(fireUser.toJson(fireUser));
+    // print(fireUser.toJson(fireUser));
     return fireUser;
   }
 
@@ -84,7 +86,7 @@ class UserProvider extends ChangeNotifier {
   }
 
   void setUserLocation({Position position}) {
-    if (user.firebaseUid == null) {
+    if (user.firebaseUid != null) {
       FirebaseFirestore.instance
           .collection('user')
           .doc(user.firebaseUid)
@@ -100,7 +102,7 @@ class UserProvider extends ChangeNotifier {
   }
 
   void setNewsPreferences({List prefsList}) {
-    if (user.firebaseUid != null) {
+    if (user != null && user.firebaseUid != null) {
       print("[UserProvider] Set news preferences in Firebase");
       FirebaseFirestore.instance
           .collection('user')

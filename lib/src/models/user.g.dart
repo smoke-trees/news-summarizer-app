@@ -21,7 +21,7 @@ class ApiUserAdapter extends TypeAdapter<ApiUser> {
       name: fields[3] as String,
       blogPreferences: (fields[0] as List)?.cast<String>(),
       customPreferences: (fields[2] as List)?.cast<String>(),
-      newsPreferences: (fields[1] as List)?.cast<dynamic>(),
+      newsPreferences: (fields[1] as List)?.cast<String>(),
       fcmToken: fields[5] as String,
       photoUrl: fields[6] as String,
       firebaseUid: fields[7] as String,

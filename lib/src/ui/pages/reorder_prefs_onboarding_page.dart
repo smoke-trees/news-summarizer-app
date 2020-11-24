@@ -45,11 +45,25 @@ class _ReorderPrefsOnboardingPageState extends State<ReorderPrefsOnboardingPage>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            svg,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: svg,
+            ),
+            SizedBox(
+              height: 10,
+            ),
             Padding(
               padding: const EdgeInsets.all(20),
               child: Text(
-                "Re-order your preferences, and get intelligent notifications according to your priorities.",
+                "You can arrange your channels in the order you want to see them.",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Text(
+                "Just drag and position the channels in your desired order.",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 20),
               ),

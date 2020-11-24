@@ -72,7 +72,7 @@ class _BlogsPrefsPageState extends State<BlogsPrefsPage> {
     _newsBox.put(NEWS_BLOGS_AUTHORS, finList);
     userProvider.setBlogPreferences(prefsList: finList);
     print("Saved to blogs authors, now list is: $finList");
-    Get.toNamed(BasePage.routename);
+    Get.toNamed(BasePage.routeName);
   }
 
   @override
