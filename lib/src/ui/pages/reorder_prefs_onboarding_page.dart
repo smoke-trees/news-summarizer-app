@@ -42,6 +42,15 @@ class _ReorderPrefsOnboardingPageState extends State<ReorderPrefsOnboardingPage>
       body: AnimatedOpacity(
         duration: Duration(milliseconds: 500),
         opacity: opacity,
+        onEnd: () {
+          Future.delayed(Duration(seconds: 4), () {
+            setState(() {
+              opacity = 0.0;
+            });
+          }).whenComplete(() => Future.delayed(Duration(milliseconds: 500), () {
+            Get.toNamed(ReorderPrefsPage.routeName, arguments: true);
+          }));
+        },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -68,40 +77,40 @@ class _ReorderPrefsOnboardingPageState extends State<ReorderPrefsOnboardingPage>
                 style: TextStyle(fontSize: 20),
               ),
             ),
-            SizedBox(
-              height: 25,
-            ),
-            AnimatedOpacity(
-              opacity: buttonOpacity,
-              duration: Duration(milliseconds: 500),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: OutlineButton(
-                  onPressed: () async {
-                    Get.toNamed(ReorderPrefsPage.routeName, arguments: true);
-                  },
-                  padding: EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  borderSide: BorderSide(color: Color(0xff3B916E)),
-                  highlightedBorderColor: Colors.transparent,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Continue",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Get.theme.accentColor
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            // SizedBox(
+            //   height: 25,
+            // ),
+            // AnimatedOpacity(
+            //   opacity: buttonOpacity,
+            //   duration: Duration(milliseconds: 500),
+            //   child: Padding(
+            //     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            //     child: OutlineButton(
+            //       onPressed: () async {
+            //         Get.toNamed(ReorderPrefsPage.routeName, arguments: true);
+            //       },
+            //       padding: EdgeInsets.symmetric(vertical: 14),
+            //       shape: RoundedRectangleBorder(
+            //         borderRadius: BorderRadius.circular(10),
+            //       ),
+            //       borderSide: BorderSide(color: Color(0xff3B916E)),
+            //       highlightedBorderColor: Colors.transparent,
+            //       child: Row(
+            //         mainAxisAlignment: MainAxisAlignment.center,
+            //         children: [
+            //           Text(
+            //             "Continue",
+            //             style: TextStyle(
+            //               fontWeight: FontWeight.bold,
+            //               fontSize: 16,
+            //               color: Get.theme.accentColor
+            //             ),
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),

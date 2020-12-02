@@ -69,7 +69,7 @@ class _AuthPageState extends State<AuthPage> {
                       Container(
                         // padding: EdgeInsets.only(top: 100),
                         child: Text(
-                          "Save all your preferences by logging in:",
+                          "Save all your channels by logging in:",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,

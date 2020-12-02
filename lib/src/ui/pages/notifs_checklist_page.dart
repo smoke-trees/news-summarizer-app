@@ -70,7 +70,7 @@ class _NotifsChecklistPageState extends State<NotifsChecklistPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
               child: Text(
-                "You will receive Push Notifications of popular news from these categories:",
+                "You will receive Push Notifications of popular news from these channels:",
                 style: TextStyle(fontSize: 18),
               ),
             ),

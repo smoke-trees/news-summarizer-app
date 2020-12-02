@@ -55,7 +55,7 @@ class _ReorderPrefsPageState extends State<ReorderPrefsPage> {
       backgroundColor: Get.theme.backgroundColor,
       appBar: AppBar(
         title: Text(
-          'Re-order Preferences',
+          'Re-order Channels',
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
@@ -85,7 +85,7 @@ class _ReorderPrefsPageState extends State<ReorderPrefsPage> {
           header: Padding(
             padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16, top: 8),
             child: Text(
-              "Reorder the preferences according to your level of interest!",
+              "Reorder the channels according to your level of interest!",
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 20),
             ),

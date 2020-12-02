@@ -73,7 +73,7 @@ class SettingPage extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          "Change News Preferences",
+                          "Change News Channels",
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,

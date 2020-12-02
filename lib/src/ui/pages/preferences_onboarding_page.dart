@@ -46,6 +46,15 @@ class _PreferencesOnboardingPageState extends State<PreferencesOnboardingPage> {
       body: AnimatedOpacity(
         duration: Duration(milliseconds: 500),
         opacity: opacity,
+        onEnd: () {
+          Future.delayed(Duration(seconds: 4), () {
+            setState(() {
+              opacity = 0.0;
+            });
+          }).whenComplete(() => Future.delayed(Duration(milliseconds: 500), () {
+            Get.toNamed(PreferencesPage.routeName, arguments: true);
+          }));
+        },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -53,7 +62,7 @@ class _PreferencesOnboardingPageState extends State<PreferencesOnboardingPage> {
             Padding(
               padding: const EdgeInsets.all(20),
               child: Text(
-                "Welcome to Terran Tidings. We bring you own personalized tidings from across the world.",
+                "Welcome to your own personalized tidings from across the world.",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 20),
               ),
@@ -64,53 +73,53 @@ class _PreferencesOnboardingPageState extends State<PreferencesOnboardingPage> {
             Padding(
               padding: const EdgeInsets.all(20),
               child: Text(
-                "First, let us help you create your own news channels. Just type a phrase and that becomes your news channel",
+                "Create your own news channels, or pick from our curated list.",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 20),
               ),
             ),
-            SizedBox(
-              height: 5,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: Text(
-                "Or pick a few channels from our curated list",
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-            SizedBox(
-              height: 25,
-            ),
-            AnimatedOpacity(
-              opacity: buttonOpacity,
-              duration: Duration(milliseconds: 500),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: OutlineButton(
-                  onPressed: () async {
-                    Get.toNamed(PreferencesPage.routeName, arguments: true);
-                  },
-                  padding: EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  borderSide: BorderSide(color: Color(0xff3B916E)),
-                  highlightedBorderColor: Colors.transparent,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Continue",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16, color: Get.theme.accentColor),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            // SizedBox(
+            //   height: 5,
+            // ),
+            // Padding(
+            //   padding: const EdgeInsets.all(20),
+            //   child: Text(
+            //     "",
+            //     textAlign: TextAlign.center,
+            //     style: TextStyle(fontSize: 20),
+            //   ),
+            // ),
+            // SizedBox(
+            //   height: 25,
+            // ),
+            // AnimatedOpacity(
+            //   opacity: buttonOpacity,
+            //   duration: Duration(milliseconds: 500),
+            //   child: Padding(
+            //     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            //     child: OutlineButton(
+            //       onPressed: () async {
+            //         Get.toNamed(PreferencesPage.routeName, arguments: true);
+            //       },
+            //       padding: EdgeInsets.symmetric(vertical: 14),
+            //       shape: RoundedRectangleBorder(
+            //         borderRadius: BorderRadius.circular(10),
+            //       ),
+            //       borderSide: BorderSide(color: Color(0xff3B916E)),
+            //       highlightedBorderColor: Colors.transparent,
+            //       child: Row(
+            //         mainAxisAlignment: MainAxisAlignment.center,
+            //         children: [
+            //           Text(
+            //             "Continue",
+            //             style: TextStyle(
+            //                 fontWeight: FontWeight.bold, fontSize: 16, color: Get.theme.accentColor),
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),

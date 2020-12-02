@@ -108,52 +108,69 @@ class _BlogsPrefsPageState extends State<BlogsPrefsPage> {
       body: SingleChildScrollView(
         child: Container(
           margin: EdgeInsets.all(8),
-          padding: EdgeInsets.all(8),
-          child: FutureBuilder(
-              future: authorsListFuture,
-              builder: (context, snapshot) {
-                if (snapshot.hasError || !snapshot.hasData) {
-                  return Center(child: CircularProgressIndicator());
-                }
-                return Card(
-                  color: Get.theme.cardColor,
-                  child: ExpansionTile(
-                    initiallyExpanded: true,
-                    title: Container(
-                      child: Text(
-                        "Experts",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          decoration: TextDecoration.underline,
-                          decorationColor: Get.theme.accentColor,
-                        ),
-                      ),
-                    ),
-                    children: [
-                      ChipsChoice<dynamic>.multiple(
-                        itemConfig: ChipsChoiceItemConfig(
-                          selectedColor: Get.theme.accentColor,
-                          unselectedColor: Get.theme.primaryColor,
-                          unselectedBrightness: Get.theme.brightness,
-                          selectedBrightness: Get.theme.brightness,
-                        ),
-                        value: authorsChosen,
-                        options: ChipsChoiceOption.listFrom(
-                          source: snapshot.data,
-                          value: (index, item) => item,
-                          label: (index, item) => item.toString().split(".").last.replaceAll("_", " "),
-                        ),
-                        onChanged: (val) {
-                          setState(() => authorsChosen = val);
-                        },
-                        padding: EdgeInsets.all(8),
-                        isWrapped: true,
-                      ),
-                    ],
+          // padding: EdgeInsets.all(8),
+          child: Column(
+            children: [
+              // SizedBox(height: 24),
+              Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.only(left: 16, right: 16, top: 16),
+                child: Text(
+                  "Choose experts and publications you follow and stay updated with them:",
+                  style: TextStyle(
+                    fontSize: 20,
                   ),
-                );
-              }),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              SizedBox(height: 15,),
+              FutureBuilder(
+                  future: authorsListFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError || !snapshot.hasData) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    return Card(
+                      color: Get.theme.cardColor,
+                      child: ExpansionTile(
+                        initiallyExpanded: true,
+                        title: Container(
+                          child: Text(
+                            "Experts",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              decoration: TextDecoration.underline,
+                              decorationColor: Get.theme.accentColor,
+                            ),
+                          ),
+                        ),
+                        children: [
+                          ChipsChoice<dynamic>.multiple(
+                            itemConfig: ChipsChoiceItemConfig(
+                              selectedColor: Get.theme.accentColor,
+                              unselectedColor: Get.theme.primaryColor,
+                              unselectedBrightness: Get.theme.brightness,
+                              selectedBrightness: Get.theme.brightness,
+                            ),
+                            value: authorsChosen,
+                            options: ChipsChoiceOption.listFrom(
+                              source: snapshot.data,
+                              value: (index, item) => item,
+                              label: (index, item) => item.toString().split(".").last.replaceAll("_", " "),
+                            ),
+                            onChanged: (val) {
+                              setState(() => authorsChosen = val);
+                            },
+                            padding: EdgeInsets.all(8),
+                            isWrapped: true,
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+            ],
+          ),
           // child: FutureBuilder(
           //     future: authorsListFuture,
           //     builder: (context, snapshot) {

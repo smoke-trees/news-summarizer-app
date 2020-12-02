@@ -57,7 +57,7 @@ class _CustomPrefsPageState extends State<CustomPrefsPage> {
       backgroundColor: Get.theme.backgroundColor,
       appBar: AppBar(
         title: Text(
-          'Custom Preferences',
+          'Custom Channels',
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
@@ -114,12 +114,12 @@ class _CustomPrefsPageState extends State<CustomPrefsPage> {
                     child: Container(
                       width: Get.mediaQuery.size.width * 0.7,
                       child: TextFormField(
-                        decoration: InputDecoration(hintText: "Enter your custom preference"),
+                        decoration: InputDecoration(hintText: "Enter your custom channel"),
                         textInputAction: TextInputAction.next,
                         controller: customPrefsController,
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Please enter a preference';
+                            return 'Please enter a channel';
                           }
                           return null;
                         },

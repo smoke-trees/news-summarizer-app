@@ -188,7 +188,7 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                 case 'Change Theme':
                   _showThemeDialog(context);
                   break;
-                case 'Change News Preferences':
+                case 'Change News Channels':
                   Get.toNamed(PreferencesPage.routeName);
                   // Get.toNamed(PreferencesOnboardingPage.routeName);
                   break;
@@ -200,7 +200,7 @@ class _NewsContainerPageState extends State<NewsContainerPage>
               }
             },
             itemBuilder: (context) {
-              return {'Change Theme', 'Change News Preferences', "Change Location", "Notification Center"}
+              return {'Change Theme', 'Change News Channels', "Change Location", "Notification Center"}
                   .map((String choice) {
                 return PopupMenuItem<String>(
                   value: choice,
@@ -298,7 +298,7 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                   backgroundColor: Get.theme.scaffoldBackgroundColor,
                   body: _blogsFeeds.isEmpty
                       ? Center(
-                          child: Text("Add an expert to your preferences"),
+                          child: Text("Add an expert to your channels"),
                         )
                       : TabBarView(
                           children: List.generate(
@@ -358,9 +358,9 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                         children: List.generate(
                           _newsFeeds.length,
                           (index) {
-                            if ((_newsFeeds[index] as String).contains("NewsFeed.")) {
+                            if (!_newsFeeds[index].contains("NewsFeed.")) {
                               return NewsPage(
-                                customPref: _newsFeeds[index].toString().split('.').last.replaceAll("_", " "),
+                                customPref: _newsFeeds[index],
                                 isCustomPref: true,
                               ); //Very bad method but eet ees what eet ees
                             } else {

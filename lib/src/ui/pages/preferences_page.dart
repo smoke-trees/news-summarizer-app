@@ -107,7 +107,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
     if (finList.length < 3) {
       Get.snackbar(
         "Warning!",
-        "Please choose at least 3 categories.",
+        "Please choose at least 3 channels.",
         backgroundColor: Colors.red,
         colorText: Colors.white,
         snackPosition: SnackPosition.BOTTOM,
@@ -134,7 +134,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
       backgroundColor: Get.theme.backgroundColor,
       appBar: AppBar(
         title: Text(
-          'News Preferences',
+          'News Channels',
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
@@ -169,7 +169,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
                 alignment: Alignment.center,
                 margin: EdgeInsets.only(left: 16, right: 16, top: 16),
                 child: Text(
-                  "Create a preference that interests you!",
+                  "Create a channel that interests you!",
                   style: TextStyle(
                     fontSize: 20,
                   ),
@@ -214,7 +214,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
                                 controller: customPrefsController,
                                 validator: (value) {
                                   if (value.isEmpty) {
-                                    return 'Please enter a preference';
+                                    return 'Please enter a channel';
                                   }
                                   return null;
                                 },
@@ -264,7 +264,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
                 alignment: Alignment.center,
                 margin: EdgeInsets.all(16),
                 child: Text(
-                  "Pick from our preset preferences!",
+                  "Pick from our preset channels!",
                   style: TextStyle(
                     fontSize: 20,
                   ),
