@@ -41,6 +41,9 @@ class ApiUser extends HiveObject {
   @HiveField(11)
   List<String> notifEnabledPrefs;
 
+  @HiveField(12)
+  List<String> savedNewsIds;
+
   ApiUser(
       {this.email,
       this.name,
@@ -53,7 +56,8 @@ class ApiUser extends HiveObject {
       this.phoneNumber,
       this.latitude,
       this.longitude,
-      this.notifEnabledPrefs});
+      this.notifEnabledPrefs,
+      this.savedNewsIds});
 
   factory ApiUser.fromJson(json) {
     return ApiUser(
@@ -68,7 +72,8 @@ class ApiUser extends HiveObject {
         phoneNumber: json['phoneNumber'],
         latitude: json['location']['latitude'],
         longitude: json['location']['longitude'],
-        notifEnabledPrefs: (json['notifEnabledPrefs'] as List).cast<String>() ?? []);
+        notifEnabledPrefs: (json['notifEnabledPrefs'] as List).cast<String>() ?? [],
+        savedNewsIds: (json['savedNewsIds'] as List).cast<String>() ?? []);
   }
 
   Map<String, dynamic> toJson() {
@@ -86,6 +91,7 @@ class ApiUser extends HiveObject {
     data['location']['latitude'] = latitude;
     data['location']['longitude'] = longitude;
     data['notifEnabledPrefs'] = notifEnabledPrefs ?? [];
+    data['savedNewsIds'] = savedNewsIds ?? [];
     return data;
   }
 }

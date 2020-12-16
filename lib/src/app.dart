@@ -34,7 +34,7 @@ class App extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.done) {
               bool isLoggedIn = ProfileHive().getIsUserLoggedIn();
               if (isLoggedIn == false) {
-                return PreferencesOnboardingPage();
+                return AuthPage(firstLogin: true,);
               } else {
                 return BasePage();
               }

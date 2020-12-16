@@ -50,6 +50,18 @@ class ApiProvider with ChangeNotifier {
     return articleList;
   }
 
+  Future<Article> getArticleById({String id}) async {
+    Response response = await _dio.get("/get_article/$id");
+    Article article = Article.fromJson(response.data);
+    return article;
+  }
+
+  Future<List<Article>> getManyArticlesByIds({List<String> ids}) async {
+    Response response = await _dio.post("/get_articles_by_ids/", data: ids);
+    List<Article> articleList = (response.data as List).map((json) => Article.fromJson(json)).toList();
+    return articleList;
+  }
+
   void makeViewNews({Article article}) async {
     await _dio.post("/make_view_news/", queryParameters: {'article_id': article.id});
   }

@@ -128,6 +128,8 @@ class _BlogsPrefsPageState extends State<BlogsPrefsPage> {
                   future: authorsListFuture,
                   builder: (context, snapshot) {
                     if (snapshot.hasError || !snapshot.hasData) {
+                      print(snapshot.error);
+                      print(snapshot.data);
                       return Center(child: CircularProgressIndicator());
                     }
                     return Card(

@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hive/hive.dart';
+import 'package:news_summarizer/src/models/article.dart';
 import 'package:news_summarizer/src/models/user.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
 import 'package:news_summarizer/src/utils/hive_prefs.dart';
@@ -158,6 +159,36 @@ class UserProvider extends ChangeNotifier {
     }
 
     user.blogPreferences = prefsList;
+    saveToHive(user: user);
+  }
+
+  void saveNews({Article article}) {
+    user.savedNewsIds.add(article.id);
+
+    if (user.firebaseUid != null) {
+      print("[UserProvider] Saved news in Firebase");
+      FirebaseFirestore.instance
+          .collection('user')
+          .doc(user.firebaseUid)
+          .update({'savedNewsIds': user.savedNewsIds});
+    } else {
+      print("[UserProvider] No user in Firebase. Did not Set save news in Firebase");
+    }
+    saveToHive(user: user);
+  }
+
+  void unsaveNews({Article article}) {
+    user.savedNewsIds.remove(article.id);
+
+    if (user.firebaseUid != null) {
+      print("[UserProvider] Removed saved news in Firebase");
+      FirebaseFirestore.instance
+          .collection('user')
+          .doc(user.firebaseUid)
+          .update({'savedNewsIds': user.savedNewsIds});
+    } else {
+      print("[UserProvider] No user in Firebase. Did not remove saved news in Firebase");
+    }
     saveToHive(user: user);
   }
 

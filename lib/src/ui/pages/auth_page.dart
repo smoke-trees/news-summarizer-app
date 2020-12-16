@@ -6,6 +6,7 @@ import 'package:news_summarizer/src/models/user.dart';
 import 'package:news_summarizer/src/providers/auth_provider.dart';
 import 'package:news_summarizer/src/providers/user_provider.dart';
 import 'package:news_summarizer/src/ui/pages/phone_auth_page.dart';
+import 'package:news_summarizer/src/ui/pages/preferences_onboarding_page.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
 import 'package:news_summarizer/src/utils/hive_prefs.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +15,9 @@ import 'base_page.dart';
 
 class AuthPage extends StatefulWidget {
   static String routeName = "/auth_page";
+  final bool firstLogin;
+
+  AuthPage({this.firstLogin = false});
 
   @override
   _AuthPageState createState() => _AuthPageState();
@@ -42,7 +46,7 @@ class _AuthPageState extends State<AuthPage> {
         //   ),
         // ],
         // ),
-        body: userProvider.user.firebaseUid != null
+        body: userProvider.user != null && userProvider.user.firebaseUid != null
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -58,12 +62,9 @@ class _AuthPageState extends State<AuthPage> {
                   )
                 ],
               )
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+            : Stack(
                 children: [
-                  Container(child: SizedBox.shrink()),
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
@@ -211,30 +212,35 @@ class _AuthPageState extends State<AuthPage> {
                       ),
                     ],
                   ),
-                  // Container(
-                  //   padding: EdgeInsets.only(bottom: 30),
-                  //   alignment: Alignment.bottomCenter,
-                  //   child: InkWell(
-                  //     onTap: () {
-                  //       UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-                  //       ApiUser user = new ApiUser(
-                  //           blogPreferences: [],
-                  //           notifEnabledPrefs: [],
-                  //           customPreferences: [],
-                  //           newsPreferences: []);
-                  //       userProvider.setUserInProvider(setUser: user);
-                  //       userProvider.saveToHive(user: user);
-                  //       Get.offAndToNamed(PreferencesOnboardingPage.routeName);
-                  //     },
-                  //     child: Text(
-                  //       "Or skip for now",
-                  //       style: TextStyle(
-                  //           decoration: TextDecoration.underline,
-                  //           decorationColor: Get.theme.accentColor,
-                  //           decorationThickness: 3),
-                  //     ),
-                  //   ),
-                  // )
+                  widget.firstLogin
+                      ? Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Container(
+                            padding: EdgeInsets.only(bottom: 30),
+                            // alignment: Alignment.bottomCenter,
+                            child: InkWell(
+                              onTap: () {
+                                UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+                                ApiUser user = new ApiUser(
+                                    blogPreferences: [],
+                                    notifEnabledPrefs: [],
+                                    customPreferences: [],
+                                    newsPreferences: []);
+                                userProvider.setUserInProvider(setUser: user);
+                                userProvider.saveToHive(user: user);
+                                Get.offAndToNamed(PreferencesOnboardingPage.routeName);
+                              },
+                              child: Text(
+                                "Or skip for now",
+                                style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    decorationColor: Get.theme.accentColor,
+                                    decorationThickness: 3),
+                              ),
+                            ),
+                          ),
+                        )
+                      : SizedBox.shrink()
                 ],
               ));
   }
