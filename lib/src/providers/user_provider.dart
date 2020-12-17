@@ -158,7 +158,7 @@ class UserProvider extends ChangeNotifier {
       print("[UserProvider] No user in Firebase. Did not Set notif preferences in Firebase");
     }
 
-    user.blogPreferences = prefsList;
+    user.notifEnabledPrefs = prefsList;
     saveToHive(user: user);
   }
 

@@ -1,5 +1,4 @@
 import 'package:hive/hive.dart';
-import 'package:news_summarizer/src/utils/news_feed_list.dart';
 
 part 'user.g.dart';
 

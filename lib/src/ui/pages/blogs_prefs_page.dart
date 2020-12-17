@@ -9,6 +9,8 @@ import 'package:news_summarizer/src/ui/pages/base_page.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
 import 'package:provider/provider.dart';
 
+import 'control_center.dart';
+
 class BlogsPrefsPage extends StatefulWidget {
   static String routeName = "/blogs_prefs_page";
 
@@ -72,7 +74,11 @@ class _BlogsPrefsPageState extends State<BlogsPrefsPage> {
     _newsBox.put(NEWS_BLOGS_AUTHORS, finList);
     userProvider.setBlogPreferences(prefsList: finList);
     print("Saved to blogs authors, now list is: $finList");
-    Get.toNamed(BasePage.routeName);
+    if (isNewUser) {
+      Get.toNamed(BasePage.routeName);
+    } else {
+      Get.back();
+    }
   }
 
   @override
@@ -123,7 +129,9 @@ class _BlogsPrefsPageState extends State<BlogsPrefsPage> {
                   textAlign: TextAlign.center,
                 ),
               ),
-              SizedBox(height: 15,),
+              SizedBox(
+                height: 15,
+              ),
               FutureBuilder(
                   future: authorsListFuture,
                   builder: (context, snapshot) {

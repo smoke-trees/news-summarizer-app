@@ -6,7 +6,6 @@ import 'package:news_summarizer/src/models/article.dart';
 import 'package:news_summarizer/src/providers/api_provider.dart';
 import 'package:news_summarizer/src/providers/user_provider.dart';
 import 'package:news_summarizer/src/ui/widgets/news_card.dart';
-import 'package:news_summarizer/src/utils/news_feed_list.dart';
 import 'package:provider/provider.dart';
 
 class NewsPage extends StatefulWidget {

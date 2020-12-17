@@ -9,7 +9,6 @@ import 'package:news_summarizer/src/providers/dynamic_link_provider.dart';
 import 'package:news_summarizer/src/providers/theme_provider.dart';
 import 'package:news_summarizer/src/providers/user_provider.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
-import 'package:news_summarizer/src/utils/news_feed_list.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:provider/provider.dart';
 

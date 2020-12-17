@@ -9,6 +9,8 @@ import 'package:news_summarizer/src/ui/widgets/listview_card.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
 import 'package:provider/provider.dart';
 
+import 'control_center.dart';
+
 class ReorderPrefsPage extends StatefulWidget {
   static String routeName = "/reorder_prefs_page";
 
@@ -45,7 +47,8 @@ class _ReorderPrefsPageState extends State<ReorderPrefsPage> {
     if (isNewUser) {
       Get.toNamed(BlogsOnboardingPage.routeName);
     } else {
-      Get.toNamed(BlogsPrefsPage.routeName);
+      // Get.toNamed(BlogsPrefsPage.routeName);
+      Get.back();
     }
   }
 

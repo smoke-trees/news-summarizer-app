@@ -4,11 +4,11 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:news_summarizer/src/models/user.dart';
 import 'package:news_summarizer/src/providers/user_provider.dart';
+import 'package:news_summarizer/src/ui/pages/control_center.dart';
 import 'package:news_summarizer/src/ui/pages/reorder_prefs_onboarding_page.dart';
 import 'package:news_summarizer/src/ui/pages/reorder_prefs_page.dart';
 import 'package:news_summarizer/src/ui/widgets/or_divider.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
-import 'package:news_summarizer/src/utils/news_feed_list.dart';
 import 'package:news_summarizer/src/utils/hive_prefs.dart';
 import 'package:provider/provider.dart';
 
@@ -37,60 +37,61 @@ class _PreferencesPageState extends State<PreferencesPage> {
   final formKey = GlobalKey<FormState>();
 
   List<String> newsFeedList = [
-    "https://timesofindia.indiatimes.com/rssfeeds/-2128936835.cms",
-    "https://timesofindia.indiatimes.com/rssfeeds/296589292.cms",
-    "https://timesofindia.indiatimes.com/rssfeeds/7098551.cms",
-    "https://timesofindia.indiatimes.com/rssfeeds/1898055.cms",
-    "https://timesofindia.indiatimes.com/rssfeeds/54829575.cms",
-    "https://timesofindia.indiatimes.com/rssfeeds/4719148.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/-2128672765.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/2647163.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/66949542.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/913168846.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/1081479906.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/2886704.cms",
-    "https://timesofindia.indiatimes.com/rssfeeds/65857041.cms",
-    "https://timesofindia.indiatimes.com/rssfeeds/74317216.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/-2128838597.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/-2128839596.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/-2128833038.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/-2128816011.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/2950623.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/-2128821153.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/3947060.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/4118235.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/7503091.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/6547154.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/4118215.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/3942695.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/3947067.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/-2128830821.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/3947051.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/3942690.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/3942693.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/8021716.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/-2128821991.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/3012535.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/-2128816762.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/-2128819658.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/-2128817995.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/3012544.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/442002.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/3942663.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/4118245.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/3942660.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/3942666.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/3947071.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/3831863.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/878156304.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/30359486.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/3907412.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/2177298.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/1898274.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/1898184.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/1898272.cms",
-    "http://timesofindia.indiatimes.com/rssfeeds/671314.cms",
+    "NewsFeed.INDIA",
+    "NewsFeed.WORLD",
+    "NewsFeed.NRI",
+    "NewsFeed.BUSINESS",
+    "NewsFeed.CRICKET",
+    "NewsFeed.SPORTS",
+    "NewsFeed.SCIENCE",
+    "NewsFeed.ENVIRONMENT",
+    "NewsFeed.TECH",
+    "NewsFeed.EDUCATION",
+    "NewsFeed.ENTERTAINMENT",
+    "NewsFeed.LIFESTYLE",
+    "NewsFeed.ASTROLOGY",
+    "NewsFeed.AUTO",
+    "NewsFeed.MUMBAI",
+    "NewsFeed.DELHI",
+    "NewsFeed.BANGALORE",
+    "NewsFeed.HYDERABAD",
+    "NewsFeed.CHENNAI",
+    "NewsFeed.AHEMDABAD",
+    "NewsFeed.ALLAHBAD",
+    "NewsFeed.BHUBANESHWAR",
+    "NewsFeed.COIMBATORE",
+    "NewsFeed.GURGAON",
+    "NewsFeed.GUWAHATI",
+    "NewsFeed.HUBLI",
+    "NewsFeed.KANPUR",
+    "NewsFeed.KOLKATA",
+    "NewsFeed.LUDHIANA",
+    "NewsFeed.MANGALORE",
+    "NewsFeed.MYSORE",
+    "NewsFeed.NOIDA",
+    "NewsFeed.PUNE",
+    "NewsFeed.GOA",
+    "NewsFeed.CHANDIGARH",
+    "NewsFeed.LUCKNOW",
+    "NewsFeed.PATNA",
+    "NewsFeed.JAIPUR",
+    "NewsFeed.NAGPUR",
+    "NewsFeed.RAJKOT",
+    "NewsFeed.RANCHI",
+    "NewsFeed.SURAT",
+    "NewsFeed.VADODARA",
+    "NewsFeed.VARANASI",
+    "NewsFeed.THANE",
+    "NewsFeed.THIRUVANANTHAPURAM",
+    "NewsFeed.USA",
+    "NewsFeed.SOUTH_ASIA",
+    "NewsFeed.UK",
+    "NewsFeed.EUROPE",
+    "NewsFeed.CHINA",
+    "NewsFeed.MIDDLE_EAST",
+    "NewsFeed.REST_OF_WORLD",
   ];
+
 
   @override
   void initState() {
@@ -179,7 +180,8 @@ class _PreferencesPageState extends State<PreferencesPage> {
       if (isNewUser) {
         Get.toNamed(ReorderPrefsOnboardingPage.routeName);
       } else {
-        Get.toNamed(ReorderPrefsPage.routeName);
+        // Get.toNamed(ReorderPrefsPage.routeName);
+        Get.back();
       }
     }
   }
