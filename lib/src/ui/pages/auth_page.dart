@@ -83,7 +83,7 @@ class _AuthPageState extends State<AuthPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         child: OutlineButton(
                           onPressed: () {
-                            Get.toNamed(PhoneAuthPage.routeName);
+                            Get.toNamed(PhoneAuthPage.routeName, arguments: widget.firstLogin);
                           },
                           padding: EdgeInsets.symmetric(vertical: 14),
                           shape: RoundedRectangleBorder(
@@ -147,22 +147,35 @@ class _AuthPageState extends State<AuthPage> {
                             UserCredential credential = await authProvider.autoSignInGoogle();
                             if (credential.additionalUserInfo.isNewUser) {
                               // ApiUser user = userProvider.createNewUser(newUser: credential.user);
-                              userProvider.user.name = credential.user.displayName;
-                              userProvider.user.email = credential.user.email;
-                              userProvider.user.firebaseUid = credential.user.uid;
-                              userProvider.user.photoUrl = credential.user.photoURL;
+                              userProvider.user = ApiUser();
+                              userProvider.user
+                                ..name = credential.user.displayName
+                                ..email = credential.user.email
+                                ..firebaseUid = credential.user.uid
+                                ..photoUrl = credential.user.photoURL
+                                ..savedBlogsIds = []
+                                ..savedPubIds = []
+                                ..pubPreferences = []
+                                ..blogPreferences = []
+                                ..newsPreferences = []
+                                ..savedNewsIds = []
+                                ..notifEnabledPrefs = [];
 
                               userProvider.createUserInFirebase(newUser: userProvider.user);
                               userProvider.saveToHive(user: userProvider.user);
                               print(userProvider.user.toJson());
                               // userProvider.setUserInProvider(setUser: use)
-                              Get.offAndToNamed(BasePage.routeName);
-                              Get.snackbar(
-                                  "Successful",
-                                  userProvider.user.name == null
-                                      ? "Welcome!"
-                                      : "Welcome, ${userProvider.user.name}!",
-                                  snackPosition: SnackPosition.BOTTOM);
+                              if (widget.firstLogin) {
+                                Get.offAndToNamed(PreferencesOnboardingPage.routeName);
+                              } else {
+                                Get.offAndToNamed(BasePage.routeName);
+                                Get.snackbar(
+                                    "Successful",
+                                    userProvider.user.name == null
+                                        ? "Welcome!"
+                                        : "Welcome, ${userProvider.user.name}!",
+                                    snackPosition: SnackPosition.BOTTOM);
+                              }
                             } else {
                               print("[] Old User but not in Hive");
                               ApiUser userr =
@@ -225,7 +238,11 @@ class _AuthPageState extends State<AuthPage> {
                                     blogPreferences: [],
                                     notifEnabledPrefs: [],
                                     customPreferences: [],
-                                    newsPreferences: []);
+                                    newsPreferences: [],
+                                    savedNewsIds: [],
+                                    savedBlogsIds: [],
+                                    savedPubIds: [],
+                                    pubPreferences: []);
                                 userProvider.setUserInProvider(setUser: user);
                                 userProvider.saveToHive(user: user);
                                 Get.offAndToNamed(PreferencesOnboardingPage.routeName);

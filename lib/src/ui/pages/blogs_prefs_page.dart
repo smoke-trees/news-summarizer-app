@@ -122,7 +122,7 @@ class _BlogsPrefsPageState extends State<BlogsPrefsPage> {
                 alignment: Alignment.center,
                 margin: EdgeInsets.only(left: 16, right: 16, top: 16),
                 child: Text(
-                  "Choose experts and publications you follow and stay updated with them:",
+                  "Choose experts you follow and stay updated with them:",
                   style: TextStyle(
                     fontSize: 20,
                   ),

@@ -8,15 +8,16 @@ import 'package:news_summarizer/src/providers/api_provider.dart';
 import 'package:news_summarizer/src/providers/dynamic_link_provider.dart';
 import 'package:news_summarizer/src/providers/user_provider.dart';
 import 'package:news_summarizer/src/ui/pages/news_web_view.dart';
+import 'package:news_summarizer/src/utils/article_type_enum.dart';
 import 'package:news_summarizer/src/utils/html_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
 class NewsCard extends StatefulWidget {
   final Article article;
-  final bool isBlog;
+  final ArticleType articleType;
 
-  NewsCard({this.article, this.isBlog = false});
+  NewsCard({this.article, this.articleType});
 
   @override
   _NewsCardState createState() => _NewsCardState();
@@ -29,11 +30,10 @@ class _NewsCardState extends State<NewsCard> {
   void initState() {
     super.initState();
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    if (userProvider.user.savedNewsIds == null) {
-      userProvider.user.savedNewsIds = [];
-    }
-    if (userProvider.user.savedNewsIds.contains(widget.article.id)) {
-      isSaved = true;
+    if (widget.articleType == ArticleType.NEWS || widget.articleType == ArticleType.AROUNDME) {
+      if (userProvider.user.savedNewsIds.contains(widget.article.id)) {
+        isSaved = true;
+      }
     }
   }
 
@@ -92,9 +92,11 @@ class _NewsCardState extends State<NewsCard> {
                                         isSaved = !isSaved;
                                       });
                                       if (isSaved) {
-                                        userProvider.saveNews(article: widget.article);
+                                        userProvider.saveArticle(
+                                            article: widget.article, articleType: widget.articleType);
                                       } else {
-                                        userProvider.unsaveNews(article: widget.article);
+                                        userProvider.unsaveArticle(
+                                            article: widget.article, articleType: widget.articleType);
                                       }
                                     }),
                                 IconButton(
@@ -124,7 +126,9 @@ class _NewsCardState extends State<NewsCard> {
                       SizedBox(height: 10),
                       Container(
                         child: Text(
-                            widget.isBlog ? widget.article.description ?? "" : widget.article.summary ?? ""),
+                            widget.articleType == ArticleType.EXPERT || widget.articleType == ArticleType.PUB
+                                ? widget.article.description ?? ""
+                                : widget.article.summary ?? ""),
                       )
                     ],
                   ),
@@ -134,17 +138,19 @@ class _NewsCardState extends State<NewsCard> {
           ),
         ),
         onTap: () {
-          if (widget.isBlog) {
+          if (widget.articleType == ArticleType.EXPERT) {
             apiProvider.makeViewBlog(article: widget.article);
-          } else {
+          } else if (widget.articleType == ArticleType.NEWS || widget.articleType == ArticleType.AROUNDME) {
             apiProvider.makeViewNews(article: widget.article);
+          } else if (widget.articleType == ArticleType.PUB) {
+            //TODO
           }
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => NewsWebView(
                 article: widget.article,
-                isBlog: widget.isBlog,
+                articleType: widget.articleType,
               ),
             ),
           );

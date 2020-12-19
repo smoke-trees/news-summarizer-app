@@ -14,7 +14,7 @@ import 'package:provider/provider.dart';
 
 ///Hive command:
 ///flutter packages pub run build_runner build --delete-conflicting-outputs
-///
+///build command: flutter build apk --dart-define=envType=dev
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final appDocumentDir = await path_provider.getApplicationDocumentsDirectory();

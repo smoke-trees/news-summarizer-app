@@ -1,0 +1,1 @@
+enum ArticleType { NEWS, CUSTOM, EXPERT, PUB, AROUNDME }

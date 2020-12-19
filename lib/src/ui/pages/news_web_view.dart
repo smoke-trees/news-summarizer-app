@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:news_summarizer/src/models/article.dart';
+import 'package:news_summarizer/src/utils/article_type_enum.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class NewsWebView extends StatefulWidget {
   final Article article;
-  final bool isBlog;
+  final ArticleType articleType;
 
-  NewsWebView({this.article, this.isBlog = false});
+  NewsWebView({this.article, this.articleType});
 
   @override
   _NewsWebViewState createState() => _NewsWebViewState();
@@ -22,7 +23,11 @@ class _NewsWebViewState extends State<NewsWebView> {
       backgroundColor: Get.theme.backgroundColor,
       appBar: AppBar(
         title: Text(
-          widget.isBlog ? "Expert Opinion" : 'News',
+          widget.articleType == ArticleType.EXPERT
+              ? "Expert Opinion"
+              : widget.articleType == ArticleType.PUB
+                  ? "Publication"
+                  : 'News',
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Get.theme.accentColor),
         ),
       ),

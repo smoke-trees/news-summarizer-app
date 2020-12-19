@@ -30,13 +30,16 @@ class ApiUserAdapter extends TypeAdapter<ApiUser> {
       longitude: fields[10] as double,
       notifEnabledPrefs: (fields[11] as List)?.cast<String>(),
       savedNewsIds: (fields[12] as List)?.cast<String>(),
+      pubPreferences: (fields[15] as List)?.cast<String>(),
+      savedBlogsIds: (fields[13] as List)?.cast<String>(),
+      savedPubIds: (fields[14] as List)?.cast<String>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, ApiUser obj) {
     writer
-      ..writeByte(13)
+      ..writeByte(16)
       ..writeByte(0)
       ..write(obj.blogPreferences)
       ..writeByte(1)
@@ -62,7 +65,13 @@ class ApiUserAdapter extends TypeAdapter<ApiUser> {
       ..writeByte(11)
       ..write(obj.notifEnabledPrefs)
       ..writeByte(12)
-      ..write(obj.savedNewsIds);
+      ..write(obj.savedNewsIds)
+      ..writeByte(13)
+      ..write(obj.savedBlogsIds)
+      ..writeByte(14)
+      ..write(obj.savedPubIds)
+      ..writeByte(15)
+      ..write(obj.pubPreferences);
   }
 
   @override

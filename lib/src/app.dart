@@ -15,6 +15,7 @@ import 'package:news_summarizer/src/ui/pages/onboarding_pages.dart';
 import 'package:news_summarizer/src/ui/pages/phone_auth_page.dart';
 import 'package:news_summarizer/src/ui/pages/preferences_onboarding_page.dart';
 import 'package:news_summarizer/src/ui/pages/preferences_page.dart';
+import 'package:news_summarizer/src/ui/pages/pub_prefs_page.dart';
 import 'package:news_summarizer/src/ui/pages/reorder_prefs_onboarding_page.dart';
 import 'package:news_summarizer/src/ui/pages/reorder_prefs_page.dart';
 import 'package:news_summarizer/src/utils/hive_prefs.dart';
@@ -75,6 +76,7 @@ class App extends StatelessWidget {
         BlogsOnboardingPage.routeName: (context) => BlogsOnboardingPage(),
         AuthPage.routeName: (context) => AuthPage(),
         ControlCenterPage.routeName: (context) => ControlCenterPage(),
+        PublicationPrefsPage.routeName: (context) => PublicationPrefsPage(),
       },
     );
   }

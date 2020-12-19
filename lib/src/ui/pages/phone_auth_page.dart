@@ -24,6 +24,7 @@ class PhoneAuthPage extends StatefulWidget {
 }
 
 class _PhoneAuthPageState extends State<PhoneAuthPage> {
+  bool isFirstLogin = Get.arguments;
   final _formkey = GlobalKey<FormState>();
   bool _isLoading = false;
   bool _isOTPWidgetVisible = false;
@@ -64,19 +65,31 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
         var authResult = await _auth.signInWithCredential(authCredential);
         if (authResult.user != null && authResult.additionalUserInfo.isNewUser) {
           // ApiUser user = userProvider.createNewUser(newUser: credential.user);
-          userProvider.user.name = authResult.user.displayName;
-          userProvider.user.phoneNumber = authResult.user.phoneNumber;
-          userProvider.user.firebaseUid = authResult.user.uid;
-          userProvider.user.photoUrl = authResult.user.photoURL;
+          userProvider.user
+            ..name = authResult.user.displayName
+            ..email = authResult.user.email
+            ..firebaseUid = authResult.user.uid
+            ..photoUrl = authResult.user.photoURL
+            ..savedBlogsIds = []
+            ..savedPubIds = []
+            ..pubPreferences = []
+            ..blogPreferences = []
+            ..newsPreferences = []
+            ..savedNewsIds = []
+            ..notifEnabledPrefs = [];
 
           userProvider.createUserInFirebase(newUser: userProvider.user);
           userProvider.saveToHive(user: userProvider.user);
           print(userProvider.user.toJson());
           // userProvider.setUserInProvider(setUser: use)
-          Get.offAndToNamed(BasePage.routeName);
-          Get.snackbar("Successful",
-              userProvider.user.name == null ? "Welcome!" : "Welcome, ${userProvider.user.name}!",
-              snackPosition: SnackPosition.BOTTOM);
+          if (isFirstLogin) {
+            Get.offAndToNamed(PreferencesOnboardingPage.routeName);
+          } else {
+            Get.offAndToNamed(BasePage.routeName);
+            Get.snackbar("Successful",
+                userProvider.user.name == null ? "Welcome!" : "Welcome, ${userProvider.user.name}!",
+                snackPosition: SnackPosition.BOTTOM);
+          }
         } else {
           print("[] Old User but not in Hive");
           ApiUser userr = await userProvider.getUserFromFirebase(firebaseUid: authResult.user.uid);
@@ -149,10 +162,18 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
 
       if (authResult.user != null && authResult.additionalUserInfo.isNewUser) {
         // ApiUser user = userProvider.createNewUser(newUser: credential.user);
-        userProvider.user.name = authResult.user.displayName;
-        userProvider.user.phoneNumber = authResult.user.phoneNumber;
-        userProvider.user.firebaseUid = authResult.user.uid;
-        userProvider.user.photoUrl = authResult.user.photoURL;
+        userProvider.user
+          ..name = authResult.user.displayName
+          ..email = authResult.user.email
+          ..firebaseUid = authResult.user.uid
+          ..photoUrl = authResult.user.photoURL
+          ..savedBlogsIds = []
+          ..savedPubIds = []
+          ..pubPreferences = []
+          ..blogPreferences = []
+          ..newsPreferences = []
+          ..savedNewsIds = []
+          ..notifEnabledPrefs = [];
 
         userProvider.createUserInFirebase(newUser: userProvider.user);
         userProvider.saveToHive(user: userProvider.user);
@@ -161,10 +182,14 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
         });
         print(userProvider.user.toJson());
         // userProvider.setUserInProvider(setUser: use)
-        Get.offAndToNamed(BasePage.routeName);
-        Get.snackbar(
-            "Successful", userProvider.user.name == null ? "Welcome!" : "Welcome, ${userProvider.user.name}!",
-            snackPosition: SnackPosition.BOTTOM);
+        if (isFirstLogin) {
+          Get.offAndToNamed(PreferencesOnboardingPage.routeName);
+        } else {
+          Get.offAndToNamed(BasePage.routeName);
+          Get.snackbar("Successful",
+              userProvider.user.name == null ? "Welcome!" : "Welcome, ${userProvider.user.name}!",
+              snackPosition: SnackPosition.BOTTOM);
+        }
       } else {
         print("[] Old User but not in Hive");
         ApiUser userr = await userProvider.getUserFromFirebase(firebaseUid: authResult.user.uid);

@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:hive/hive.dart';
 import 'package:news_summarizer/src/models/article.dart';
 import 'package:news_summarizer/src/models/user.dart';
+import 'package:news_summarizer/src/utils/article_type_enum.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
 import 'package:news_summarizer/src/utils/hive_prefs.dart';
 
@@ -20,6 +21,7 @@ class UserProvider extends ChangeNotifier {
     print("[UserProvider] Set user in provider");
     user = setUser;
     saveToHive(user: user);
+    notifyListeners();
   }
 
   void createUserInFirebase({ApiUser newUser}) {
@@ -84,6 +86,7 @@ class UserProvider extends ChangeNotifier {
       FirebaseFirestore.instance.collection('user').doc(user.firebaseUid).update({'fcmToken': fcmtoken});
     }
     user.fcmToken = fcmtoken;
+    notifyListeners();
   }
 
   void setUserLocation({Position position}) {
@@ -100,6 +103,7 @@ class UserProvider extends ChangeNotifier {
     user.latitude = position.latitude;
     user.longitude = position.longitude;
     saveToHive(user: user);
+    notifyListeners();
   }
 
   void setNewsPreferences({List prefsList}) {
@@ -115,6 +119,7 @@ class UserProvider extends ChangeNotifier {
 
     user.newsPreferences = prefsList;
     saveToHive(user: user);
+    notifyListeners();
   }
 
   void setCustomPreferences({List prefsList}) {
@@ -130,6 +135,7 @@ class UserProvider extends ChangeNotifier {
 
     user.customPreferences = prefsList;
     saveToHive(user: user);
+    notifyListeners();
   }
 
   void setBlogPreferences({List prefsList}) {
@@ -145,6 +151,23 @@ class UserProvider extends ChangeNotifier {
 
     user.blogPreferences = prefsList;
     saveToHive(user: user);
+    notifyListeners();
+  }
+
+  void setPubPreferences({List prefsList}) {
+    if (user.firebaseUid != null) {
+      print("[UserProvider] Set pub preferences in Firebase");
+      FirebaseFirestore.instance
+          .collection('user')
+          .doc(user.firebaseUid)
+          .update({'pubPreferences': prefsList.cast<String>()});
+    } else {
+      print("[UserProvider] No user in Firebase. Did not Set pub preferences in Firebase");
+    }
+
+    user.pubPreferences = prefsList;
+    saveToHive(user: user);
+    notifyListeners();
   }
 
   void setNotificationPrefs({List<String> prefsList}) {
@@ -160,36 +183,85 @@ class UserProvider extends ChangeNotifier {
 
     user.notifEnabledPrefs = prefsList;
     saveToHive(user: user);
+    notifyListeners();
   }
 
-  void saveNews({Article article}) {
-    user.savedNewsIds.add(article.id);
+  void saveArticle({Article article, ArticleType articleType}) {
+    String changeKey;
+    switch(articleType){
+      case ArticleType.NEWS:
+        user.savedNewsIds.add(article.id);
+        changeKey = "savedNewsIds";
+        break;
+      case ArticleType.CUSTOM:
+        user.savedNewsIds.add(article.id);
+        changeKey = "savedNewsIds";
+        break;
+      case ArticleType.AROUNDME:
+        user.savedNewsIds.add(article.id);
+        changeKey = "savedNewsIds";
+        break;
+      case ArticleType.PUB:
+        user.savedPubIds.add(article.id);
+        changeKey = "savedPubIds";
+        break;
+      case ArticleType.EXPERT:
+        user.savedBlogsIds.add(article.id);
+        changeKey = "savedBlogsIds";
+        break;
+    }
+    // user.savedNewsIds.add(article.id);
 
     if (user.firebaseUid != null) {
       print("[UserProvider] Saved news in Firebase");
       FirebaseFirestore.instance
           .collection('user')
           .doc(user.firebaseUid)
-          .update({'savedNewsIds': user.savedNewsIds});
+          .update({changeKey: user.savedNewsIds});
     } else {
       print("[UserProvider] No user in Firebase. Did not Set save news in Firebase");
     }
     saveToHive(user: user);
+    notifyListeners();
   }
 
-  void unsaveNews({Article article}) {
-    user.savedNewsIds.remove(article.id);
+  void unsaveArticle({Article article, ArticleType articleType}) {
+    String changeKey;
+    switch(articleType){
+      case ArticleType.NEWS:
+        user.savedNewsIds.remove(article.id);
+        changeKey = "savedNewsIds";
+        break;
+      case ArticleType.CUSTOM:
+        user.savedNewsIds.remove(article.id);
+        changeKey = "savedNewsIds";
+        break;
+      case ArticleType.AROUNDME:
+        user.savedNewsIds.remove(article.id);
+        changeKey = "savedNewsIds";
+        break;
+      case ArticleType.PUB:
+        user.savedPubIds.remove(article.id);
+        changeKey = "savedPubIds";
+        break;
+      case ArticleType.EXPERT:
+        user.savedBlogsIds.remove(article.id);
+        changeKey = "savedBlogsIds";
+        break;
+    }
+
 
     if (user.firebaseUid != null) {
       print("[UserProvider] Removed saved news in Firebase");
       FirebaseFirestore.instance
           .collection('user')
           .doc(user.firebaseUid)
-          .update({'savedNewsIds': user.savedNewsIds});
+          .update({changeKey: user.savedNewsIds});
     } else {
       print("[UserProvider] No user in Firebase. Did not remove saved news in Firebase");
     }
     saveToHive(user: user);
+    notifyListeners();
   }
 
   void subscribeToTopic({String topic}) {

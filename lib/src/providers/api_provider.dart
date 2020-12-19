@@ -43,6 +43,12 @@ class ApiProvider with ChangeNotifier {
     return articleList;
   }
 
+  Future<List<Article>> getArticlesFromPub({String source}) async {
+    Response response = await _dio.get("/get_source_mag/", queryParameters: {"source": source});
+    List<Article> articleList = (response.data as List).map((json) => Article.fromJson(json)).toList();
+    return articleList;
+  }
+
   Future<List<Article>> getArticlesFromLocation({double latitude, double longitude}) async {
     Response response =
         await _dio.get("/get_location_news", queryParameters: {'latitude': latitude, 'longitude': longitude});
@@ -58,7 +64,22 @@ class ApiProvider with ChangeNotifier {
 
   Future<List<Article>> getManyArticlesByIds({List<String> ids}) async {
     Response response = await _dio.post("/get_articles_by_ids/", data: ids);
-    List<Article> articleList = (response.data as List).map((json) => Article.fromJson(json)).toList();
+    print(response.data);
+    List<Article> articleList = (response.data as List).map((json) => Article.fromJson(json)).toList() ?? [];
+    return articleList;
+  }
+
+  Future<List<Article>> getManyBlogsByIds({List<String> ids}) async {
+    Response response = await _dio.post("/get_blogs_by_ids/", data: ids);
+    print(response.data);
+    List<Article> articleList = (response.data as List).map((json) => Article.fromJson(json)).toList() ?? [];
+    return articleList;
+  }
+
+  Future<List<Article>> getManyPubByIds({List<String> ids}) async {
+    Response response = await _dio.post("/get_mags_by_ids/", data: ids);
+    print(response.data);
+    List<Article> articleList = (response.data as List).map((json) => Article.fromJson(json)).toList() ?? [];
     return articleList;
   }
 

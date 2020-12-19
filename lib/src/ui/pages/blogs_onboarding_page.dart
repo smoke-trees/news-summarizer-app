@@ -43,7 +43,7 @@ class _BlogsOnboardingPageState extends State<BlogsOnboardingPage> {
         duration: Duration(milliseconds: 500),
         opacity: opacity,
         onEnd: () {
-          Future.delayed(Duration(seconds: 4), () {
+          Future.delayed(Duration(seconds: 3), () {
             setState(() {
               opacity = 0.0;
             });

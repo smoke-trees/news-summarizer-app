@@ -43,6 +43,15 @@ class ApiUser extends HiveObject {
   @HiveField(12)
   List<String> savedNewsIds;
 
+  @HiveField(13)
+  List<String> savedBlogsIds;
+
+  @HiveField(14)
+  List<String> savedPubIds;
+
+  @HiveField(15)
+  List<String> pubPreferences;
+
   ApiUser(
       {this.email,
       this.name,
@@ -56,13 +65,17 @@ class ApiUser extends HiveObject {
       this.latitude,
       this.longitude,
       this.notifEnabledPrefs,
-      this.savedNewsIds});
+      this.savedNewsIds,
+      this.pubPreferences,
+      this.savedBlogsIds,
+      this.savedPubIds});
 
   factory ApiUser.fromJson(json) {
     return ApiUser(
-        blogPreferences: (json['blogPreferences'] as List).cast<String>() ?? [],
-        newsPreferences: (json['newsPreferences'] as List).cast<String>() ?? [],
-        customPreferences: (json['customPreferences'] as List).cast<String>() ?? [],
+        blogPreferences: (json['blogPreferences'] as List)?.cast<String>() ?? [],
+        newsPreferences: (json['newsPreferences'] as List)?.cast<String>() ?? [],
+        customPreferences: (json['customPreferences'] as List)?.cast<String>() ?? [],
+        pubPreferences: (json['pubPreferences'] as List)?.cast<String>() ?? [],
         name: json['name'],
         email: json['email'],
         fcmToken: json['fcmToken'],
@@ -72,7 +85,9 @@ class ApiUser extends HiveObject {
         latitude: json['location']['latitude'],
         longitude: json['location']['longitude'],
         notifEnabledPrefs: (json['notifEnabledPrefs'] as List).cast<String>() ?? [],
-        savedNewsIds: (json['savedNewsIds'] as List).cast<String>() ?? []);
+        savedPubIds: (json['savedPubIds'] as List)?.cast<String>() ?? [],
+        savedBlogsIds: (json['savedBlogsIds'] as List)?.cast<String>() ?? [],
+        savedNewsIds: (json['savedNewsIds'] as List)?.cast<String>() ?? []);
   }
 
   Map<String, dynamic> toJson() {
@@ -80,6 +95,7 @@ class ApiUser extends HiveObject {
     data['blogPreferences'] = blogPreferences;
     data['newsPreferences'] = newsPreferences;
     data['customPreferences'] = customPreferences;
+    data['pubPreferences'] = pubPreferences ?? [];
     data['name'] = name;
     data['email'] = email;
     data['fcmToken'] = fcmToken;
@@ -91,6 +107,8 @@ class ApiUser extends HiveObject {
     data['location']['longitude'] = longitude;
     data['notifEnabledPrefs'] = notifEnabledPrefs ?? [];
     data['savedNewsIds'] = savedNewsIds ?? [];
+    data['savedBlogsIds'] = savedBlogsIds ?? [];
+    data['savedPubIds'] = savedPubIds ?? [];
     return data;
   }
 }
