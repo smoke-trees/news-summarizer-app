@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:news_summarizer/src/models/article.dart';
 import 'package:news_summarizer/src/models/summary.dart';
 import 'package:news_summarizer/src/providers/api_provider.dart';
-import 'package:news_summarizer/src/providers/theme_provider.dart';
 import 'package:news_summarizer/src/ui/widgets/news_list.dart';
 import 'package:provider/provider.dart';
 
@@ -13,49 +14,40 @@ class SearchPage extends StatefulWidget {
 class SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
     final apiProvider = Provider.of<ApiProvider>(context);
 
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Get.theme.backgroundColor,
       appBar: AppBar(
         centerTitle: true,
         title: Text('Search results',
             style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).accentColor)),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.tonality),
-            onPressed: () {
-              themeProvider.toggleTheme();
-            },
-          ),
-        ],
+                color: Get.theme.accentColor)),
       ),
       body: Center(
-        child: FutureBuilder<List<SummaryResponse>>(
-            future: apiProvider.getSummary(apiProvider.searchTerm),
+        child: FutureBuilder<List<Article>>(
+            future: apiProvider.getArticlesFromSearch(),
             builder: (BuildContext context,
-                AsyncSnapshot<List<SummaryResponse>> snapshot) {
+                AsyncSnapshot<List<Article>> snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.none:
                   return Center(
                     child: CircularProgressIndicator(
-                      backgroundColor: Theme.of(context).backgroundColor,
+                      backgroundColor: Get.theme.backgroundColor,
                     ),
                   );
                 case ConnectionState.active:
                   return Center(
                     child: CircularProgressIndicator(
-                      backgroundColor: Theme.of(context).backgroundColor,
+                      backgroundColor: Get.theme.backgroundColor,
                     ),
                   );
                 case ConnectionState.waiting:
                   return Center(
                     child: CircularProgressIndicator(
-                      backgroundColor: Theme.of(context).backgroundColor,
+                      backgroundColor: Get.theme.backgroundColor,
                     ),
                   );
                 case ConnectionState.done:

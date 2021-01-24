@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+1
+version: 1.0.0+5
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -29,14 +29,51 @@ dependencies:
   material_design_icons_flutter: 4.0.5345
   animations: ^1.1.1
 
+  firebase_core: ^0.5.0
+  firebase_analytics: ^6.0.0
+  firebase_auth: ^0.18.0+1
+  firebase_messaging: ^7.0.3
+  cloud_firestore: ^0.14.1+3
+  firebase_dynamic_links: ^0.6.3
+
+  google_sign_in: ^4.5.1
+  get: ^3.8.0
+  pin_code_fields: ^4.0.0
+#    shared_preferences: ^0.5.10
+  http: ^0.12.2
+  cached_network_image: ^2.3.1
+  html: ^0.14.0+3
+  intl: ^0.16.1
+  webview_flutter: ^0.3.22+1
+  chips_choice: ^1.2.0
+  hive: ^1.4.4+1
+  hive_flutter: ^0.3.1
+  path_provider: ^1.6.14
+
+  fancy_on_boarding: ^1.7.0
+  geolocator: ^6.1.6
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
+  flutter_svg: ^0.19.1
+
+  flutter_launcher_icons: ^0.8.1
+  share: ^0.6.5+4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  # Hive Dependencies
+  hive_generator: ^0.8.2
+  build_runner: ^1.10.4
+  flutter_launcher_icons: "^0.8.0"
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/only-logo.jpg"
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -54,3 +91,6 @@ flutter:
           weight: 500
         - asset: assets/fonts/CircularStd-Book.ttf
           weight: 300
+  assets:
+    - assets/icons/
+    - assets/svgs/
