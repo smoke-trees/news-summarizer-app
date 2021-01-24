@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
-import 'package:news_summarizer/src/providers/user_provider.dart';
-import 'package:news_summarizer/src/ui/pages/base_page.dart';
 import 'package:news_summarizer/src/ui/pages/blogs_onboarding_page.dart';
-import 'package:news_summarizer/src/ui/pages/blogs_prefs_page.dart';
 import 'package:news_summarizer/src/ui/widgets/listview_card.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
-import 'package:provider/provider.dart';
-
-import 'control_center.dart';
 
 class ReorderPrefsPage extends StatefulWidget {
   static String routeName = "/reorder_prefs_page";

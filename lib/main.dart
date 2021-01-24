@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:news_summarizer/src/app.dart';
 import 'package:news_summarizer/src/models/user.dart';
 import 'package:news_summarizer/src/providers/api_provider.dart';
@@ -15,6 +14,7 @@ import 'package:provider/provider.dart';
 ///Hive command:
 ///flutter packages pub run build_runner build --delete-conflicting-outputs
 ///build command: flutter build apk --dart-define=envType=dev
+///Launcher icon command: flutter pub run flutter_launcher_icons:main
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final appDocumentDir = await path_provider.getApplicationDocumentsDirectory();

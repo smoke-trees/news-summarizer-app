@@ -50,7 +50,8 @@ class _NewsContainerPageState extends State<NewsContainerPage>
 
   Widget _searchAppBar(BuildContext context) {
     final apiProvider = Provider.of<ApiProvider>(context);
-
+//TODO: Put these into different files
+//TODO: Add recommended channel
     return AppBar(
       title: Row(
         children: [
@@ -222,8 +223,12 @@ class _NewsContainerPageState extends State<NewsContainerPage>
               }
             },
             itemBuilder: (context) {
-              return {'Change Theme', 'Control Center', "Change Location", "Notification Center"}
-                  .map((String choice) {
+              return {
+                'Change Theme',
+                'Control Center',
+                "Change Location",
+                "Notification Center"
+              }.map((String choice) {
                 return PopupMenuItem<String>(
                   value: choice,
                   child: Text(choice),
@@ -291,6 +296,7 @@ class _NewsContainerPageState extends State<NewsContainerPage>
     _newsFeeds = userProvider.user.newsPreferences ?? [];
     _blogsFeeds = userProvider.user.blogPreferences ?? [];
     _pubFeeds = userProvider.user.pubPreferences ?? [];
+
     if (selectedMenuItem == 1)
       return Scaffold(
           drawer: drawerWidget(),
@@ -298,10 +304,15 @@ class _NewsContainerPageState extends State<NewsContainerPage>
             centerTitle: true,
             title: Text(
               'Terran Tidings',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Get.theme.accentColor),
+              style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Get.theme.accentColor),
             ),
           ),
-          body: AuthPage());
+          body: AuthPage(
+            firstLogin: false,
+          ));
     else if (selectedMenuItem == 2)
       return DefaultTabController(
         length: 3,
@@ -311,7 +322,10 @@ class _NewsContainerPageState extends State<NewsContainerPage>
             centerTitle: true,
             title: Text(
               'Saved Articles',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Get.theme.accentColor),
+              style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Get.theme.accentColor),
             ),
             bottom: TabBar(
               tabs: [
@@ -438,7 +452,8 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                             : _searchAppBar(context),
                         body: _pubFeeds.isEmpty
                             ? Center(
-                                child: Text("Add a publication to your channels"),
+                                child:
+                                    Text("Add a publication to your channels"),
                               )
                             : TabBarView(
                                 children: List.generate(
@@ -484,17 +499,17 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                           children: List.generate(
                             _newsFeeds.length,
                             (index) {
-                              if(_newsFeeds[index].contains("NewsFeed.")){
+                              if (_newsFeeds[index].contains("NewsFeed.")) {
                                 return NewsPage(
                                   newsFeed: _newsFeeds[index],
                                   articleType: ArticleType.NEWS,
                                 );
-                              }else {
+                              } else {
                                 return NewsPage(
                                   customPref: _newsFeeds[index],
                                   articleType: ArticleType.CUSTOM,
                                 ); //
-                              }// Very bad method but eet ees what eet ees
+                              } // Very bad method but eet ees what eet ees
                             },
                           ),
                         ),

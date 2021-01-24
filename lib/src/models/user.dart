@@ -52,29 +52,33 @@ class ApiUser extends HiveObject {
   @HiveField(15)
   List<String> pubPreferences;
 
-  ApiUser(
-      {this.email,
-      this.name,
-      this.blogPreferences,
-      this.customPreferences,
-      this.newsPreferences,
-      this.fcmToken,
-      this.photoUrl,
-      this.firebaseUid,
-      this.phoneNumber,
-      this.latitude,
-      this.longitude,
-      this.notifEnabledPrefs,
-      this.savedNewsIds,
-      this.pubPreferences,
-      this.savedBlogsIds,
-      this.savedPubIds});
+  ApiUser({
+    this.email,
+    this.name,
+    this.blogPreferences,
+    this.customPreferences,
+    this.newsPreferences,
+    this.fcmToken,
+    this.photoUrl,
+    this.firebaseUid,
+    this.phoneNumber,
+    this.latitude,
+    this.longitude,
+    this.notifEnabledPrefs,
+    this.savedNewsIds,
+    this.pubPreferences,
+    this.savedBlogsIds,
+    this.savedPubIds,
+  });
 
   factory ApiUser.fromJson(json) {
     return ApiUser(
-        blogPreferences: (json['blogPreferences'] as List)?.cast<String>() ?? [],
-        newsPreferences: (json['newsPreferences'] as List)?.cast<String>() ?? [],
-        customPreferences: (json['customPreferences'] as List)?.cast<String>() ?? [],
+        blogPreferences:
+            (json['blogPreferences'] as List)?.cast<String>() ?? [],
+        newsPreferences:
+            (json['newsPreferences'] as List)?.cast<String>() ?? [],
+        customPreferences:
+            (json['customPreferences'] as List)?.cast<String>() ?? [],
         pubPreferences: (json['pubPreferences'] as List)?.cast<String>() ?? [],
         name: json['name'],
         email: json['email'],
@@ -84,7 +88,8 @@ class ApiUser extends HiveObject {
         phoneNumber: json['phoneNumber'],
         latitude: json['location']['latitude'],
         longitude: json['location']['longitude'],
-        notifEnabledPrefs: (json['notifEnabledPrefs'] as List).cast<String>() ?? [],
+        notifEnabledPrefs:
+            (json['notifEnabledPrefs'] as List).cast<String>() ?? [],
         savedPubIds: (json['savedPubIds'] as List)?.cast<String>() ?? [],
         savedBlogsIds: (json['savedBlogsIds'] as List)?.cast<String>() ?? [],
         savedNewsIds: (json['savedNewsIds'] as List)?.cast<String>() ?? []);

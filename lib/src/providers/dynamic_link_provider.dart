@@ -4,10 +4,12 @@ import 'package:news_summarizer/src/models/article.dart';
 
 class DynamicLinkProvider extends ChangeNotifier {
   void initDynamicLinks(BuildContext context) async {
+    print("Dynamic Links init");
     FirebaseDynamicLinks.instance.onLink(onSuccess: (PendingDynamicLinkData dynamicLink) async {
       final Uri deepLink = dynamicLink?.link;
 
       if (deepLink != null) {
+        print(deepLink.path);
         Navigator.pushNamed(context, deepLink.path);
       }
     }, onError: (OnLinkErrorException e) async {
@@ -29,7 +31,7 @@ class DynamicLinkProvider extends ChangeNotifier {
       link: Uri.parse('https://terrantidings.com/news/${article.title}'),
       androidParameters: AndroidParameters(
         packageName: 'dev.smoketrees.news_summarizer',
-        minimumVersion: 125,
+        // minimumVersion: 1,
       ),
       // iosParameters: IosParameters(
       //   bundleId: 'com.example.ios',

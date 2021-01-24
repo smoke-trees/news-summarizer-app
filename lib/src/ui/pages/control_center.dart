@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:news_summarizer/src/providers/user_provider.dart';
+import 'package:news_summarizer/src/ui/pages/base_page.dart';
 import 'package:news_summarizer/src/ui/pages/blogs_prefs_page.dart';
 import 'package:news_summarizer/src/ui/pages/preferences_page.dart';
 import 'package:news_summarizer/src/ui/pages/pub_prefs_page.dart';
@@ -15,12 +16,30 @@ class ControlCenterPage extends StatefulWidget {
 }
 
 class _ControlCenterPageState extends State<ControlCenterPage> {
+  bool isNewUser = Get.arguments;
+
   @override
   Widget build(BuildContext context) {
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: true);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
+        actions: [
+          GestureDetector(
+            child: Container(
+              margin: EdgeInsets.only(right: 16),
+              alignment: Alignment.center,
+              child: Text(
+                "Done",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+            ),
+            onTap: () => Get.toNamed(BasePage.routeName),
+          ),
+        ],
         title: Text(
           "Control Center",
           style: TextStyle(
@@ -47,14 +66,20 @@ class _ControlCenterPageState extends State<ControlCenterPage> {
                     decorationThickness: 3),
               ),
             ),
-            subtitle: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              child: Text(userProvider.user.newsPreferences
-                      .map((e) =>
-                          e.substring(9).toLowerCase().split("_").map((e) => e.capitalizeFirst).join(" "))
-                      .join(", ") ??
-                  ""),
-            ),
+            subtitle: userProvider.user.newsPreferences.length == 0
+                ? null
+                : Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    child: Text(userProvider.user.newsPreferences
+                            .map((e) => e
+                                .substring(9)
+                                .toLowerCase()
+                                .split("_")
+                                .map((e) => e.capitalizeFirst)
+                                .join(" "))
+                            .join(", ") ??
+                        ""),
+                  ),
             onTap: () {
               Get.toNamed(PreferencesPage.routeName);
             },
@@ -73,10 +98,12 @@ class _ControlCenterPageState extends State<ControlCenterPage> {
                     decorationThickness: 3),
               ),
             ),
-            subtitle: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              child: Text(userProvider.user.blogPreferences?.join(", ") ?? ""),
-            ),
+            subtitle: userProvider.user.blogPreferences.length == 0
+                ? null
+                : Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    child: Text(userProvider.user.blogPreferences?.join(", ") ?? ""),
+                  ),
             onTap: () {
               Get.toNamed(BlogsPrefsPage.routeName);
             },
@@ -95,10 +122,12 @@ class _ControlCenterPageState extends State<ControlCenterPage> {
                     decorationThickness: 3),
               ),
             ),
-            subtitle: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              child: Text(userProvider.user.pubPreferences?.join(", ") ?? ""),
-            ),
+            subtitle: userProvider.user.pubPreferences.length == 0
+                ? null
+                : Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    child: Text(userProvider.user.pubPreferences?.join(", ") ?? ""),
+                  ),
             onTap: () {
               Get.toNamed(PublicationPrefsPage.routeName);
             },

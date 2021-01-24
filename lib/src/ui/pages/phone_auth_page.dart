@@ -15,6 +15,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 
 import 'base_page.dart';
+import 'control_center_onboarding_page.dart';
 
 class PhoneAuthPage extends StatefulWidget {
   static String routeName = "/phone_auth_page";
@@ -83,7 +84,8 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
           print(userProvider.user.toJson());
           // userProvider.setUserInProvider(setUser: use)
           if (isFirstLogin) {
-            Get.offAndToNamed(PreferencesOnboardingPage.routeName);
+            // Get.offAndToNamed(PreferencesOnboardingPage.routeName);
+            Get.offAndToNamed(ControlCenterOnboardingPage.routeName);
           } else {
             Get.offAndToNamed(BasePage.routeName);
             Get.snackbar("Successful",
@@ -183,7 +185,8 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
         print(userProvider.user.toJson());
         // userProvider.setUserInProvider(setUser: use)
         if (isFirstLogin) {
-          Get.offAndToNamed(PreferencesOnboardingPage.routeName);
+          Get.offAndToNamed(ControlCenterOnboardingPage.routeName);
+          // Get.offAndToNamed(PreferencesOnboardingPage.routeName);
         } else {
           Get.offAndToNamed(BasePage.routeName);
           Get.snackbar("Successful",
