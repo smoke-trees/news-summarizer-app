@@ -18,12 +18,19 @@ class _BasePageState extends State<BasePage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    DynamicLinkProvider dynamicLinkProvider = Provider.of<DynamicLinkProvider>(context, listen: false);
+    DynamicLinkProvider dynamicLinkProvider =
+        Provider.of<DynamicLinkProvider>(context, listen: false);
     dynamicLinkProvider.initDynamicLinks(context);
-    userProvider.configureFCM();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
     ApiUser user = userProvider.fetchFromHive();
     userProvider.setUserInProvider(setUser: user);
+    userProvider.configureFCM();
   }
 
   @override

@@ -1,3 +1,5 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:news_summarizer/src/app.dart';
@@ -24,6 +26,7 @@ void main() async {
   await Hive.openBox(NEWS_PREFS_BOX);
   await Hive.openBox<ApiUser>(USER_BOX);
   await Hive.openBox(PROFILE_BOX);
+  await Firebase.initializeApp();
   const runtimeEnv = String.fromEnvironment('envType');
   print("RUNTIME TYPE = $runtimeEnv");
   if (runtimeEnv == "dev") {
@@ -31,6 +34,7 @@ void main() async {
   } else if (runtimeEnv == "prod") {
     BASE_URL = "https://news.smoketrees.in/";
   }
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   runApp(
     MultiProvider(
       providers: [

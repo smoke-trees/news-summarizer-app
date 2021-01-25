@@ -21,7 +21,7 @@ class UserProvider extends ChangeNotifier {
     print("[UserProvider] Set user in provider");
     user = setUser;
     saveToHive(user: user);
-    notifyListeners();
+    // notifyListeners();
   }
 
   void createUserInFirebase({ApiUser newUser}) {
@@ -50,33 +50,33 @@ class UserProvider extends ChangeNotifier {
   }
 
   void configureFCM() {
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print("onMessage: $message");
-        final notification = message['notification'];
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        print("onLaunch: $message");
-
-        final notification = message['data'];
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print("onResume: $message");
-      },
-    );
-    _firebaseMessaging
-        .requestNotificationPermissions(const IosNotificationSettings(sound: true, badge: true, alert: true));
-
-    ProfileHive sp = new ProfileHive();
-    _firebaseMessaging.onTokenRefresh.listen((event) {
-      String userFCMToken = sp.getUserFCMToken();
-      if (event != userFCMToken) {
-        print("FCM Saved in shared_prefs");
-        user.fcmToken = event;
-        sp.setUserFCMToken(event);
-        setFCMtokenInFirebase(fcmtoken: user.fcmToken);
-      }
-    });
+    // _firebaseMessaging.configure(
+    //   onMessage: (Map<String, dynamic> message) async {
+    //     print("onMessage: $message");
+    //     final notification = message['notification'];
+    //   },
+    //   onLaunch: (Map<String, dynamic> message) async {
+    //     print("onLaunch: $message");
+    //
+    //     final notification = message['data'];
+    //   },
+    //   onResume: (Map<String, dynamic> message) async {
+    //     print("onResume: $message");
+    //   },
+    // );
+    // _firebaseMessaging
+    //     .requestNotificationPermissions(const IosNotificationSettings(sound: true, badge: true, alert: true));
+    //
+    // ProfileHive sp = new ProfileHive();
+    // _firebaseMessaging.onTokenRefresh.listen((event) {
+    //   String userFCMToken = sp.getUserFCMToken();
+    //   if (event != userFCMToken) {
+    //     print("FCM Saved in shared_prefs");
+    //     user.fcmToken = event;
+    //     sp.setUserFCMToken(event);
+    //     setFCMtokenInFirebase(fcmtoken: user.fcmToken);
+    //   }
+    // });
   }
 
   void setFCMtokenInFirebase({String fcmtoken}) {

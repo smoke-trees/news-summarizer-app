@@ -28,8 +28,10 @@ class _NewsCardState extends State<NewsCard> {
   @override
   void initState() {
     super.initState();
-    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    if (widget.articleType == ArticleType.NEWS || widget.articleType == ArticleType.AROUNDME) {
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
+    if (widget.articleType == ArticleType.NEWS ||
+        widget.articleType == ArticleType.AROUNDME) {
       if (userProvider.user.savedNewsIds.contains(widget.article.id)) {
         isSaved = true;
       }
@@ -39,8 +41,10 @@ class _NewsCardState extends State<NewsCard> {
   @override
   Widget build(BuildContext context) {
     ApiProvider apiProvider = Provider.of<ApiProvider>(context, listen: false);
-    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    DynamicLinkProvider dynamicLinkProvider = Provider.of<DynamicLinkProvider>(context, listen: false);
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
+    DynamicLinkProvider dynamicLinkProvider =
+        Provider.of<DynamicLinkProvider>(context, listen: false);
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: InkWell(
@@ -85,26 +89,34 @@ class _NewsCardState extends State<NewsCard> {
                             child: Row(
                               children: [
                                 IconButton(
-                                    icon: Icon(isSaved ? Icons.bookmark : Icons.bookmark_border),
+                                    icon: Icon(isSaved
+                                        ? Icons.bookmark
+                                        : Icons.bookmark_border),
                                     onPressed: () {
                                       setState(() {
                                         isSaved = !isSaved;
                                       });
                                       if (isSaved) {
                                         userProvider.saveArticle(
-                                            article: widget.article, articleType: widget.articleType);
+                                          article: widget.article,
+                                          articleType: widget.articleType,
+                                        );
                                       } else {
                                         userProvider.unsaveArticle(
-                                            article: widget.article, articleType: widget.articleType);
+                                          article: widget.article,
+                                          articleType: widget.articleType,
+                                        );
                                       }
                                     }),
                                 IconButton(
                                     icon: Icon(Icons.share),
                                     onPressed: () async {
-                                      String url =
-                                          await dynamicLinkProvider.getDynamicLink(article: widget.article);
+                                      String url = await dynamicLinkProvider
+                                          .getDynamicLink(
+                                              article: widget.article);
 
-                                      Share.share('${widget.article.title} \n $url',
+                                      Share.share(
+                                          '${widget.article.title} \n $url',
                                           subject: 'News From Terran Tidings');
                                     })
                               ],
@@ -124,10 +136,10 @@ class _NewsCardState extends State<NewsCard> {
                       // ),
                       SizedBox(height: 10),
                       Container(
-                        child: Text(
-                            widget.articleType == ArticleType.EXPERT || widget.articleType == ArticleType.PUB
-                                ? widget.article.description ?? ""
-                                : widget.article.summary ?? ""),
+                        child: Text(widget.articleType == ArticleType.EXPERT ||
+                                widget.articleType == ArticleType.PUB
+                            ? widget.article.description ?? ""
+                            : widget.article.summary ?? ""),
                       )
                     ],
                   ),
@@ -139,7 +151,8 @@ class _NewsCardState extends State<NewsCard> {
         onTap: () {
           if (widget.articleType == ArticleType.EXPERT) {
             apiProvider.makeViewBlog(article: widget.article);
-          } else if (widget.articleType == ArticleType.NEWS || widget.articleType == ArticleType.AROUNDME) {
+          } else if (widget.articleType == ArticleType.NEWS ||
+              widget.articleType == ArticleType.AROUNDME) {
             apiProvider.makeViewNews(article: widget.article);
           } else if (widget.articleType == ArticleType.PUB) {
             //TODO
