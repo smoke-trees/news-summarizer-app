@@ -49,13 +49,15 @@ class _ControlCenterOnboardingPageState
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             OnboardingTextWidget(
-                text: "You can now choose and create channels"),
+              text: "You can now choose and create channels",
+            ),
             SizedBox(
               height: 20,
             ),
             OnboardingTextWidget(
-                text:
-                    "You have the option of news channels, expert opinion channels and publications")
+              text:
+                  "You have the option of news channels, expert opinion channels and publications",
+            )
           ],
         )),
       ),

@@ -51,248 +51,261 @@ class _AuthPageState extends State<AuthPage> {
         // ),
         body: userProvider.user != null && userProvider.user.firebaseUid != null
             ? Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Logged in with:  ", style: TextStyle(fontSize: 18)),
-                Text(
-                  "${userProvider.user.email ?? userProvider.user.phoneNumber}",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                ),
-              ],
-            )
-          ],
-        )
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Logged in with:  ", style: TextStyle(fontSize: 18)),
+                      Text(
+                        "${userProvider.user.email ?? userProvider.user.phoneNumber}",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                    ],
+                  )
+                ],
+              )
             : Stack(
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  // padding: EdgeInsets.only(top: 100),
-                  child: Text(
-                    "You can create a account for better, consistent experience on multiple devices",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 30),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 20, vertical: 10),
-                  child: OutlineButton(
-                    onPressed: () {
-                      Get.toNamed(PhoneAuthPage.routeName,
-                          arguments: widget.firstLogin);
-                    },
-                    padding: EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    borderSide: BorderSide(color: Color(0xff3B916E)),
-                    highlightedBorderColor: Colors.transparent,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.phone),
-                        SizedBox(
-                          width: 18,
-                        ),
-                        Text(
-                          "Continue with Phone Number",
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        // padding: EdgeInsets.only(top: 100),
+                        child: Text(
+                          "You can create a account for better, consistent experience on multiple devices",
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                            fontSize: 20,
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                //   child: OutlineButton(
-                //     onPressed: () {
-                //       Get.toNamed(PhoneAuthPage.routeName);
-                //     },
-                //     padding: EdgeInsets.symmetric(vertical: 14),
-                //     shape: RoundedRectangleBorder(
-                //       borderRadius: BorderRadius.circular(10),
-                //     ),
-                //     borderSide: BorderSide(color: Color(0xff3B916E)),
-                //     highlightedBorderColor: Colors.transparent,
-                //     child: Row(
-                //       mainAxisAlignment: MainAxisAlignment.center,
-                //       children: [
-                //         Icon(Icons.mail),
-                //         SizedBox(
-                //           width: 18,
-                //         ),
-                //         Text(
-                //           "Continue with Email",
-                //           style: TextStyle(
-                //             fontWeight: FontWeight.bold,
-                //             fontSize: 16,
-                //           ),
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 20, vertical: 10),
-                  child: OutlineButton(
-                    onPressed: () async {
-                      AuthProvider authProvider = Provider.of<AuthProvider>(
-                          context, listen: false);
-                      UserCredential credential = await authProvider
-                          .autoSignInGoogle();
-                      if (credential.additionalUserInfo.isNewUser &&
-                          widget.firstLogin) {
-                        // ApiUser user = userProvider.createNewUser(newUser: credential.user);
-                        userProvider.user = ApiUser();
-                        userProvider.user
-                          ..name = credential.user.displayName
-                          ..email = credential.user.email
-                          ..firebaseUid = credential.user.uid
-                          ..photoUrl = credential.user.photoURL
-                          ..savedBlogsIds = []
-                          ..savedPubIds = []
-                          ..pubPreferences = []
-                          ..blogPreferences = []
-                          ..newsPreferences = []
-                          ..savedNewsIds = []
-                          ..notifEnabledPrefs = [];
-
-                        userProvider.createUserInFirebase(
-                            newUser: userProvider.user);
-                        userProvider.saveToHive(user: userProvider.user);
-                        print(userProvider.user.toJson());
-                        // userProvider.setUserInProvider(setUser: use)
-                        // if (widget.firstLogin) {
-                        Get.offAndToNamed(
-                            ControlCenterOnboardingPage.routeName);
-                        // Get.offAndToNamed(PreferencesOnboardingPage.routeName);
-                        // } else {
-                        Get.offAndToNamed(BasePage.routeName);
-                        Get.snackbar(
-                            "Successful",
-                            userProvider.user.name == null
-                                ? "Welcome!"
-                                : "Welcome, ${userProvider.user.name}!",
-                            snackPosition: SnackPosition.BOTTOM);
-                        // }
-                      } else if (credential.additionalUserInfo.isNewUser &&
-                          !widget.firstLogin) {
-                        userProvider.user
-                          ..name = credential.user.displayName
-                          ..email = credential.user.email
-                          ..firebaseUid = credential.user.uid
-                          ..photoUrl = credential.user.photoURL;
-                        userProvider.createUserInFirebase(
-                            newUser: userProvider.user);
-                        userProvider.saveToHive(user: userProvider.user);
-                        print(userProvider.user.toJson());
-
-                        Get.offAndToNamed(BasePage.routeName);
-                        Get.snackbar(
-                            "Successful",
-                            userProvider.user.name == null
-                                ? "Welcome!"
-                                : "Welcome, ${userProvider.user.name}!",
-                            snackPosition: SnackPosition.BOTTOM);
-                      } else {
-                        print("[] Old User but not in Hive");
-                        ApiUser userr =
-                        await userProvider.getUserFromFirebase(
-                            firebaseUid: credential.user.uid);
-                        userProvider.setUserInProvider(setUser: userr);
-                        userProvider.saveToHive(user: userr);
-                        _newsBox.put(NEWS_PREFS, userr.newsPreferences);
-                        _newsBox.put(NEWS_BLOGS_AUTHORS, userr.blogPreferences);
-                        _newsBox.put(NEWS_CUSTOM, userr.customPreferences);
-                        ProfileHive().setIsUserLoggedIn(true);
-                        Get.toNamed(BasePage.routeName);
-                        Get.snackbar(
-                            "Successful",
-                            userProvider.user.name == null
-                                ? "Welcome back!"
-                                : "Welcome back, ${userProvider.user.name}!",
-                            snackPosition: SnackPosition.BOTTOM);
-                      }
-                    },
-                    padding: EdgeInsets.symmetric(vertical: 14),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    borderSide: BorderSide(color: Color(0xff3B916E)),
-                    highlightedBorderColor: Colors.transparent,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          "assets/icons/google_logo.png",
-                          width: 20,
-                          height: 20,
-                        ),
-                        SizedBox(
-                          width: 18,
-                        ),
-                        Text(
-                          "Continue with Google",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                      ),
+                      SizedBox(height: 30),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        child: OutlineButton(
+                          onPressed: () {
+                            Get.toNamed(PhoneAuthPage.routeName,
+                                arguments: widget.firstLogin);
+                          },
+                          padding: EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          borderSide: BorderSide(color: Color(0xff3B916E)),
+                          highlightedBorderColor: Colors.transparent,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.phone),
+                              SizedBox(
+                                width: 18,
+                              ),
+                              Text(
+                                "Continue with Phone Number",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      //   child: OutlineButton(
+                      //     onPressed: () {
+                      //       Get.toNamed(PhoneAuthPage.routeName);
+                      //     },
+                      //     padding: EdgeInsets.symmetric(vertical: 14),
+                      //     shape: RoundedRectangleBorder(
+                      //       borderRadius: BorderRadius.circular(10),
+                      //     ),
+                      //     borderSide: BorderSide(color: Color(0xff3B916E)),
+                      //     highlightedBorderColor: Colors.transparent,
+                      //     child: Row(
+                      //       mainAxisAlignment: MainAxisAlignment.center,
+                      //       children: [
+                      //         Icon(Icons.mail),
+                      //         SizedBox(
+                      //           width: 18,
+                      //         ),
+                      //         Text(
+                      //           "Continue with Email",
+                      //           style: TextStyle(
+                      //             fontWeight: FontWeight.bold,
+                      //             fontSize: 16,
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        child: OutlineButton(
+                          onPressed: () async {
+                            AuthProvider authProvider =
+                                Provider.of<AuthProvider>(context,
+                                    listen: false);
+                            UserCredential credential =
+                                await authProvider.autoSignInGoogle();
+                            if (credential.additionalUserInfo.isNewUser &&
+                                widget.firstLogin) {
+                              // ApiUser user = userProvider.createNewUser(newUser: credential.user);
+                              userProvider.user = ApiUser();
+                              userProvider.user
+                                ..name = credential.user.displayName
+                                ..email = credential.user.email
+                                ..firebaseUid = credential.user.uid
+                                ..photoUrl = credential.user.photoURL
+                                ..savedBlogsIds = []
+                                ..savedPubIds = []
+                                ..pubPreferences = []
+                                ..blogPreferences = []
+                                ..newsPreferences = []
+                                ..savedNewsIds = []
+                                ..notifEnabledPrefs = [];
+
+                              userProvider.createUserInFirebase(
+                                  newUser: userProvider.user);
+                              userProvider.saveToHive(user: userProvider.user);
+                              print(userProvider.user.toJson());
+                              // userProvider.setUserInProvider(setUser: use)
+                              // if (widget.firstLogin) {
+                              Get.offAndToNamed(
+                                  ControlCenterOnboardingPage.routeName);
+                              // Get.offAndToNamed(PreferencesOnboardingPage.routeName);
+                              // } else {
+                              Get.offAndToNamed(BasePage.routeName);
+                              Get.snackbar(
+                                  "Successful",
+                                  userProvider.user.name == null
+                                      ? "Welcome!"
+                                      : "Welcome, ${userProvider.user.name}!",
+                                  snackPosition: SnackPosition.BOTTOM);
+                              // }
+                            } else if (credential
+                                    .additionalUserInfo.isNewUser &&
+                                !widget.firstLogin) {
+                              userProvider.user
+                                ..name = credential.user.displayName
+                                ..email = credential.user.email
+                                ..firebaseUid = credential.user.uid
+                                ..photoUrl = credential.user.photoURL;
+                              userProvider.createUserInFirebase(
+                                  newUser: userProvider.user);
+                              userProvider.saveToHive(user: userProvider.user);
+                              print(userProvider.user.toJson());
+
+                              Get.offAndToNamed(BasePage.routeName);
+                              Get.snackbar(
+                                  "Successful",
+                                  userProvider.user.name == null
+                                      ? "Welcome!"
+                                      : "Welcome, ${userProvider.user.name}!",
+                                  snackPosition: SnackPosition.BOTTOM);
+                            } else {
+                              print("[] Old User but not in Hive");
+                              ApiUser userr =
+                                  await userProvider.getUserFromFirebase(
+                                      firebaseUid: credential.user.uid);
+                              userProvider.setUserInProvider(setUser: userr);
+                              userProvider.saveToHive(user: userr);
+                              _newsBox.put(NEWS_PREFS, userr.newsPreferences);
+                              _newsBox.put(
+                                  NEWS_BLOGS_AUTHORS, userr.blogPreferences);
+                              _newsBox.put(
+                                  NEWS_CUSTOM, userr.customPreferences);
+                              ProfileHive().setIsUserLoggedIn(true);
+                              Get.toNamed(BasePage.routeName);
+                              Get.snackbar(
+                                  "Successful",
+                                  userProvider.user.name == null
+                                      ? "Welcome back!"
+                                      : "Welcome back, ${userProvider.user.name}!",
+                                  snackPosition: SnackPosition.BOTTOM);
+                            }
+                          },
+                          padding: EdgeInsets.symmetric(vertical: 14),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          borderSide: BorderSide(color: Color(0xff3B916E)),
+                          highlightedBorderColor: Colors.transparent,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                "assets/icons/google_logo.png",
+                                width: 20,
+                                height: 20,
+                              ),
+                              SizedBox(
+                                width: 18,
+                              ),
+                              Text(
+                                "Continue with Google",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-            widget.firstLogin
-                ? Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                padding: EdgeInsets.only(bottom: 30),
-                // alignment: Alignment.bottomCenter,
-                child: InkWell(
-                  onTap: () {
-                    UserProvider userProvider = Provider.of<UserProvider>(
-                        context, listen: false);
-                    ApiUser user = new ApiUser(
-                        blogPreferences: [],
-                        notifEnabledPrefs: [],
-                        customPreferences: [],
-                        newsPreferences: [],
-                        savedNewsIds: [],
-                        savedBlogsIds: [],
-                        savedPubIds: [],
-                        pubPreferences: []);
-                    userProvider.setUserInProvider(setUser: user);
-                    userProvider.saveToHive(user: user);
-                    Get.offAndToNamed(ControlCenterOnboardingPage.routeName);
-                    // Get.offAndToNamed(PreferencesOnboardingPage.routeName);
-                  },
-                  child: Text(
-                    "Proceed without login",
-                    style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        decorationColor: Get.theme.accentColor,
-                        decorationThickness: 3),
-                  ),
-                ),
-              ),
-            )
-                : SizedBox.shrink()
-          ],
-        ));
+                  widget.firstLogin
+                      ? Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Container(
+                            padding: EdgeInsets.only(bottom: 30),
+                            // alignment: Alignment.bottomCenter,
+                            child: InkWell(
+                              onTap: () {
+                                UserProvider userProvider =
+                                    Provider.of<UserProvider>(context,
+                                        listen: false);
+                                ApiUser user = new ApiUser(
+                                  blogPreferences: [],
+                                  notifEnabledPrefs: [],
+                                  customPreferences: [],
+                                  newsPreferences: [],
+                                  savedNewsIds: [],
+                                  savedBlogsIds: [],
+                                  savedPubIds: [],
+                                  pubPreferences: [],
+                                );
+                                userProvider.setUserInProvider(setUser: user);
+                                userProvider.saveToHive(user: user);
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                  ControlCenterOnboardingPage.routeName,
+                                  (Route<dynamic> route) => false,
+                                );
+                                // Get.offAndToNamed(
+                                //   ControlCenterOnboardingPage.routeName,
+                                // );
+                                // Get.offAndToNamed(PreferencesOnboardingPage.routeName);
+                              },
+                              child: Text(
+                                "Proceed without login",
+                                style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    decorationColor: Get.theme.accentColor,
+                                    decorationThickness: 3),
+                              ),
+                            ),
+                          ),
+                        )
+                      : SizedBox.shrink()
+                ],
+              ));
   }
 }

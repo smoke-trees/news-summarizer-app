@@ -8,14 +8,13 @@ import 'package:news_summarizer/src/models/article.dart';
 import 'package:news_summarizer/src/models/user.dart';
 import 'package:news_summarizer/src/utils/article_type_enum.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
-import 'package:news_summarizer/src/utils/hive_prefs.dart';
 
 class UserProvider extends ChangeNotifier {
   ApiUser user;
 
   var userBox = Hive.box<ApiUser>(USER_BOX);
 
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   void setUserInProvider({ApiUser setUser}) {
     print("[UserProvider] Set user in provider");
@@ -39,7 +38,7 @@ class UserProvider extends ChangeNotifier {
         phoneNumber: phoneNumber);
     // createUserInFirebase(newUser: user);
     // saveToHive(user: user);
-    return user;
+   return user;
   }
 
   Future<ApiUser> getUserFromFirebase({String firebaseUid}) async {
@@ -50,7 +49,7 @@ class UserProvider extends ChangeNotifier {
   }
 
   void configureFCM() {
-    // _firebaseMessaging.configure(
+    // _firebaseMessaging(
     //   onMessage: (Map<String, dynamic> message) async {
     //     print("onMessage: $message");
     //     final notification = message['notification'];

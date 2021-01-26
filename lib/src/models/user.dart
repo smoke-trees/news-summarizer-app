@@ -69,7 +69,24 @@ class ApiUser extends HiveObject {
     this.pubPreferences,
     this.savedBlogsIds,
     this.savedPubIds,
-  });
+  }) {
+    email = "";
+    name = "";
+    blogPreferences = [];
+    customPreferences = [];
+    newsPreferences = [];
+    fcmToken = "";
+    photoUrl = "";
+    firebaseUid = "";
+    phoneNumber = "";
+    latitude = -1;
+    longitude = -1;
+    notifEnabledPrefs = [];
+    savedNewsIds = [];
+    pubPreferences = [];
+    savedBlogsIds = [];
+    savedPubIds = [];
+  }
 
   factory ApiUser.fromJson(json) {
     return ApiUser(

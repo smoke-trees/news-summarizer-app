@@ -7,7 +7,8 @@ class PreferencesOnboardingPage extends StatefulWidget {
   static String routeName = "/prefs_onboarding_page";
 
   @override
-  _PreferencesOnboardingPageState createState() => _PreferencesOnboardingPageState();
+  _PreferencesOnboardingPageState createState() =>
+      _PreferencesOnboardingPageState();
 }
 
 class _PreferencesOnboardingPageState extends State<PreferencesOnboardingPage> {
@@ -52,8 +53,8 @@ class _PreferencesOnboardingPageState extends State<PreferencesOnboardingPage> {
               opacity = 0.0;
             });
           }).whenComplete(() => Future.delayed(Duration(milliseconds: 500), () {
-            Get.toNamed(PreferencesPage.routeName, arguments: true);
-          }));
+                Get.toNamed(PreferencesPage.routeName, arguments: true);
+              }));
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

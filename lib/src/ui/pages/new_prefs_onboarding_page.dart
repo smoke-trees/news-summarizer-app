@@ -34,12 +34,14 @@ class _NewPrefsOnboardingPageState extends State<NewPrefsOnboardingPage> {
             setState(() {
               opacity = 0.0;
             });
-          }).whenComplete(() => Future.delayed(Duration(milliseconds: 500), () {
-                // Get.toNamed(AuthPage.routeName, arguments: true);
-                Get.to(AuthPage(
-                  firstLogin: true,
-                ));
-              }));
+          }).whenComplete(
+            () => Future.delayed(Duration(milliseconds: 500), () {
+              // Get.toNamed(AuthPage.routeName, arguments: true);
+              Get.to(AuthPage(
+                firstLogin: true,
+              ));
+            }),
+          );
         },
         child: Center(
             child: Column(
@@ -49,7 +51,9 @@ class _NewPrefsOnboardingPageState extends State<NewPrefsOnboardingPage> {
             SizedBox(
               height: 20,
             ),
-            OnboardingTextWidget(text: "Your gateway to news and more across the globe")
+            OnboardingTextWidget(
+              text: "Your gateway to news and more across the globe",
+            )
           ],
         )),
       ),

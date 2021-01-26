@@ -113,7 +113,9 @@ class _NewsCardState extends State<NewsCard> {
                                     onPressed: () async {
                                       String url = await dynamicLinkProvider
                                           .getDynamicLink(
-                                              article: widget.article);
+                                        article: widget.article,
+                                        articleType: widget.articleType,
+                                      );
 
                                       Share.share(
                                           '${widget.article.title} \n $url',
@@ -124,12 +126,16 @@ class _NewsCardState extends State<NewsCard> {
                           )
                         ],
                       ),
-                      SizedBox(height: 15),
+                      SizedBox(
+                        height: 15,
+                      ),
                       Divider(
                         color: Get.theme.accentColor,
                         thickness: 2,
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(
+                        height: 10,
+                      ),
                       // Text(
                       //   "Summary",
                       //   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
