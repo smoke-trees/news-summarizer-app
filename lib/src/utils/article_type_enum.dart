@@ -33,6 +33,8 @@ ArticleType articleTypefromString(String type) {
       return ArticleType.PUB;
     case "expert":
       return ArticleType.EXPERT;
+    default:
+      return ArticleType.NEWS;
   }
 }
 

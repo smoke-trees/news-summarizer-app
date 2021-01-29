@@ -31,7 +31,8 @@ class _AuthPageState extends State<AuthPage> {
 
   @override
   Widget build(BuildContext context) {
-    UserProvider userProvider = Provider.of<UserProvider>(context);
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: true);
     return Scaffold(
         backgroundColor: Get.theme.backgroundColor,
         // appBar: AppBar(
@@ -157,21 +158,22 @@ class _AuthPageState extends State<AuthPage> {
                                 await authProvider.autoSignInGoogle();
                             if (credential.additionalUserInfo.isNewUser &&
                                 widget.firstLogin) {
+                              ///User opened app for the first time, so initializing for the first time
                               // ApiUser user = userProvider.createNewUser(newUser: credential.user);
-                              userProvider.user = ApiUser();
-                              userProvider.user
-                                ..name = credential.user.displayName
-                                ..email = credential.user.email
-                                ..firebaseUid = credential.user.uid
-                                ..photoUrl = credential.user.photoURL
-                                ..savedBlogsIds = []
-                                ..savedPubIds = []
-                                ..pubPreferences = []
-                                ..blogPreferences = []
-                                ..newsPreferences = []
-                                ..savedNewsIds = []
-                                ..notifEnabledPrefs = [];
-
+                              ApiUser user = ApiUser(
+                                name: credential.user.displayName,
+                                email: credential.user.email,
+                                firebaseUid: credential.user.uid,
+                                photoUrl: credential.user.photoURL,
+                                savedBlogsIds: [],
+                                savedPubIds: [],
+                                pubPreferences: [],
+                                blogPreferences: [],
+                                newsPreferences: [],
+                                savedNewsIds: [],
+                                notifEnabledPrefs: [],
+                              );
+                              userProvider.setUserInProvider(setUser: user);
                               userProvider.createUserInFirebase(
                                   newUser: userProvider.user);
                               userProvider.saveToHive(user: userProvider.user);
@@ -184,15 +186,17 @@ class _AuthPageState extends State<AuthPage> {
                               // } else {
                               Get.offAndToNamed(BasePage.routeName);
                               Get.snackbar(
-                                  "Successful",
-                                  userProvider.user.name == null
-                                      ? "Welcome!"
-                                      : "Welcome, ${userProvider.user.name}!",
-                                  snackPosition: SnackPosition.BOTTOM);
+                                "Successful",
+                                userProvider.user.name == null
+                                    ? "Welcome!"
+                                    : "Welcome, ${userProvider.user.name}!",
+                                snackPosition: SnackPosition.BOTTOM,
+                              );
                               // }
                             } else if (credential
                                     .additionalUserInfo.isNewUser &&
                                 !widget.firstLogin) {
+                              ///User was already using app, and added login later, so changing only name, email, image, photo
                               userProvider.user
                                 ..name = credential.user.displayName
                                 ..email = credential.user.email
@@ -225,11 +229,12 @@ class _AuthPageState extends State<AuthPage> {
                               ProfileHive().setIsUserLoggedIn(true);
                               Get.toNamed(BasePage.routeName);
                               Get.snackbar(
-                                  "Successful",
-                                  userProvider.user.name == null
-                                      ? "Welcome back!"
-                                      : "Welcome back, ${userProvider.user.name}!",
-                                  snackPosition: SnackPosition.BOTTOM);
+                                "Successful",
+                                userProvider.user.name == null
+                                    ? "Welcome back!"
+                                    : "Welcome back, ${userProvider.user.name}!",
+                                snackPosition: SnackPosition.BOTTOM,
+                              );
                             }
                           },
                           padding: EdgeInsets.symmetric(vertical: 14),
@@ -297,9 +302,10 @@ class _AuthPageState extends State<AuthPage> {
                               child: Text(
                                 "Proceed without login",
                                 style: TextStyle(
-                                    decoration: TextDecoration.underline,
-                                    decorationColor: Get.theme.accentColor,
-                                    decorationThickness: 3),
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: Get.theme.accentColor,
+                                  decorationThickness: 3,
+                                ),
                               ),
                             ),
                           ),

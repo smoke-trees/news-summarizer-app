@@ -33,16 +33,16 @@ class _ControlCenterOnboardingPageState
         duration: Duration(milliseconds: 500),
         onEnd: () {
           Future.delayed(Duration(seconds: 3), () {
-            setState(() {
-              opacity = 0.0;
-            });
+            // setState(() {
+            //   opacity = 0.0;
+            // });
           }).whenComplete(() => Future.delayed(Duration(milliseconds: 500), () {
-                Get.toNamed(
+                Get.offAllNamed(
                   ControlCenterPage.routeName,
                   arguments: true,
                 );
                 // Get.offAndToNamed(ControlCenterPage.routeName, arguments: true);
-              }));
+              }),);
         },
         child: Center(
             child: Column(

@@ -3,11 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:news_summarizer/src/providers/user_provider.dart';
-import 'package:news_summarizer/src/ui/pages/base_page.dart';
-import 'package:news_summarizer/src/ui/pages/blogs_prefs_page.dart';
-import 'package:news_summarizer/src/ui/pages/reorder_prefs_page.dart';
+import 'package:news_summarizer/src/ui/pages/reorder_news_prefs_page.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
-import 'package:news_summarizer/src/utils/hive_prefs.dart';
 import 'package:provider/provider.dart';
 
 class CustomPrefsPage extends StatefulWidget {
@@ -48,7 +45,7 @@ class _CustomPrefsPageState extends State<CustomPrefsPage> {
     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     userProvider.setCustomPreferences(prefsList: stringCustomPreferences);
     // SharedPrefs.setIsUserLoggedIn(true);
-    Get.toNamed(ReorderPrefsPage.routeName);
+    Get.toNamed(ReorderNewsPrefsPage.routeName);
   }
 
   @override

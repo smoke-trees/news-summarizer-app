@@ -6,7 +6,7 @@ import 'package:news_summarizer/src/models/user.dart';
 import 'package:news_summarizer/src/providers/user_provider.dart';
 import 'package:news_summarizer/src/ui/pages/control_center.dart';
 import 'package:news_summarizer/src/ui/pages/reorder_prefs_onboarding_page.dart';
-import 'package:news_summarizer/src/ui/pages/reorder_prefs_page.dart';
+import 'package:news_summarizer/src/ui/pages/reorder_news_prefs_page.dart';
 import 'package:news_summarizer/src/ui/widgets/or_divider.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
 import 'package:news_summarizer/src/utils/hive_prefs.dart';
@@ -92,7 +92,6 @@ class _PreferencesPageState extends State<PreferencesPage> {
     "NewsFeed.REST_OF_WORLD",
   ];
 
-
   @override
   void initState() {
     super.initState();
@@ -107,7 +106,8 @@ class _PreferencesPageState extends State<PreferencesPage> {
   }
 
   void finishSelection() {
-    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
     print("finishSelection called");
     List<String> finList = [];
     if (!popularChosen.isNullOrBlank) {
@@ -141,24 +141,40 @@ class _PreferencesPageState extends State<PreferencesPage> {
     // userProvider.setUserInProvider(setUser: new ApiUser());
     if (userProvider.user == null) {
       print("[] User not in provider, creating new User");
-      userProvider.setUserInProvider(setUser: new ApiUser());
+      userProvider.setUserInProvider(
+          setUser: new ApiUser(
+        blogPreferences: [],
+        notifEnabledPrefs: [],
+        customPreferences: [],
+        newsPreferences: [],
+        savedNewsIds: [],
+        savedBlogsIds: [],
+        savedPubIds: [],
+        pubPreferences: [],
+      ));
       userProvider.setNewsPreferences(prefsList: finList);
     } else {
       userProvider.setNewsPreferences(prefsList: finList);
     }
     if (userProvider.user.notifEnabledPrefs.isNull) {
-      userProvider.user.notifEnabledPrefs = finList.map((e) => e.toString()).toList();
-      userProvider.setNotificationPrefs(prefsList: userProvider.user.notifEnabledPrefs);
+      userProvider.user.notifEnabledPrefs =
+          finList.map((e) => e.toString()).toList();
+      userProvider.setNotificationPrefs(
+          prefsList: userProvider.user.notifEnabledPrefs);
     } else {
-      userProvider.user.notifEnabledPrefs.addAll(finList.map((e) => e.toString()).toList());
-      userProvider.user.notifEnabledPrefs = userProvider.user.notifEnabledPrefs.toSet().toList();
-      userProvider.setNotificationPrefs(prefsList: userProvider.user.notifEnabledPrefs);
+      userProvider.user.notifEnabledPrefs
+          .addAll(finList.map((e) => e.toString()).toList());
+      userProvider.user.notifEnabledPrefs =
+          userProvider.user.notifEnabledPrefs.toSet().toList();
+      userProvider.setNotificationPrefs(
+          prefsList: userProvider.user.notifEnabledPrefs);
     }
 
     List<String> stringCustomPreferences = customPrefsChosen.cast<String>();
     List<String> stringFinList = finList.map((e) => e.toString()).toList();
 
-    stringCustomPreferences.retainWhere((value) => !stringFinList.contains(value));
+    stringCustomPreferences
+        .retainWhere((value) => !stringFinList.contains(value));
     finList.addAll(stringCustomPreferences);
 
     if (finList.length < 3) {
@@ -258,7 +274,8 @@ class _PreferencesPageState extends State<PreferencesPage> {
                       isWrapped: true,
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -297,8 +314,10 @@ class _PreferencesPageState extends State<PreferencesPage> {
                               onPressed: () {
                                 if (formKey.currentState.validate()) {
                                   setState(() {
-                                    customPrefsChosen.add(customPrefsController.text.trim());
-                                    customPrefsPresent.add(customPrefsController.text.trim());
+                                    customPrefsChosen
+                                        .add(customPrefsController.text.trim());
+                                    customPrefsPresent
+                                        .add(customPrefsController.text.trim());
                                     customPrefsController.clear();
                                   });
                                 }
@@ -312,7 +331,8 @@ class _PreferencesPageState extends State<PreferencesPage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 child: OrDivider(
                   color: Get.theme.accentColor,
                   thickness: 2,
@@ -355,9 +375,16 @@ class _PreferencesPageState extends State<PreferencesPage> {
                         ),
                         value: popularChosen,
                         options: ChipsChoiceOption.listFrom(
-                          source: newsFeedList.sublist(0, 14).map((e) => e.toString()).toList(),
+                          source: newsFeedList
+                              .sublist(0, 14)
+                              .map((e) => e.toString())
+                              .toList(),
                           value: (index, item) => item,
-                          label: (index, item) => item.toString().split(".").last.replaceAll("_", " "),
+                          label: (index, item) => item
+                              .toString()
+                              .split(".")
+                              .last
+                              .replaceAll("_", " "),
                         ),
                         onChanged: (val) {
                           setState(() => popularChosen = val.cast<String>());
@@ -402,12 +429,20 @@ class _PreferencesPageState extends State<PreferencesPage> {
                         ),
                         value: internationalChosen,
                         options: ChipsChoiceOption.listFrom(
-                          source: newsFeedList.sublist(46, 53).map((e) => e.toString()).toList(),
+                          source: newsFeedList
+                              .sublist(46, 53)
+                              .map((e) => e.toString())
+                              .toList(),
                           value: (index, item) => item,
-                          label: (index, item) => item.toString().split(".").last.replaceAll("_", " "),
+                          label: (index, item) => item
+                              .toString()
+                              .split(".")
+                              .last
+                              .replaceAll("_", " "),
                         ),
                         onChanged: (val) {
-                          setState(() => internationalChosen = val.cast<String>());
+                          setState(
+                              () => internationalChosen = val.cast<String>());
                         },
                         padding: EdgeInsets.all(8),
                         isWrapped: true,

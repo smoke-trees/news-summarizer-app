@@ -31,9 +31,9 @@ class _NewPrefsOnboardingPageState extends State<NewPrefsOnboardingPage> {
         opacity: opacity,
         onEnd: () {
           Future.delayed(Duration(seconds: 3), () {
-            setState(() {
-              opacity = 0.0;
-            });
+            // setState(() {
+            //   opacity = 0.0;
+            // });
           }).whenComplete(
             () => Future.delayed(Duration(milliseconds: 500), () {
               // Get.toNamed(AuthPage.routeName, arguments: true);

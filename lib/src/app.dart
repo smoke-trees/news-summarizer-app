@@ -22,12 +22,19 @@ import 'package:news_summarizer/src/ui/pages/phone_auth_page.dart';
 import 'package:news_summarizer/src/ui/pages/preferences_onboarding_page.dart';
 import 'package:news_summarizer/src/ui/pages/preferences_page.dart';
 import 'package:news_summarizer/src/ui/pages/pub_prefs_page.dart';
+import 'package:news_summarizer/src/ui/pages/reorder_expert_prefs_page.dart';
 import 'package:news_summarizer/src/ui/pages/reorder_prefs_onboarding_page.dart';
-import 'package:news_summarizer/src/ui/pages/reorder_prefs_page.dart';
+import 'package:news_summarizer/src/ui/pages/reorder_news_prefs_page.dart';
+import 'package:news_summarizer/src/ui/pages/reorder_pubs_prefs_page.dart';
+import 'package:news_summarizer/src/ui/pages/splash_page.dart';
 import 'package:news_summarizer/src/utils/hive_prefs.dart';
 import 'package:provider/provider.dart';
 
 class App extends StatelessWidget {
+
+  Future firebaseInit(){
+
+  }
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -36,11 +43,11 @@ class App extends StatelessWidget {
         ChangeNotifierProvider<ApiProvider>(create: (_) => ApiProvider()),
         ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
         ChangeNotifierProvider<UserProvider>(create: (_) => UserProvider()),
-        ChangeNotifierProvider<DynamicLinkProvider>(
-            create: (_) => DynamicLinkProvider()),
       ],
       builder: (context, _) {
         final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+        DynamicLinkService dynamicLinkProvider = new DynamicLinkService();
+        dynamicLinkProvider.initDynamicLinks(context);
         return GetMaterialApp(
           title: 'Terran Tidings',
           theme: themeProvider.theme,
@@ -57,15 +64,7 @@ class App extends StatelessWidget {
                   return BasePage();
                 }
               } else {
-                return Scaffold(
-                  backgroundColor: Get.theme.primaryColor,
-                  body: Center(
-                    child: Text(
-                      "Terran Tidings",
-                      style: TextStyle(fontSize: 24),
-                    ),
-                  ),
-                );
+                return SplashPage();
               }
             },
           ),
@@ -74,7 +73,9 @@ class App extends StatelessWidget {
             BasePage.routeName: (context) => BasePage(),
             PreferencesPage.routeName: (context) => PreferencesPage(),
             CustomPrefsPage.routename: (context) => CustomPrefsPage(),
-            ReorderPrefsPage.routeName: (context) => ReorderPrefsPage(),
+            ReorderNewsPrefsPage.routeName: (context) => ReorderNewsPrefsPage(),
+            ReorderPubPrefsPage.routeName: (context) => ReorderPubPrefsPage(),
+            ReorderExpertPrefsPage.routeName: (context) => ReorderExpertPrefsPage(),
             BlogsPrefsPage.routeName: (context) => BlogsPrefsPage(),
             OnboardingPages.routeName: (context) => OnboardingPages(),
             PhoneAuthPage.routeName: (context) => PhoneAuthPage(),

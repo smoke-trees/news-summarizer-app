@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:news_summarizer/src/ui/pages/reorder_prefs_page.dart';
+import 'package:news_summarizer/src/ui/pages/reorder_news_prefs_page.dart';
 
 class ReorderPrefsOnboardingPage extends StatefulWidget {
   static String routeName = "/reorder_onboarding_page";
@@ -48,7 +48,7 @@ class _ReorderPrefsOnboardingPageState extends State<ReorderPrefsOnboardingPage>
               opacity = 0.0;
             });
           }).whenComplete(() => Future.delayed(Duration(milliseconds: 500), () {
-            Get.toNamed(ReorderPrefsPage.routeName, arguments: true);
+            Get.toNamed(ReorderNewsPrefsPage.routeName, arguments: true);
           }));
         },
         child: Column(

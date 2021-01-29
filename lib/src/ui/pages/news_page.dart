@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:news_summarizer/src/models/article.dart';
 import 'package:news_summarizer/src/providers/api_provider.dart';
+import 'package:news_summarizer/src/providers/theme_provider.dart';
 import 'package:news_summarizer/src/providers/user_provider.dart';
+import 'package:news_summarizer/src/ui/pages/get_location_page.dart';
 import 'package:news_summarizer/src/ui/widgets/news_card.dart';
 import 'package:news_summarizer/src/utils/article_type_enum.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +23,8 @@ class NewsPage extends StatefulWidget {
   _NewsPageState createState() => _NewsPageState();
 }
 
-class _NewsPageState extends State<NewsPage> with AutomaticKeepAliveClientMixin<NewsPage> {
+class _NewsPageState extends State<NewsPage>
+    with AutomaticKeepAliveClientMixin<NewsPage> {
   List<Article> _newsItems;
 
   @override
@@ -33,28 +36,40 @@ class _NewsPageState extends State<NewsPage> with AutomaticKeepAliveClientMixin<
     try {
       // print(widget.articleType);
       // print(widget.newsFeed);
-      ApiProvider apiProvider = Provider.of<ApiProvider>(context, listen: false);
-      UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+      ApiProvider apiProvider =
+          Provider.of<ApiProvider>(context, listen: false);
+      UserProvider userProvider =
+          Provider.of<UserProvider>(context, listen: false);
       if (widget.articleType == ArticleType.CUSTOM) {
         List<Article> articleList =
-            await apiProvider.getArticlesFromCustomPreference(customPref: widget.customPref);
+            await apiProvider.getArticlesFromCustomPreference(
+          customPref: widget.customPref,
+        );
         _newsItems = articleList;
         return articleList;
       } else if (widget.articleType == ArticleType.EXPERT) {
-        List<Article> articleList = await apiProvider.getArticlesFromBlogAuthor(author: widget.blogAuthor);
+        List<Article> articleList = await apiProvider.getArticlesFromBlogAuthor(
+          author: widget.blogAuthor,
+        );
         _newsItems = articleList;
         return articleList;
       } else if (widget.articleType == ArticleType.AROUNDME) {
+        print(userProvider.user.latitude);
+        print(userProvider.user.longitude);
         List<Article> articleList = await apiProvider.getArticlesFromLocation(
-            latitude: userProvider.user.latitude, longitude: userProvider.user.longitude);
+          latitude: userProvider.user.latitude,
+          longitude: userProvider.user.longitude,
+        );
         _newsItems = articleList;
         return articleList;
       } else if (widget.articleType == ArticleType.NEWS) {
-        String category = widget.newsFeed.split('.').sublist(1).join("").replaceAll("_", " ");
+        String category =
+            widget.newsFeed.split('.').sublist(1).join("").replaceAll("_", " ");
         if (category == "USA") {
           category = "U.S.A";
         }
-        List<Article> articleList = await apiProvider.getArticlesFromCategory(category: category);
+        List<Article> articleList =
+            await apiProvider.getArticlesFromCategory(category: category);
         _newsItems = articleList;
         return articleList;
       }
@@ -74,11 +89,14 @@ class _NewsPageState extends State<NewsPage> with AutomaticKeepAliveClientMixin<
 
   @override
   Widget build(BuildContext context) {
-    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
     super.build(context);
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: !(widget.articleType == ArticleType.AROUNDME && userProvider.user.longitude == null)
+      body: !(widget.articleType == ArticleType.AROUNDME &&
+              userProvider.user.longitude == null)
           ? FutureBuilder(
               future: loadFeed(),
               builder: (context, snapshot) => (snapshot.hasData)
@@ -106,9 +124,23 @@ class _NewsPageState extends State<NewsPage> with AutomaticKeepAliveClientMixin<
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text("You haven't saved your location yet."),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [Text("Tap the \""), Icon(Icons.more_vert), Text("\" icon to set it.")],
+                  SizedBox(
+                    height: 10,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Get.toNamed(GetLocationPage.routeName);
+                    },
+                    child: Text(
+                      "Set Location",
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        color: themeProvider.isDarkMode
+                            ? Get.theme.accentColor
+                            : Get.theme.primaryColor,
+                      ),
+                    ),
                   ),
                 ],
               ),

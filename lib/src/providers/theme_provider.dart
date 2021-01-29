@@ -4,6 +4,7 @@ import 'package:news_summarizer/src/utils/hive_prefs.dart';
 
 class ThemeProvider with ChangeNotifier {
   ThemeData theme;
+  bool isDarkMode;
   ProfileHive sp = new ProfileHive();
 
   ThemeProvider() {
@@ -12,16 +13,18 @@ class ThemeProvider with ChangeNotifier {
   }
 
   getUserTheme() async {
-
     var _isDarkMode = sp.getIsDarkMode();
     if (_isDarkMode != null) {
       if (_isDarkMode) {
         theme = darkTheme;
+        isDarkMode = true;
       } else {
         theme = lightTheme;
+        isDarkMode = false;
       }
     } else {
       theme = darkTheme;
+      isDarkMode = true;
     }
     notifyListeners();
   }
@@ -70,17 +73,20 @@ class ThemeProvider with ChangeNotifier {
   void setDarkTheme() {
     theme = darkTheme;
     sp.setIsDarkMode(true);
+    isDarkMode = true;
     notifyListeners();
   }
 
   void setLightTheme() {
     theme = lightTheme;
     sp.setIsDarkMode(false);
+    isDarkMode = false;
     notifyListeners();
   }
 
   void toggleTheme() {
     theme = theme == lightTheme ? darkTheme : lightTheme;
+    isDarkMode = !isDarkMode;
     notifyListeners();
   }
 }

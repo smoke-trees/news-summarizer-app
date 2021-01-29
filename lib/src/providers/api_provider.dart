@@ -15,11 +15,6 @@ class ApiProvider with ChangeNotifier {
     ),
   );
 
-  setSummary(SummaryResponse response) {
-    this.response = response;
-    notifyListeners();
-  }
-
   setSearchTerm(String searchTerm) {
     this.searchTerm = searchTerm;
     notifyListeners();
@@ -77,6 +72,18 @@ class ApiProvider with ChangeNotifier {
 
   Future<Article> getArticleById({String id}) async {
     Response response = await _dio.get("/get_article/$id");
+    Article article = Article.fromJson(response.data);
+    return article;
+  }
+
+  Future<Article> getMagazineById({String id}) async {
+    Response response = await _dio.get("/get_mag/$id");
+    Article article = Article.fromJson(response.data);
+    return article;
+  }
+
+  Future<Article> getBlogById({String id}) async {
+    Response response = await _dio.get("/get_blog/$id");
     Article article = Article.fromJson(response.data);
     return article;
   }

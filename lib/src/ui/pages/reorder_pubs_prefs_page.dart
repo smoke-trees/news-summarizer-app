@@ -1,27 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
-import 'package:news_summarizer/src/ui/pages/blogs_onboarding_page.dart';
+import 'package:news_summarizer/src/providers/user_provider.dart';
 import 'package:news_summarizer/src/ui/widgets/listview_card.dart';
-import 'package:news_summarizer/src/utils/constants.dart';
+import 'package:provider/provider.dart';
 
-class ReorderPrefsPage extends StatefulWidget {
-  static String routeName = "/reorder_prefs_page";
+class ReorderPubPrefsPage extends StatefulWidget {
+  static String routeName = "/reorder_pubs_prefs_page";
 
   @override
-  _ReorderPrefsPageState createState() => _ReorderPrefsPageState();
+  _ReorderPubPrefsPageState createState() => _ReorderPubPrefsPageState();
 }
 
-class _ReorderPrefsPageState extends State<ReorderPrefsPage> {
+class _ReorderPubPrefsPageState extends State<ReorderPubPrefsPage> {
   bool isNewUser = Get.arguments ?? false;
-  var _newsBox = Hive.box(NEWS_PREFS_BOX);
-  var preferences = [];
+  List<String> preferences = [];
 
   @override
   void initState() {
     super.initState();
-    preferences = _newsBox.get(NEWS_PREFS) ?? [];
-    // preferences = preferences.map((e) => e.toString()).toList();
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
+    preferences = userProvider.user.pubPreferences;
   }
 
   void _onReorder(int oldIndex, int newIndex) {
@@ -37,13 +36,16 @@ class _ReorderPrefsPageState extends State<ReorderPrefsPage> {
   }
 
   void finishReordering() {
-    _newsBox.put(NEWS_PREFS, preferences);
-    if (isNewUser) {
-      Get.toNamed(BlogsOnboardingPage.routeName);
-    } else {
-      // Get.toNamed(BlogsPrefsPage.routeName);
-      Get.back();
-    }
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
+    userProvider.setPubPreferences(prefsList: preferences);
+    // if (isNewUser) {
+    //   Get.toNamed(BlogsOnboardingPage.routeName);
+    // } else {
+    //   // Get.toNamed(BlogsPrefsPage.routeName);
+    //   Get.back();
+    // }
+    Get.back();
   }
 
   @override
@@ -52,7 +54,7 @@ class _ReorderPrefsPageState extends State<ReorderPrefsPage> {
       backgroundColor: Get.theme.backgroundColor,
       appBar: AppBar(
         title: Text(
-          'Re-order Channels',
+          'Re-order Publication Channels',
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
@@ -80,9 +82,10 @@ class _ReorderPrefsPageState extends State<ReorderPrefsPage> {
         data: ThemeData(canvasColor: Get.theme.scaffoldBackgroundColor),
         child: ReorderableListView(
           header: Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16, top: 8),
+            padding:
+                const EdgeInsets.only(left: 16, right: 16, bottom: 16, top: 8),
             child: Text(
-              "Reorder the channels according to your level of interest!",
+              "Reorder the publications according to your level of interest!",
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 20),
             ),

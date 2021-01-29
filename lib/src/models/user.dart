@@ -69,54 +69,55 @@ class ApiUser extends HiveObject {
     this.pubPreferences,
     this.savedBlogsIds,
     this.savedPubIds,
-  }) {
-    email = "";
-    name = "";
-    blogPreferences = [];
-    customPreferences = [];
-    newsPreferences = [];
-    fcmToken = "";
-    photoUrl = "";
-    firebaseUid = "";
-    phoneNumber = "";
-    latitude = -1;
-    longitude = -1;
-    notifEnabledPrefs = [];
-    savedNewsIds = [];
-    pubPreferences = [];
-    savedBlogsIds = [];
-    savedPubIds = [];
-  }
+  });
+
+  // {
+  //   email = "";
+  //   name = "";
+  //   blogPreferences = [];
+  //   customPreferences = [];
+  //   newsPreferences = [];
+  //   fcmToken = "";
+  //   photoUrl = "";
+  //   firebaseUid = "";
+  //   phoneNumber = "";
+  //   latitude = -1;
+  //   longitude = -1;
+  //   notifEnabledPrefs = [];
+  //   savedNewsIds = [];
+  //   pubPreferences = [];
+  //   savedBlogsIds = [];
+  //   savedPubIds = [];
+  // }
 
   factory ApiUser.fromJson(json) {
     return ApiUser(
-        blogPreferences:
-            (json['blogPreferences'] as List)?.cast<String>() ?? [],
-        newsPreferences:
-            (json['newsPreferences'] as List)?.cast<String>() ?? [],
-        customPreferences:
-            (json['customPreferences'] as List)?.cast<String>() ?? [],
-        pubPreferences: (json['pubPreferences'] as List)?.cast<String>() ?? [],
-        name: json['name'],
-        email: json['email'],
-        fcmToken: json['fcmToken'],
-        photoUrl: json['photoUrl'],
-        firebaseUid: json['firebaseUid'],
-        phoneNumber: json['phoneNumber'],
-        latitude: json['location']['latitude'],
-        longitude: json['location']['longitude'],
-        notifEnabledPrefs:
-            (json['notifEnabledPrefs'] as List).cast<String>() ?? [],
-        savedPubIds: (json['savedPubIds'] as List)?.cast<String>() ?? [],
-        savedBlogsIds: (json['savedBlogsIds'] as List)?.cast<String>() ?? [],
-        savedNewsIds: (json['savedNewsIds'] as List)?.cast<String>() ?? []);
+      blogPreferences: (json['blogPreferences'] as List)?.cast<String>() ?? [],
+      newsPreferences: (json['newsPreferences'] as List)?.cast<String>() ?? [],
+      customPreferences:
+          (json['customPreferences'] as List)?.cast<String>() ?? [],
+      pubPreferences: (json['pubPreferences'] as List)?.cast<String>() ?? [],
+      name: json['name'],
+      email: json['email'],
+      fcmToken: json['fcmToken'],
+      photoUrl: json['photoUrl'],
+      firebaseUid: json['firebaseUid'],
+      phoneNumber: json['phoneNumber'],
+      latitude: json['location']['latitude'],
+      longitude: json['location']['longitude'],
+      notifEnabledPrefs:
+          (json['notifEnabledPrefs'] as List).cast<String>() ?? [],
+      savedPubIds: (json['savedPubIds'] as List)?.cast<String>() ?? [],
+      savedBlogsIds: (json['savedBlogsIds'] as List)?.cast<String>() ?? [],
+      savedNewsIds: (json['savedNewsIds'] as List)?.cast<String>() ?? [],
+    );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['blogPreferences'] = blogPreferences;
     data['newsPreferences'] = newsPreferences;
-    data['customPreferences'] = customPreferences;
+    data['customPreferences'] = customPreferences ?? [];
     data['pubPreferences'] = pubPreferences ?? [];
     data['name'] = name;
     data['email'] = email;

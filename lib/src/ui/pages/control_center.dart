@@ -5,7 +5,9 @@ import 'package:news_summarizer/src/ui/pages/base_page.dart';
 import 'package:news_summarizer/src/ui/pages/blogs_prefs_page.dart';
 import 'package:news_summarizer/src/ui/pages/preferences_page.dart';
 import 'package:news_summarizer/src/ui/pages/pub_prefs_page.dart';
-import 'package:news_summarizer/src/ui/pages/reorder_prefs_page.dart';
+import 'package:news_summarizer/src/ui/pages/reorder_expert_prefs_page.dart';
+import 'package:news_summarizer/src/ui/pages/reorder_news_prefs_page.dart';
+import 'package:news_summarizer/src/ui/pages/reorder_pubs_prefs_page.dart';
 import 'package:provider/provider.dart';
 
 class ControlCenterPage extends StatefulWidget {
@@ -20,7 +22,8 @@ class _ControlCenterPageState extends State<ControlCenterPage> {
 
   @override
   Widget build(BuildContext context) {
-    UserProvider userProvider = Provider.of<UserProvider>(context, listen: true);
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: true);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -61,15 +64,17 @@ class _ControlCenterPageState extends State<ControlCenterPage> {
               child: Text(
                 "News Preferences",
                 style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    decorationColor: Get.theme.accentColor,
-                    decorationThickness: 3),
+                  decoration: TextDecoration.underline,
+                  decorationColor: Get.theme.accentColor,
+                  decorationThickness: 3,
+                ),
               ),
             ),
             subtitle: userProvider.user.newsPreferences.length == 0
                 ? null
                 : Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     child: Text(userProvider.user.newsPreferences
                             .map((e) => e
                                 .substring(9)
@@ -93,16 +98,19 @@ class _ControlCenterPageState extends State<ControlCenterPage> {
               child: Text(
                 "Expert Opinion",
                 style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    decorationColor: Get.theme.accentColor,
-                    decorationThickness: 3),
+                  decoration: TextDecoration.underline,
+                  decorationColor: Get.theme.accentColor,
+                  decorationThickness: 3,
+                ),
               ),
             ),
             subtitle: userProvider.user.blogPreferences.length == 0
                 ? null
                 : Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    child: Text(userProvider.user.blogPreferences?.join(", ") ?? ""),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    child: Text(
+                        userProvider.user.blogPreferences?.join(", ") ?? ""),
                   ),
             onTap: () {
               Get.toNamed(BlogsPrefsPage.routeName);
@@ -125,8 +133,10 @@ class _ControlCenterPageState extends State<ControlCenterPage> {
             subtitle: userProvider.user.pubPreferences.length == 0
                 ? null
                 : Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    child: Text(userProvider.user.pubPreferences?.join(", ") ?? ""),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    child: Text(
+                        userProvider.user.pubPreferences?.join(", ") ?? ""),
                   ),
             onTap: () {
               Get.toNamed(PublicationPrefsPage.routeName);
@@ -141,9 +151,10 @@ class _ControlCenterPageState extends State<ControlCenterPage> {
               child: Text(
                 "News Ordering",
                 style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    decorationColor: Get.theme.accentColor,
-                    decorationThickness: 3),
+                  decoration: TextDecoration.underline,
+                  decorationColor: Get.theme.accentColor,
+                  decorationThickness: 3,
+                ),
               ),
             ),
             // subtitle: Padding(
@@ -151,7 +162,47 @@ class _ControlCenterPageState extends State<ControlCenterPage> {
             //   child: Text(userProvider.user.blogPreferences.join(" ")),
             // ),
             onTap: () {
-              Get.toNamed(ReorderPrefsPage.routeName);
+              Get.toNamed(ReorderNewsPrefsPage.routeName);
+            },
+          ),
+          ListTile(
+            title: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Publication Ordering",
+                style: TextStyle(
+                  decoration: TextDecoration.underline,
+                  decorationColor: Get.theme.accentColor,
+                  decorationThickness: 3,
+                ),
+              ),
+            ),
+            // subtitle: Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            //   child: Text(userProvider.user.blogPreferences.join(" ")),
+            // ),
+            onTap: () {
+              Get.toNamed(ReorderPubPrefsPage.routeName);
+            },
+          ),
+          ListTile(
+            title: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "Expert Opinion Ordering",
+                style: TextStyle(
+                  decoration: TextDecoration.underline,
+                  decorationColor: Get.theme.accentColor,
+                  decorationThickness: 3,
+                ),
+              ),
+            ),
+            // subtitle: Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            //   child: Text(userProvider.user.blogPreferences.join(" ")),
+            // ),
+            onTap: () {
+              Get.toNamed(ReorderExpertPrefsPage.routeName);
             },
           ),
         ],

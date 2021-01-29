@@ -43,8 +43,7 @@ class _NewsCardState extends State<NewsCard> {
     ApiProvider apiProvider = Provider.of<ApiProvider>(context, listen: false);
     UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
-    DynamicLinkProvider dynamicLinkProvider =
-        Provider.of<DynamicLinkProvider>(context, listen: false);
+    DynamicLinkService dynamicLinkProvider = new DynamicLinkService();
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: InkWell(

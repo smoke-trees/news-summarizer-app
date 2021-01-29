@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:news_summarizer/src/providers/api_provider.dart';
+import 'package:news_summarizer/src/providers/theme_provider.dart';
 import 'package:news_summarizer/src/providers/user_provider.dart';
 import 'package:news_summarizer/src/ui/pages/auth_page.dart';
+import 'package:news_summarizer/src/ui/pages/blogs_prefs_page.dart';
 import 'package:news_summarizer/src/ui/pages/control_center.dart';
 import 'package:news_summarizer/src/ui/pages/get_location_page.dart';
 import 'package:news_summarizer/src/ui/pages/news_page.dart';
@@ -11,6 +13,7 @@ import 'package:news_summarizer/src/ui/pages/notifs_checklist_page.dart';
 import 'package:news_summarizer/src/ui/pages/preferences_onboarding_page.dart';
 import 'package:news_summarizer/src/ui/pages/preferences_page.dart';
 import 'package:news_summarizer/src/ui/pages/pub_page.dart';
+import 'package:news_summarizer/src/ui/pages/pub_prefs_page.dart';
 import 'package:news_summarizer/src/ui/pages/saved_articles_page.dart';
 import 'package:news_summarizer/src/ui/pages/search_page.dart';
 import 'package:news_summarizer/src/ui/widgets/theme_dialog.dart';
@@ -107,6 +110,16 @@ class _NewsContainerPageState extends State<NewsContainerPage>
     );
   }
 
+  void _onDrawerSelect(int index) {
+    if (selectedMenuItem != index) {
+      setState(() {
+        // _isAuthSelected = false;
+        selectedMenuItem = index;
+      });
+      Get.back();
+    }
+  }
+
   Drawer drawerWidget() {
     return Drawer(
       child: Container(
@@ -129,16 +142,7 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                 style: TextStyle(color: Get.theme.accentColor, fontSize: 18),
               ),
               focusColor: Get.theme.accentColor,
-              onTap: () {
-                if (selectedMenuItem != 0) {
-                  setState(() {
-                    // _isAuthSelected = false;
-                    selectedMenuItem = 0;
-                  });
-                  Get.back();
-                }
-                // Get.toNamed(AuthPage.routeName);
-              },
+              onTap: () => _onDrawerSelect(0),
             ),
             ListTile(
               title: Text(
@@ -146,16 +150,7 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                 style: TextStyle(color: Get.theme.accentColor, fontSize: 18),
               ),
               focusColor: Get.theme.accentColor,
-              onTap: () {
-                if (selectedMenuItem != 1) {
-                  setState(() {
-                    // _isAuthSelected = true;
-                    selectedMenuItem = 1;
-                  });
-                  Get.back();
-                }
-                // Get.toNamed(AuthPage.routeName);
-              },
+              onTap: () => _onDrawerSelect(1),
             ),
             ListTile(
               title: Text(
@@ -163,16 +158,7 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                 style: TextStyle(color: Get.theme.accentColor, fontSize: 18),
               ),
               focusColor: Get.theme.accentColor,
-              onTap: () {
-                if (selectedMenuItem != 2) {
-                  setState(() {
-                    // _isAuthSelected = true;
-                    selectedMenuItem = 2;
-                  });
-                  Get.back();
-                }
-                // Get.toNamed(AuthPage.routeName);
-              },
+              onTap: () => _onDrawerSelect(2),
             ),
           ],
         ),
@@ -293,6 +279,7 @@ class _NewsContainerPageState extends State<NewsContainerPage>
   @override
   Widget build(BuildContext context) {
     UserProvider userProvider = Provider.of<UserProvider>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     _newsFeeds = userProvider.user.newsPreferences ?? [];
     _blogsFeeds = userProvider.user.blogPreferences ?? [];
     _pubFeeds = userProvider.user.pubPreferences ?? [];
@@ -389,7 +376,31 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                 backgroundColor: Get.theme.scaffoldBackgroundColor,
                 body: _blogsFeeds.isEmpty
                     ? Center(
-                        child: Text("Add an expert to your channels"),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Add an expert to your channels"),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Get.toNamed(BlogsPrefsPage.routeName);
+                              },
+                              child: Text(
+                                "Add Expert Channels",
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                  color: themeProvider.isDarkMode
+                                      ? Get.theme.accentColor
+                                      : Get.theme.primaryColor,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       )
                     : TabBarView(
                         children: List.generate(
@@ -452,8 +463,32 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                             : _searchAppBar(context),
                         body: _pubFeeds.isEmpty
                             ? Center(
-                                child:
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
                                     Text("Add a publication to your channels"),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        Get.toNamed(
+                                            PublicationPrefsPage.routeName);
+                                      },
+                                      child: Text(
+                                        "Add Publication Channel",
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold,
+                                          color: themeProvider.isDarkMode
+                                              ? Get.theme.accentColor
+                                              : Get.theme.primaryColor,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
                               )
                             : TabBarView(
                                 children: List.generate(

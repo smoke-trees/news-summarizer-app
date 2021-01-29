@@ -20,7 +20,7 @@ class UserProvider extends ChangeNotifier {
     print("[UserProvider] Set user in provider");
     user = setUser;
     saveToHive(user: user);
-    // notifyListeners();
+    notifyListeners();
   }
 
   void createUserInFirebase({ApiUser newUser}) {
