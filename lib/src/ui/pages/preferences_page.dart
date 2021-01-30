@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:news_summarizer/src/models/user.dart';
+import 'package:news_summarizer/src/providers/theme_provider.dart';
 import 'package:news_summarizer/src/providers/user_provider.dart';
 import 'package:news_summarizer/src/ui/pages/control_center.dart';
 import 'package:news_summarizer/src/ui/pages/reorder_prefs_onboarding_page.dart';
 import 'package:news_summarizer/src/ui/pages/reorder_news_prefs_page.dart';
+import 'package:news_summarizer/src/ui/pages/reorder_pubs_prefs_page.dart';
 import 'package:news_summarizer/src/ui/widgets/or_divider.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
 import 'package:news_summarizer/src/utils/hive_prefs.dart';
@@ -122,7 +124,16 @@ class _PreferencesPageState extends State<PreferencesPage> {
     if (!internationalChosen.isNullOrBlank) {
       finList.addAll(internationalChosen);
     }
-
+    if (finList.length < 3) {
+      Get.snackbar(
+        "Warning!",
+        "Please choose at least 3 channels.",
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
     // _newsBox.put(NEWS_PREFS, finList);
 
     // _newsBox.put(NEWS_METRO, metroChosen);
@@ -177,33 +188,24 @@ class _PreferencesPageState extends State<PreferencesPage> {
         .retainWhere((value) => !stringFinList.contains(value));
     finList.addAll(stringCustomPreferences);
 
-    if (finList.length < 3) {
-      Get.snackbar(
-        "Warning!",
-        "Please choose at least 3 channels.",
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM,
-      );
-    } else {
-      _newsBox.put(NEWS_CUSTOM, stringCustomPreferences);
-      _newsBox.put(NEWS_PREFS, finList);
-      _newsBox.put(NEWS_POPULAR, popularChosen);
-      _newsBox.put(NEWS_INT, internationalChosen);
-      userProvider.setCustomPreferences(prefsList: stringCustomPreferences);
+    _newsBox.put(NEWS_CUSTOM, stringCustomPreferences);
+    _newsBox.put(NEWS_PREFS, finList);
+    _newsBox.put(NEWS_POPULAR, popularChosen);
+    _newsBox.put(NEWS_INT, internationalChosen);
+    userProvider.setCustomPreferences(prefsList: stringCustomPreferences);
 
-      ProfileHive().setIsUserLoggedIn(true);
-      if (isNewUser) {
-        Get.toNamed(ReorderPrefsOnboardingPage.routeName);
-      } else {
-        // Get.toNamed(ReorderPrefsPage.routeName);
-        Get.back();
-      }
+    ProfileHive().setIsUserLoggedIn(true);
+    if (isNewUser) {
+      Get.toNamed(ReorderPrefsOnboardingPage.routeName);
+    } else {
+      // Get.toNamed(ReorderPrefsPage.routeName);
+      Get.back();
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     return Scaffold(
       backgroundColor: Get.theme.backgroundColor,
       appBar: AppBar(
@@ -216,6 +218,12 @@ class _PreferencesPageState extends State<PreferencesPage> {
           ),
         ),
         actions: [
+          IconButton(
+            icon: Icon(Icons.sort),
+            onPressed: () {
+              Get.toNamed(ReorderNewsPrefsPage.routeName);
+            },
+          ),
           GestureDetector(
             child: Container(
               margin: EdgeInsets.only(right: 16),
@@ -256,7 +264,9 @@ class _PreferencesPageState extends State<PreferencesPage> {
                   children: [
                     ChipsChoice<dynamic>.multiple(
                       itemConfig: ChipsChoiceItemConfig(
-                        selectedColor: Get.theme.accentColor,
+                        selectedColor: themeProvider.isDarkMode
+                            ? Get.theme.accentColor
+                            : Get.theme.primaryColorDark,
                         unselectedColor: Get.theme.primaryColor,
                         unselectedBrightness: Get.theme.brightness,
                         selectedBrightness: Get.theme.brightness,
@@ -310,7 +320,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
                             backgroundColor: Get.theme.accentColor,
                             child: IconButton(
                               icon: Icon(Icons.add),
-                              color: Get.theme.primaryColor,
+                              color: Get.theme.primaryColorDark,
                               onPressed: () {
                                 if (formKey.currentState.validate()) {
                                   setState(() {
@@ -368,7 +378,9 @@ class _PreferencesPageState extends State<PreferencesPage> {
                     children: [
                       ChipsChoice<dynamic>.multiple(
                         itemConfig: ChipsChoiceItemConfig(
-                          selectedColor: Get.theme.accentColor,
+                          selectedColor: themeProvider.isDarkMode
+                              ? Get.theme.accentColor
+                              : Get.theme.primaryColorDark,
                           unselectedColor: Get.theme.primaryColor,
                           unselectedBrightness: Get.theme.brightness,
                           selectedBrightness: Get.theme.brightness,
@@ -422,7 +434,9 @@ class _PreferencesPageState extends State<PreferencesPage> {
                     children: [
                       ChipsChoice<dynamic>.multiple(
                         itemConfig: ChipsChoiceItemConfig(
-                          selectedColor: Get.theme.accentColor,
+                          selectedColor: themeProvider.isDarkMode
+                              ? Get.theme.accentColor
+                              : Get.theme.primaryColorDark,
                           unselectedColor: Get.theme.primaryColor,
                           unselectedBrightness: Get.theme.brightness,
                           selectedBrightness: Get.theme.brightness,

@@ -477,7 +477,7 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                                             PublicationPrefsPage.routeName);
                                       },
                                       child: Text(
-                                        "Add Publication Channel",
+                                        "Add Publications",
                                         style: TextStyle(
                                           fontSize: 17,
                                           fontWeight: FontWeight.bold,

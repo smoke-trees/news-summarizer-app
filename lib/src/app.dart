@@ -31,10 +31,6 @@ import 'package:news_summarizer/src/utils/hive_prefs.dart';
 import 'package:provider/provider.dart';
 
 class App extends StatelessWidget {
-
-  Future firebaseInit(){
-
-  }
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -46,6 +42,8 @@ class App extends StatelessWidget {
       ],
       builder: (context, _) {
         final themeProvider = Provider.of<ThemeProvider>(context, listen: true);
+        UserProvider userProvider =
+            Provider.of<UserProvider>(context, listen: true);
         DynamicLinkService dynamicLinkProvider = new DynamicLinkService();
         dynamicLinkProvider.initDynamicLinks(context);
         return GetMaterialApp(
@@ -56,14 +54,37 @@ class App extends StatelessWidget {
             future: Firebase.initializeApp(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
+                userProvider.fetchFromHive();
                 bool isLoggedIn = ProfileHive().getIsUserLoggedIn();
-                if (isLoggedIn == false) {
-                  return NewPrefsOnboardingPage();
+                if (userProvider.user == null) {
+                  ///First time user
+                  return AuthOnboardingPage();
+                } else if (isLoggedIn == false &&
+                    userProvider.user.isUserLoggedIn == false) {
+                  /// Something weird but works
+                  return AuthOnboardingPage();
                   // return AuthPage(firstLogin: true,);
-                } else {
+                } else if (userProvider.user.completedOnboarding == true &&
+                    userProvider.user.isUserLoggedIn == true) {
+                  /// Proper logged in user
                   return BasePage();
+                } else if (userProvider.user.completedOnboarding == false ||
+                    userProvider.user.completedOnboarding == null) {
+                  /// User closed app before setting prefs
+                  return ControlCenterOnboardingPage();
+                } else if (userProvider.user.completedOnboarding == true &&
+                    (userProvider.user.isUserLoggedIn == null ||
+                        userProvider.user.isUserLoggedIn == false)) {
+                  /// Proper skipped login user
+                  return BasePage();
+                } else {
+                  /// Something weird
+                  print(userProvider.user.completedOnboarding);
+                  print(userProvider.user.isUserLoggedIn);
+                  return SplashPage();
                 }
               } else {
+                /// loading
                 return SplashPage();
               }
             },
@@ -75,7 +96,8 @@ class App extends StatelessWidget {
             CustomPrefsPage.routename: (context) => CustomPrefsPage(),
             ReorderNewsPrefsPage.routeName: (context) => ReorderNewsPrefsPage(),
             ReorderPubPrefsPage.routeName: (context) => ReorderPubPrefsPage(),
-            ReorderExpertPrefsPage.routeName: (context) => ReorderExpertPrefsPage(),
+            ReorderExpertPrefsPage.routeName: (context) =>
+                ReorderExpertPrefsPage(),
             BlogsPrefsPage.routeName: (context) => BlogsPrefsPage(),
             OnboardingPages.routeName: (context) => OnboardingPages(),
             PhoneAuthPage.routeName: (context) => PhoneAuthPage(),
@@ -89,8 +111,7 @@ class App extends StatelessWidget {
             AuthPage.routeName: (context) => AuthPage(),
             ControlCenterPage.routeName: (context) => ControlCenterPage(),
             PublicationPrefsPage.routeName: (context) => PublicationPrefsPage(),
-            NewPrefsOnboardingPage.routeName: (context) =>
-                NewPrefsOnboardingPage(),
+            AuthOnboardingPage.routeName: (context) => AuthOnboardingPage(),
             ControlCenterOnboardingPage.routeName: (context) =>
                 ControlCenterOnboardingPage(),
           },

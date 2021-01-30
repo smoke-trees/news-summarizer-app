@@ -4,12 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
+import 'package:news_summarizer/src/providers/theme_provider.dart';
 import 'package:news_summarizer/src/providers/user_provider.dart';
 import 'package:news_summarizer/src/ui/pages/base_page.dart';
+import 'package:news_summarizer/src/ui/pages/reorder_expert_prefs_page.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
 import 'package:provider/provider.dart';
 
-import 'control_center.dart';
 
 class BlogsPrefsPage extends StatefulWidget {
   static String routeName = "/blogs_prefs_page";
@@ -60,7 +61,8 @@ class _BlogsPrefsPageState extends State<BlogsPrefsPage> {
 
   void finishSelection() {
     print("finishSelection called");
-    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
     var finList = authorsChosen.cast<String>();
     previousAuthors.forEach((element) {
       userProvider.unsubscribeToTopic(topic: element.replaceAll(' ', ''));
@@ -69,8 +71,10 @@ class _BlogsPrefsPageState extends State<BlogsPrefsPage> {
       userProvider.subscribeToTopic(topic: element.replaceAll(' ', ''));
     });
     userProvider.user.notifEnabledPrefs.addAll(finList);
-    userProvider.user.notifEnabledPrefs = userProvider.user.notifEnabledPrefs.toSet().toList();
-    userProvider.setNotificationPrefs(prefsList: userProvider.user.notifEnabledPrefs);
+    userProvider.user.notifEnabledPrefs =
+        userProvider.user.notifEnabledPrefs.toSet().toList();
+    userProvider.setNotificationPrefs(
+        prefsList: userProvider.user.notifEnabledPrefs);
     _newsBox.put(NEWS_BLOGS_AUTHORS, finList);
     userProvider.setBlogPreferences(prefsList: finList);
     print("Saved to blogs authors, now list is: $finList");
@@ -83,6 +87,7 @@ class _BlogsPrefsPageState extends State<BlogsPrefsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     return Scaffold(
       backgroundColor: Get.theme.backgroundColor,
       appBar: AppBar(
@@ -95,6 +100,13 @@ class _BlogsPrefsPageState extends State<BlogsPrefsPage> {
           ),
         ),
         actions: [
+          IconButton(
+            icon: Icon(Icons.sort),
+            onPressed: () {
+              finishSelection();
+              Get.toNamed(ReorderExpertPrefsPage.routeName);
+            },
+          ),
           GestureDetector(
             child: Container(
               margin: EdgeInsets.only(right: 16),
@@ -158,7 +170,9 @@ class _BlogsPrefsPageState extends State<BlogsPrefsPage> {
                         children: [
                           ChipsChoice<dynamic>.multiple(
                             itemConfig: ChipsChoiceItemConfig(
-                              selectedColor: Get.theme.accentColor,
+                              selectedColor: themeProvider.isDarkMode
+                                  ? Get.theme.accentColor
+                                  : Get.theme.primaryColorDark,
                               unselectedColor: Get.theme.primaryColor,
                               unselectedBrightness: Get.theme.brightness,
                               selectedBrightness: Get.theme.brightness,
@@ -167,7 +181,11 @@ class _BlogsPrefsPageState extends State<BlogsPrefsPage> {
                             options: ChipsChoiceOption.listFrom(
                               source: snapshot.data,
                               value: (index, item) => item,
-                              label: (index, item) => item.toString().split(".").last.replaceAll("_", " "),
+                              label: (index, item) => item
+                                  .toString()
+                                  .split(".")
+                                  .last
+                                  .replaceAll("_", " "),
                             ),
                             onChanged: (val) {
                               setState(() => authorsChosen = val);

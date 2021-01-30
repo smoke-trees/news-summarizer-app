@@ -54,7 +54,7 @@ class _ReorderExpertPrefsPageState extends State<ReorderExpertPrefsPage> {
       backgroundColor: Get.theme.backgroundColor,
       appBar: AppBar(
         title: Text(
-          'Re-order Expert Opinion Channels',
+          'Re-order Experts',
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,

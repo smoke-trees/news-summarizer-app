@@ -40,7 +40,21 @@ class _ControlCenterPageState extends State<ControlCenterPage> {
                 ),
               ),
             ),
-            onTap: () => Get.toNamed(BasePage.routeName),
+            onTap: () {
+              if (userProvider.user.newsPreferences.length < 3) {
+                Get.snackbar(
+                  "Warning!",
+                  "Please choose at least 3 news channels.",
+                  backgroundColor: Colors.red,
+                  colorText: Colors.white,
+                  snackPosition: SnackPosition.BOTTOM,
+                );
+                return;
+              } else {
+                userProvider.completeOnboarding();
+                Get.toNamed(BasePage.routeName);
+              }
+            },
           ),
         ],
         title: Text(

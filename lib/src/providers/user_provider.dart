@@ -8,6 +8,7 @@ import 'package:news_summarizer/src/models/article.dart';
 import 'package:news_summarizer/src/models/user.dart';
 import 'package:news_summarizer/src/utils/article_type_enum.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class UserProvider extends ChangeNotifier {
   ApiUser user;
@@ -25,7 +26,10 @@ class UserProvider extends ChangeNotifier {
 
   void createUserInFirebase({ApiUser newUser}) {
     print("[UserProvider] Creating user in firebase");
-    FirebaseFirestore.instance.collection('user').doc(newUser.firebaseUid).set(newUser.toJson());
+    FirebaseFirestore.instance
+        .collection('user')
+        .doc(newUser.firebaseUid)
+        .set(newUser.toJson());
   }
 
   ApiUser createNewUser({User newUser, String phoneNumber = ""}) {
@@ -38,11 +42,14 @@ class UserProvider extends ChangeNotifier {
         phoneNumber: phoneNumber);
     // createUserInFirebase(newUser: user);
     // saveToHive(user: user);
-   return user;
+    return user;
   }
 
   Future<ApiUser> getUserFromFirebase({String firebaseUid}) async {
-    var response = await FirebaseFirestore.instance.collection('user').doc(firebaseUid).get();
+    var response = await FirebaseFirestore.instance
+        .collection('user')
+        .doc(firebaseUid)
+        .get();
     ApiUser fireUser = ApiUser.fromJson(response.data());
     // print(fireUser.toJson(fireUser));
     return fireUser;
@@ -82,7 +89,10 @@ class UserProvider extends ChangeNotifier {
     if (user.firebaseUid == null) {
       print("[UserProvider] No user in firebase, so no FCM saved");
     } else {
-      FirebaseFirestore.instance.collection('user').doc(user.firebaseUid).update({'fcmToken': fcmtoken});
+      FirebaseFirestore.instance
+          .collection('user')
+          .doc(user.firebaseUid)
+          .update({'fcmToken': fcmtoken});
     }
     user.fcmToken = fcmtoken;
     notifyListeners();
@@ -93,10 +103,14 @@ class UserProvider extends ChangeNotifier {
       FirebaseFirestore.instance
           .collection('user')
           .doc(user.firebaseUid)
-          .update({'location.latitude': position.latitude, 'location.longitude': position.longitude});
+          .update({
+        'location.latitude': position.latitude,
+        'location.longitude': position.longitude
+      });
       print("[UserProvider] Set user location in Firebase");
     } else {
-      print("[UserProvider] No user in Firebase. Did not Set user location in Firebase");
+      print(
+          "[UserProvider] No user in Firebase. Did not Set user location in Firebase");
     }
 
     user.latitude = position.latitude;
@@ -111,9 +125,11 @@ class UserProvider extends ChangeNotifier {
       FirebaseFirestore.instance
           .collection('user')
           .doc(user.firebaseUid)
-          .update({'newsPreferences': prefsList.map((e) => e.toString()).toList()});
+          .update(
+              {'newsPreferences': prefsList.map((e) => e.toString()).toList()});
     } else {
-      print("[UserProvider] No user in Firebase. Did not Set news preferences in Firebase");
+      print(
+          "[UserProvider] No user in Firebase. Did not Set news preferences in Firebase");
     }
 
     user.newsPreferences = prefsList;
@@ -127,9 +143,12 @@ class UserProvider extends ChangeNotifier {
       FirebaseFirestore.instance
           .collection('user')
           .doc(user.firebaseUid)
-          .update({'customPreferences': prefsList.map((e) => e.toString()).toList()});
+          .update({
+        'customPreferences': prefsList.map((e) => e.toString()).toList()
+      });
     } else {
-      print("[UserProvider] No user in Firebase. Did not Set custom preferences in Firebase");
+      print(
+          "[UserProvider] No user in Firebase. Did not Set custom preferences in Firebase");
     }
 
     user.customPreferences = prefsList;
@@ -145,7 +164,8 @@ class UserProvider extends ChangeNotifier {
           .doc(user.firebaseUid)
           .update({'blogPreferences': prefsList.cast<String>()});
     } else {
-      print("[UserProvider] No user in Firebase. Did not Set blog preferences in Firebase");
+      print(
+          "[UserProvider] No user in Firebase. Did not Set blog preferences in Firebase");
     }
 
     user.blogPreferences = prefsList;
@@ -161,10 +181,28 @@ class UserProvider extends ChangeNotifier {
           .doc(user.firebaseUid)
           .update({'pubPreferences': prefsList.cast<String>()});
     } else {
-      print("[UserProvider] No user in Firebase. Did not Set pub preferences in Firebase");
+      print(
+          "[UserProvider] No user in Firebase. Did not Set pub preferences in Firebase");
     }
 
     user.pubPreferences = prefsList;
+    saveToHive(user: user);
+    notifyListeners();
+  }
+
+  void completeOnboarding() {
+    if (user.firebaseUid != null) {
+      print("[UserProvider] Set completedOnboarding true in Firebase");
+      FirebaseFirestore.instance
+          .collection('user')
+          .doc(user.firebaseUid)
+          .update({'completedOnboarding': true});
+    } else {
+      print(
+          "[UserProvider] No user in Firebase. Did not Set completedOnboarding in Firebase");
+    }
+
+    user.completedOnboarding = true;
     saveToHive(user: user);
     notifyListeners();
   }
@@ -177,7 +215,8 @@ class UserProvider extends ChangeNotifier {
           .doc(user.firebaseUid)
           .update({'notifEnabledPrefs': prefsList});
     } else {
-      print("[UserProvider] No user in Firebase. Did not Set notif preferences in Firebase");
+      print(
+          "[UserProvider] No user in Firebase. Did not Set notif preferences in Firebase");
     }
 
     user.notifEnabledPrefs = prefsList;
@@ -187,7 +226,7 @@ class UserProvider extends ChangeNotifier {
 
   void saveArticle({Article article, ArticleType articleType}) {
     String changeKey;
-    switch(articleType){
+    switch (articleType) {
       case ArticleType.NEWS:
         user.savedNewsIds.add(article.id);
         changeKey = "savedNewsIds";
@@ -218,7 +257,8 @@ class UserProvider extends ChangeNotifier {
           .doc(user.firebaseUid)
           .update({changeKey: user.savedNewsIds});
     } else {
-      print("[UserProvider] No user in Firebase. Did not Set save news in Firebase");
+      print(
+          "[UserProvider] No user in Firebase. Did not Set save news in Firebase");
     }
     saveToHive(user: user);
     notifyListeners();
@@ -226,7 +266,7 @@ class UserProvider extends ChangeNotifier {
 
   void unsaveArticle({Article article, ArticleType articleType}) {
     String changeKey;
-    switch(articleType){
+    switch (articleType) {
       case ArticleType.NEWS:
         user.savedNewsIds.remove(article.id);
         changeKey = "savedNewsIds";
@@ -249,7 +289,6 @@ class UserProvider extends ChangeNotifier {
         break;
     }
 
-
     if (user.firebaseUid != null) {
       print("[UserProvider] Removed saved news in Firebase");
       FirebaseFirestore.instance
@@ -257,20 +296,25 @@ class UserProvider extends ChangeNotifier {
           .doc(user.firebaseUid)
           .update({changeKey: user.savedNewsIds});
     } else {
-      print("[UserProvider] No user in Firebase. Did not remove saved news in Firebase");
+      print(
+          "[UserProvider] No user in Firebase. Did not remove saved news in Firebase");
     }
     saveToHive(user: user);
     notifyListeners();
   }
 
   void subscribeToTopic({String topic}) {
-    print("[UserProvider] Subscribing to topic $topic");
-    _firebaseMessaging.subscribeToTopic(topic);
+    if(!kIsWeb) {
+      print("[UserProvider] Subscribing to topic $topic");
+      _firebaseMessaging.subscribeToTopic(topic);
+    }
   }
 
   void unsubscribeToTopic({String topic}) {
-    print("[UserProvider] Unsubscribe to topic $topic");
-    _firebaseMessaging.unsubscribeFromTopic(topic);
+    if(!kIsWeb) {
+      print("[UserProvider] Unsubscribe to topic $topic");
+      _firebaseMessaging.unsubscribeFromTopic(topic);
+    }
   }
 
   void saveToHive({ApiUser user}) {

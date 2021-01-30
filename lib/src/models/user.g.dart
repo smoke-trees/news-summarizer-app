@@ -33,13 +33,16 @@ class ApiUserAdapter extends TypeAdapter<ApiUser> {
       pubPreferences: (fields[15] as List)?.cast<String>(),
       savedBlogsIds: (fields[13] as List)?.cast<String>(),
       savedPubIds: (fields[14] as List)?.cast<String>(),
+      completedOnboarding: fields[17] as bool,
+      isUserLoggedIn: fields[16] as bool,
+      forceRelogin: fields[18] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, ApiUser obj) {
     writer
-      ..writeByte(16)
+      ..writeByte(19)
       ..writeByte(0)
       ..write(obj.blogPreferences)
       ..writeByte(1)
@@ -71,7 +74,13 @@ class ApiUserAdapter extends TypeAdapter<ApiUser> {
       ..writeByte(14)
       ..write(obj.savedPubIds)
       ..writeByte(15)
-      ..write(obj.pubPreferences);
+      ..write(obj.pubPreferences)
+      ..writeByte(16)
+      ..write(obj.isUserLoggedIn)
+      ..writeByte(17)
+      ..write(obj.completedOnboarding)
+      ..writeByte(18)
+      ..write(obj.forceRelogin);
   }
 
   @override

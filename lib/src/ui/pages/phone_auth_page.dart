@@ -51,7 +51,8 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
       );
     };
 
-    final PhoneCodeSent codeSent = (String verificationId, [int forceResendingToken]) async {
+    final PhoneCodeSent codeSent =
+        (String verificationId, [int forceResendingToken]) async {
       print("code sent");
       setState(() {
         _isLoading = false;
@@ -60,11 +61,14 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
       });
     };
 
-    final PhoneVerificationCompleted verificationCompleted = (AuthCredential authCredential) async {
+    final PhoneVerificationCompleted verificationCompleted =
+        (AuthCredential authCredential) async {
       try {
-        UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+        UserProvider userProvider =
+            Provider.of<UserProvider>(context, listen: false);
         var authResult = await _auth.signInWithCredential(authCredential);
-        if (authResult.user != null && authResult.additionalUserInfo.isNewUser) {
+        if (authResult.user != null &&
+            authResult.additionalUserInfo.isNewUser) {
           // ApiUser user = userProvider.createNewUser(newUser: credential.user);
           userProvider.user
             ..name = authResult.user.displayName
@@ -77,7 +81,8 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
             ..blogPreferences = []
             ..newsPreferences = []
             ..savedNewsIds = []
-            ..notifEnabledPrefs = [];
+            ..notifEnabledPrefs = []
+            ..isUserLoggedIn = true;
 
           userProvider.createUserInFirebase(newUser: userProvider.user);
           userProvider.saveToHive(user: userProvider.user);
@@ -88,13 +93,19 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
             Get.offAndToNamed(ControlCenterOnboardingPage.routeName);
           } else {
             Get.offAndToNamed(BasePage.routeName);
-            Get.snackbar("Successful",
-                userProvider.user.name == null ? "Welcome!" : "Welcome, ${userProvider.user.name}!",
-                snackPosition: SnackPosition.BOTTOM);
+            Get.snackbar(
+              "Successful",
+              userProvider.user.name == null
+                  ? "Welcome!"
+                  : "Welcome, ${userProvider.user.name}!",
+              snackPosition: SnackPosition.BOTTOM,
+            );
           }
         } else {
           print("[] Old User but not in Hive");
-          ApiUser userr = await userProvider.getUserFromFirebase(firebaseUid: authResult.user.uid);
+          ApiUser userr = await userProvider.getUserFromFirebase(
+            firebaseUid: authResult.user.uid,
+          );
           userProvider.setUserInProvider(setUser: userr);
           userProvider.saveToHive(user: userr);
           _newsBox.put(NEWS_PREFS, userr.newsPreferences);
@@ -102,9 +113,13 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
           _newsBox.put(NEWS_CUSTOM, userr.customPreferences);
           ProfileHive().setIsUserLoggedIn(true);
           Get.toNamed(BasePage.routeName);
-          Get.snackbar("Successful",
-              userProvider.user.name == null ? "Welcome back!" : "Welcome back, ${userProvider.user.name}!",
-              snackPosition: SnackPosition.BOTTOM);
+          Get.snackbar(
+            "Successful",
+            userProvider.user.name == null
+                ? "Welcome back!"
+                : "Welcome back, ${userProvider.user.name}!",
+            snackPosition: SnackPosition.BOTTOM,
+          );
         }
         // if (authResult.user != null && authResult.additionalUserInfo.isNewUser) {
         //   userProvider.createNewUser(newUser: authResult.user, phoneNumber: _phoneController.text.trim());
@@ -154,12 +169,14 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
       verificationId: _verificationCode,
       smsCode: smsCode,
     );
-    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
     try {
       setState(() {
         _isLoading = true;
       });
-      var authResult = await FirebaseAuth.instance.signInWithCredential(credential);
+      var authResult =
+          await FirebaseAuth.instance.signInWithCredential(credential);
       // User user = authResult.user;
 
       if (authResult.user != null && authResult.additionalUserInfo.isNewUser) {
@@ -175,7 +192,8 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
           ..blogPreferences = []
           ..newsPreferences = []
           ..savedNewsIds = []
-          ..notifEnabledPrefs = [];
+          ..notifEnabledPrefs = []
+          ..isUserLoggedIn = true;
 
         userProvider.createUserInFirebase(newUser: userProvider.user);
         userProvider.saveToHive(user: userProvider.user);
@@ -189,13 +207,17 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
           // Get.offAndToNamed(PreferencesOnboardingPage.routeName);
         } else {
           Get.offAndToNamed(BasePage.routeName);
-          Get.snackbar("Successful",
-              userProvider.user.name == null ? "Welcome!" : "Welcome, ${userProvider.user.name}!",
+          Get.snackbar(
+              "Successful",
+              userProvider.user.name == null
+                  ? "Welcome!"
+                  : "Welcome, ${userProvider.user.name}!",
               snackPosition: SnackPosition.BOTTOM);
         }
       } else {
         print("[] Old User but not in Hive");
-        ApiUser userr = await userProvider.getUserFromFirebase(firebaseUid: authResult.user.uid);
+        ApiUser userr = await userProvider.getUserFromFirebase(
+            firebaseUid: authResult.user.uid);
         userProvider.setUserInProvider(setUser: userr);
         userProvider.saveToHive(user: userr);
         _newsBox.put(NEWS_PREFS, userr.newsPreferences);
@@ -203,8 +225,11 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
         _newsBox.put(NEWS_CUSTOM, userr.customPreferences);
         ProfileHive().setIsUserLoggedIn(true);
         Get.toNamed(BasePage.routeName);
-        Get.snackbar("Successful",
-            userProvider.user.name == null ? "Welcome back!" : "Welcome back, ${userProvider.user.name}!",
+        Get.snackbar(
+            "Successful",
+            userProvider.user.name == null
+                ? "Welcome back!"
+                : "Welcome back, ${userProvider.user.name}!",
             snackPosition: SnackPosition.BOTTOM);
       }
 
@@ -272,7 +297,10 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
           centerTitle: true,
           title: Text(
             'Terran Tidings',
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Get.theme.accentColor),
+            style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Get.theme.accentColor),
           )),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -347,7 +375,9 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                     backgroundColor: Colors.transparent,
                     enabled: !_isLoading,
                     textStyle: TextStyle(
-                      color: (themeProvider.theme == themeProvider.darkTheme) ? Colors.white : Colors.black,
+                      color: (themeProvider.theme == themeProvider.darkTheme)
+                          ? Colors.white
+                          : Colors.black,
                       fontSize: 18,
                     ),
                     pinTheme: PinTheme(

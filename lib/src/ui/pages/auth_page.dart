@@ -75,7 +75,7 @@ class _AuthPageState extends State<AuthPage> {
                       Container(
                         // padding: EdgeInsets.only(top: 100),
                         child: Text(
-                          "You can create a account for better, consistent experience on multiple devices",
+                          "You can create an account for better, consistent experience on multiple devices",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -89,8 +89,10 @@ class _AuthPageState extends State<AuthPage> {
                             horizontal: 20, vertical: 10),
                         child: OutlineButton(
                           onPressed: () {
-                            Get.toNamed(PhoneAuthPage.routeName,
-                                arguments: widget.firstLogin);
+                            Get.toNamed(
+                              PhoneAuthPage.routeName,
+                              arguments: widget.firstLogin,
+                            );
                           },
                           padding: EdgeInsets.symmetric(vertical: 14),
                           shape: RoundedRectangleBorder(
@@ -160,6 +162,8 @@ class _AuthPageState extends State<AuthPage> {
                                 widget.firstLogin) {
                               ///User opened app for the first time, so initializing for the first time
                               // ApiUser user = userProvider.createNewUser(newUser: credential.user);
+                              print(
+                                  "[] User opened app for the first time, so initializing for the first time");
                               ApiUser user = ApiUser(
                                 name: credential.user.displayName,
                                 email: credential.user.email,
@@ -172,6 +176,7 @@ class _AuthPageState extends State<AuthPage> {
                                 newsPreferences: [],
                                 savedNewsIds: [],
                                 notifEnabledPrefs: [],
+                                isUserLoggedIn: true,
                               );
                               userProvider.setUserInProvider(setUser: user);
                               userProvider.createUserInFirebase(
@@ -184,6 +189,33 @@ class _AuthPageState extends State<AuthPage> {
                                   ControlCenterOnboardingPage.routeName);
                               // Get.offAndToNamed(PreferencesOnboardingPage.routeName);
                               // } else {
+                              // Get.offAndToNamed(BasePage.routeName);
+                              // Get.snackbar(
+                              //   "Successful",
+                              //   userProvider.user.name == null
+                              //       ? "Welcome!"
+                              //       : "Welcome, ${userProvider.user.name}!",
+                              //   snackPosition: SnackPosition.BOTTOM,
+                              // );
+                              // }
+                            } else if (credential
+                                    .additionalUserInfo.isNewUser &&
+                                !widget.firstLogin) {
+                              ///User was already using app, and added login later, so changing only name, email, image, photo
+                              print(
+                                  "[] User was already using app, and added login later, so changing only name, email, image, photo");
+                              userProvider.user
+                                ..name = credential.user.displayName
+                                ..email = credential.user.email
+                                ..firebaseUid = credential.user.uid
+                                ..photoUrl = credential.user.photoURL
+                                ..isUserLoggedIn = true;
+
+                              userProvider.createUserInFirebase(
+                                  newUser: userProvider.user);
+                              userProvider.saveToHive(user: userProvider.user);
+                              print(userProvider.user.toJson());
+
                               Get.offAndToNamed(BasePage.routeName);
                               Get.snackbar(
                                 "Successful",
@@ -192,33 +224,12 @@ class _AuthPageState extends State<AuthPage> {
                                     : "Welcome, ${userProvider.user.name}!",
                                 snackPosition: SnackPosition.BOTTOM,
                               );
-                              // }
-                            } else if (credential
-                                    .additionalUserInfo.isNewUser &&
-                                !widget.firstLogin) {
-                              ///User was already using app, and added login later, so changing only name, email, image, photo
-                              userProvider.user
-                                ..name = credential.user.displayName
-                                ..email = credential.user.email
-                                ..firebaseUid = credential.user.uid
-                                ..photoUrl = credential.user.photoURL;
-                              userProvider.createUserInFirebase(
-                                  newUser: userProvider.user);
-                              userProvider.saveToHive(user: userProvider.user);
-                              print(userProvider.user.toJson());
-
-                              Get.offAndToNamed(BasePage.routeName);
-                              Get.snackbar(
-                                  "Successful",
-                                  userProvider.user.name == null
-                                      ? "Welcome!"
-                                      : "Welcome, ${userProvider.user.name}!",
-                                  snackPosition: SnackPosition.BOTTOM);
                             } else {
                               print("[] Old User but not in Hive");
                               ApiUser userr =
                                   await userProvider.getUserFromFirebase(
-                                      firebaseUid: credential.user.uid);
+                                firebaseUid: credential.user.uid,
+                              );
                               userProvider.setUserInProvider(setUser: userr);
                               userProvider.saveToHive(user: userr);
                               _newsBox.put(NEWS_PREFS, userr.newsPreferences);
@@ -227,14 +238,20 @@ class _AuthPageState extends State<AuthPage> {
                               _newsBox.put(
                                   NEWS_CUSTOM, userr.customPreferences);
                               ProfileHive().setIsUserLoggedIn(true);
-                              Get.toNamed(BasePage.routeName);
-                              Get.snackbar(
-                                "Successful",
-                                userProvider.user.name == null
-                                    ? "Welcome back!"
-                                    : "Welcome back, ${userProvider.user.name}!",
-                                snackPosition: SnackPosition.BOTTOM,
-                              );
+                              if (userProvider.user.completedOnboarding ==
+                                  false) {
+                                Get.offAndToNamed(
+                                    ControlCenterOnboardingPage.routeName);
+                              } else {
+                                Get.offAndToNamed(BasePage.routeName);
+                                Get.snackbar(
+                                  "Successful",
+                                  userProvider.user.name == null
+                                      ? "Welcome back!"
+                                      : "Welcome back, ${userProvider.user.name}!",
+                                  snackPosition: SnackPosition.BOTTOM,
+                                );
+                              }
                             }
                           },
                           padding: EdgeInsets.symmetric(vertical: 14),
@@ -287,6 +304,7 @@ class _AuthPageState extends State<AuthPage> {
                                   savedBlogsIds: [],
                                   savedPubIds: [],
                                   pubPreferences: [],
+                                  completedOnboarding: false,
                                 );
                                 userProvider.setUserInProvider(setUser: user);
                                 userProvider.saveToHive(user: user);

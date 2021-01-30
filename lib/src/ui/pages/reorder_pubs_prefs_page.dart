@@ -54,7 +54,7 @@ class _ReorderPubPrefsPageState extends State<ReorderPubPrefsPage> {
       backgroundColor: Get.theme.backgroundColor,
       appBar: AppBar(
         title: Text(
-          'Re-order Publication Channels',
+          'Re-order Publications',
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,

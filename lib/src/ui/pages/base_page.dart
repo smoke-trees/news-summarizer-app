@@ -18,8 +18,6 @@ class _BasePageState extends State<BasePage> {
     super.initState();
     UserProvider userProvider =
     Provider.of<UserProvider>(context, listen: false);
-    userProvider.fetchFromHive();
-    // userProvider.setUserInProvider(setUser: user);
     userProvider.configureFCM();
   }
 

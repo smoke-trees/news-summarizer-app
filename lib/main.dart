@@ -6,6 +6,7 @@ import 'package:news_summarizer/src/app.dart';
 import 'package:news_summarizer/src/models/user.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 ///Hive command:
 ///flutter packages pub run build_runner build --delete-conflicting-outputs
@@ -14,8 +15,14 @@ import 'package:path_provider/path_provider.dart' as path_provider;
 
 Future<void> initializations() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final appDocumentDir = await path_provider.getApplicationDocumentsDirectory();
-  Hive.init(appDocumentDir.path);
+  var appDocumentDirectory;
+  if (kIsWeb) {
+    // Set web-specific directory
+  } else {
+    final appDocumentDir = await path_provider.getApplicationDocumentsDirectory();
+    Hive.init(appDocumentDir.path);
+  }
+
   Hive.registerAdapter(ApiUserAdapter());
   await Hive.openBox(NEWS_PREFS_BOX);
   await Hive.openBox<ApiUser>(USER_BOX);

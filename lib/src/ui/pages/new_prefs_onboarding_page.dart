@@ -3,14 +3,14 @@ import 'package:get/get.dart';
 import 'package:news_summarizer/src/ui/pages/auth_page.dart';
 import 'package:news_summarizer/src/ui/widgets/onboarding_text_widget.dart';
 
-class NewPrefsOnboardingPage extends StatefulWidget {
+class AuthOnboardingPage extends StatefulWidget {
   static String routeName = "/new_prefs_onboarding_page";
 
   @override
-  _NewPrefsOnboardingPageState createState() => _NewPrefsOnboardingPageState();
+  _AuthOnboardingPageState createState() => _AuthOnboardingPageState();
 }
 
-class _NewPrefsOnboardingPageState extends State<NewPrefsOnboardingPage> {
+class _AuthOnboardingPageState extends State<AuthOnboardingPage> {
   double opacity = 0.0;
 
   @override
@@ -34,7 +34,8 @@ class _NewPrefsOnboardingPageState extends State<NewPrefsOnboardingPage> {
             // setState(() {
             //   opacity = 0.0;
             // });
-          }).whenComplete(
+          })
+              .whenComplete(
             () => Future.delayed(Duration(milliseconds: 500), () {
               // Get.toNamed(AuthPage.routeName, arguments: true);
               Get.to(AuthPage(
@@ -43,19 +44,59 @@ class _NewPrefsOnboardingPageState extends State<NewPrefsOnboardingPage> {
             }),
           );
         },
-        child: Center(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            OnboardingTextWidget(text: "Welcome to Terran Tidings"),
-            SizedBox(
-              height: 20,
+        child: Container(
+          width: Get.width,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage(
+                  "assets/splash_bg.png",
+                ),
+                fit: BoxFit.cover),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 15,
             ),
-            OnboardingTextWidget(
-              text: "Your gateway to news and more across the globe",
-            )
-          ],
-        )),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Flexible(
+                  child: Container(
+                    padding: EdgeInsets.only(top: 50),
+                    child: Text(
+                      "Welcome To Terran Tidings",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 30,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  "Your gateway to news in the world",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 30,
+                  ),
+                ),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: Image.asset(
+                      "assets/icons/dark-logo.png",
+                      width: Get.width * 0.5,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

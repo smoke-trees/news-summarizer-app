@@ -38,17 +38,21 @@ dependencies:
   firebase_crashlytics: ^0.4.0+1
 
   google_sign_in: ^4.5.1
-  get: ^3.8.0
+  get:
+    git:
+      url: https://github.com/jonataslaw/getx.git
+      ref: dev
   pin_code_fields: ^4.0.0
-#    shared_preferences: ^0.5.10
   http: ^0.12.2
   cached_network_image: ^2.3.1
   html: ^0.14.0+3
   intl: ^0.16.1
   webview_flutter: ^0.3.22+1
   chips_choice: ^1.2.0
+
   hive: ^1.4.4+1
   hive_flutter: ^0.3.1
+
   path_provider: ^1.6.14
 
   fancy_on_boarding: ^1.7.0
@@ -67,7 +71,7 @@ dev_dependencies:
     sdk: flutter
   # Hive Dependencies
   hive_generator: ^0.8.2
-  build_runner: ^1.10.4
+  build_runner: ^1.11.0
   flutter_launcher_icons: "^0.8.0"
 
 flutter_icons:

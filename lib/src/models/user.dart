@@ -52,6 +52,15 @@ class ApiUser extends HiveObject {
   @HiveField(15)
   List<String> pubPreferences;
 
+  @HiveField(16)
+  bool isUserLoggedIn;
+
+  @HiveField(17)
+  bool completedOnboarding;
+
+  @HiveField(18)
+  bool forceRelogin;
+
   ApiUser({
     this.email,
     this.name,
@@ -69,6 +78,9 @@ class ApiUser extends HiveObject {
     this.pubPreferences,
     this.savedBlogsIds,
     this.savedPubIds,
+    this.completedOnboarding,
+    this.isUserLoggedIn,
+    this.forceRelogin,
   });
 
   // {
@@ -92,11 +104,18 @@ class ApiUser extends HiveObject {
 
   factory ApiUser.fromJson(json) {
     return ApiUser(
-      blogPreferences: (json['blogPreferences'] as List)?.cast<String>() ?? [],
-      newsPreferences: (json['newsPreferences'] as List)?.cast<String>() ?? [],
-      customPreferences:
-          (json['customPreferences'] as List)?.cast<String>() ?? [],
-      pubPreferences: (json['pubPreferences'] as List)?.cast<String>() ?? [],
+      blogPreferences: json['blogPreferences'] == null
+          ? []
+          : (json['blogPreferences'] as List)?.cast<String>() ?? [],
+      newsPreferences: json['newsPreferences'] == null
+          ? []
+          : (json['newsPreferences'] as List)?.cast<String>() ?? [],
+      customPreferences: json['customPreferences'] == null
+          ? []
+          : (json['customPreferences'] as List)?.cast<String>() ?? [],
+      pubPreferences: json['pubPreferences'] == null
+          ? []
+          : (json['pubPreferences'] as List)?.cast<String>() ?? [],
       name: json['name'],
       email: json['email'],
       fcmToken: json['fcmToken'],
@@ -105,11 +124,21 @@ class ApiUser extends HiveObject {
       phoneNumber: json['phoneNumber'],
       latitude: json['location']['latitude'],
       longitude: json['location']['longitude'],
-      notifEnabledPrefs:
-          (json['notifEnabledPrefs'] as List).cast<String>() ?? [],
-      savedPubIds: (json['savedPubIds'] as List)?.cast<String>() ?? [],
-      savedBlogsIds: (json['savedBlogsIds'] as List)?.cast<String>() ?? [],
-      savedNewsIds: (json['savedNewsIds'] as List)?.cast<String>() ?? [],
+      notifEnabledPrefs: json['notifEnabledPrefs'] == null
+          ? []
+          : (json['notifEnabledPrefs'] as List).cast<String>() ?? [],
+      savedPubIds: json['savedPubIds'] == null
+          ? []
+          : (json['savedPubIds'] as List)?.cast<String>() ?? [],
+      savedBlogsIds: json['savedBlogsIds'] == null
+          ? []
+          : (json['savedBlogsIds'] as List)?.cast<String>() ?? [],
+      savedNewsIds: json['savedNewsIds'] == null
+          ? []
+          : (json['savedNewsIds'] as List)?.cast<String>() ?? [],
+      isUserLoggedIn: json['isUserLoggedIn'] ?? false,
+      completedOnboarding: json['completedOnboarding'] ?? false,
+      forceRelogin: json['forceRelogin'] ?? false,
     );
   }
 
@@ -132,6 +161,9 @@ class ApiUser extends HiveObject {
     data['savedNewsIds'] = savedNewsIds ?? [];
     data['savedBlogsIds'] = savedBlogsIds ?? [];
     data['savedPubIds'] = savedPubIds ?? [];
+    data['completedOnboarding'] = completedOnboarding ?? false;
+    data['isUserLoggedIn'] = isUserLoggedIn ?? false;
+    data['forceRelogin'] = forceRelogin ?? false;
     return data;
   }
 }

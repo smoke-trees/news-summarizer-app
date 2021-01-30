@@ -44,8 +44,9 @@ class ThemeProvider with ChangeNotifier {
     pageTransitionsTheme: const PageTransitionsTheme(
       builders: <TargetPlatform, PageTransitionsBuilder>{
         TargetPlatform.android: SharedAxisPageTransitionsBuilder(
-            transitionType: SharedAxisTransitionType.scaled,
-            fillColor: Color(0xff1d1f3e)),
+          transitionType: SharedAxisTransitionType.scaled,
+          fillColor: Color(0xff1d1f3e),
+        ),
       },
     ),
   );
@@ -54,7 +55,7 @@ class ThemeProvider with ChangeNotifier {
     brightness: Brightness.light,
     accentColor: Color(0xff69F0AE),
     primaryColor: Color(0xff009688),
-    primaryColorDark: Color(0xff009688),
+    primaryColorDark: Color(0xff055c54),
     backgroundColor: Colors.white,
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(),
@@ -64,8 +65,9 @@ class ThemeProvider with ChangeNotifier {
     pageTransitionsTheme: const PageTransitionsTheme(
       builders: <TargetPlatform, PageTransitionsBuilder>{
         TargetPlatform.android: SharedAxisPageTransitionsBuilder(
-            transitionType: SharedAxisTransitionType.scaled,
-            fillColor: Colors.white),
+          transitionType: SharedAxisTransitionType.scaled,
+          fillColor: Colors.white,
+        ),
       },
     ),
   );
