@@ -21,6 +21,7 @@ class ApiProvider with ChangeNotifier {
   }
 
   Future<List<Article>> getArticlesFromCategory({String category}) async {
+    print(_dio.options.baseUrl);
     Response response = await _dio
         .get("/get_category_news", queryParameters: {'category': category});
     List<Article> articleList =
@@ -90,7 +91,6 @@ class ApiProvider with ChangeNotifier {
 
   Future<List<Article>> getManyArticlesByIds({List<String> ids}) async {
     Response response = await _dio.post("/get_articles_by_ids/", data: ids);
-    print(response.data);
     List<Article> articleList = (response.data as List)
             .map((json) => Article.fromJson(json))
             .toList() ??
@@ -100,7 +100,6 @@ class ApiProvider with ChangeNotifier {
 
   Future<List<Article>> getManyBlogsByIds({List<String> ids}) async {
     Response response = await _dio.post("/get_blogs_by_ids/", data: ids);
-    print(response.data);
     List<Article> articleList = (response.data as List)
             .map((json) => Article.fromJson(json))
             .toList() ??
@@ -110,7 +109,6 @@ class ApiProvider with ChangeNotifier {
 
   Future<List<Article>> getManyPubByIds({List<String> ids}) async {
     Response response = await _dio.post("/get_mags_by_ids/", data: ids);
-    print(response.data);
     List<Article> articleList = (response.data as List)
             .map((json) => Article.fromJson(json))
             .toList() ??
