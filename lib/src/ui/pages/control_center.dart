@@ -89,14 +89,18 @@ class _ControlCenterPageState extends State<ControlCenterPage> {
                 : Padding(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    child: Text(userProvider.user.newsPreferences
-                            .map((e) => e
+                    child: Text(userProvider.user.newsPreferences.map((e) {
+                          if (e.contains("NewsFeed.")) {
+                            return e
                                 .substring(9)
                                 .toLowerCase()
                                 .split("_")
                                 .map((e) => e.capitalizeFirst)
-                                .join(" "))
-                            .join(", ") ??
+                                .join(" ");
+                          } else {
+                            return e.capitalizeFirst;
+                          }
+                        }).join(", ") ??
                         ""),
                   ),
             onTap: () {

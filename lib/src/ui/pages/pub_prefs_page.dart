@@ -142,54 +142,55 @@ class _PublicationPrefsPageState extends State<PublicationPrefsPage> {
                   height: 15,
                 ),
                 FutureBuilder(
-                    future: pubListFuture,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasError || !snapshot.hasData) {
-                        print(snapshot.error);
-                        print(snapshot.data);
-                        return Center(child: CircularProgressIndicator());
-                      }
-                      return Card(
-                        color: Get.theme.cardColor,
-                        child: ExpansionTile(
-                          initiallyExpanded: true,
-                          title: Container(
-                            child: Text(
-                              "Publications",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                                decoration: TextDecoration.underline,
-                                decorationColor: Get.theme.accentColor,
-                              ),
+                  future: pubListFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError || !snapshot.hasData) {
+                      print(snapshot.error);
+                      print(snapshot.data);
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    return Card(
+                      color: Get.theme.cardColor,
+                      child: ExpansionTile(
+                        initiallyExpanded: true,
+                        title: Container(
+                          child: Text(
+                            "Publications",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                              decoration: TextDecoration.underline,
+                              decorationColor: Get.theme.accentColor,
                             ),
                           ),
-                          children: [
-                            ChipsChoice<dynamic>.multiple(
-                              itemConfig: ChipsChoiceItemConfig(
-                                selectedColor: themeProvider.isDarkMode
-                                    ? Get.theme.accentColor
-                                    : Get.theme.primaryColorDark,
-                                unselectedColor: Get.theme.primaryColor,
-                                unselectedBrightness: Get.theme.brightness,
-                                selectedBrightness: Get.theme.brightness,
-                              ),
-                              value: pubChosen,
-                              options: ChipsChoiceOption.listFrom(
-                                source: snapshot.data,
-                                value: (index, item) => item,
-                                label: (index, item) => item,
-                              ),
-                              onChanged: (val) {
-                                setState(() => pubChosen = val);
-                              },
-                              padding: EdgeInsets.all(8),
-                              isWrapped: true,
-                            ),
-                          ],
                         ),
-                      );
-                    }),
+                        children: [
+                          ChipsChoice<dynamic>.multiple(
+                            itemConfig: ChipsChoiceItemConfig(
+                              selectedColor: themeProvider.isDarkMode
+                                  ? Get.theme.accentColor
+                                  : Get.theme.primaryColorDark,
+                              unselectedColor: Get.theme.primaryColor,
+                              unselectedBrightness: Get.theme.brightness,
+                              selectedBrightness: Get.theme.brightness,
+                            ),
+                            value: pubChosen,
+                            options: ChipsChoiceOption.listFrom(
+                              source: snapshot.data,
+                              value: (index, item) => item,
+                              label: (index, item) => item,
+                            ),
+                            onChanged: (val) {
+                              setState(() => pubChosen = val);
+                            },
+                            padding: EdgeInsets.all(8),
+                            isWrapped: true,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
           ),

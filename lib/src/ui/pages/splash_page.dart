@@ -10,10 +10,11 @@ class SplashPage extends StatelessWidget {
           width: Get.width,
           decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage(
-                  "assets/splash_bg.png",
-                ),
-                fit: BoxFit.cover),
+              image: AssetImage(
+                "assets/splash_bg.png",
+              ),
+              fit: BoxFit.cover,
+            ),
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(

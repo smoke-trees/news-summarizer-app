@@ -14,6 +14,7 @@ import 'package:news_summarizer/src/ui/pages/preferences_onboarding_page.dart';
 import 'package:news_summarizer/src/ui/pages/preferences_page.dart';
 import 'package:news_summarizer/src/ui/pages/pub_page.dart';
 import 'package:news_summarizer/src/ui/pages/pub_prefs_page.dart';
+import 'package:news_summarizer/src/ui/pages/recommended_news_page.dart';
 import 'package:news_summarizer/src/ui/pages/saved_articles_page.dart';
 import 'package:news_summarizer/src/ui/pages/search_page.dart';
 import 'package:news_summarizer/src/ui/widgets/theme_dialog.dart';
@@ -39,6 +40,20 @@ class _NewsContainerPageState extends State<NewsContainerPage>
   @override
   void initState() {
     super.initState();
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
+    _newsFeeds = userProvider.user.newsPreferences ?? [];
+    _blogsFeeds = userProvider.user.blogPreferences ?? [];
+    _pubFeeds = userProvider.user.pubPreferences ?? [];
+    if (!_newsFeeds.contains("RECOMMENDED")) {
+      _newsFeeds.insert(0, "RECOMMENDED");
+    }
+    // if (!_blogsFeeds.contains("RECOMMENDED")) {
+    //   _blogsFeeds.insert(0, "RECOMMENDED");
+    // }
+    // if (!_pubFeeds.contains("RECOMMENDED")) {
+    //   _pubFeeds.insert(0, "RECOMMENDED");
+    // }
   }
 
   Future<void> _showThemeDialog(BuildContext context) async {
@@ -101,9 +116,11 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                 fontSize: 14,
               ),
             ),
-            onTap: () => setState(() {
-              _isSearchActive = false;
-            }),
+            onTap: () => setState(
+              () {
+                _isSearchActive = false;
+              },
+            ),
           ),
         ],
       ),
@@ -130,7 +147,10 @@ class _NewsContainerPageState extends State<NewsContainerPage>
             DrawerHeader(
               child: Text(
                 'Terran Tidings',
-                style: TextStyle(color: Get.theme.primaryColor, fontSize: 20),
+                style: TextStyle(
+                  color: Get.theme.primaryColor,
+                  fontSize: 20,
+                ),
               ),
               decoration: BoxDecoration(
                 color: Get.theme.accentColor,
@@ -139,7 +159,10 @@ class _NewsContainerPageState extends State<NewsContainerPage>
             ListTile(
               title: Text(
                 'Home',
-                style: TextStyle(color: Get.theme.accentColor, fontSize: 18),
+                style: TextStyle(
+                  color: Get.theme.accentColor,
+                  fontSize: 18,
+                ),
               ),
               focusColor: Get.theme.accentColor,
               onTap: () => _onDrawerSelect(0),
@@ -147,7 +170,10 @@ class _NewsContainerPageState extends State<NewsContainerPage>
             ListTile(
               title: Text(
                 'Login',
-                style: TextStyle(color: Get.theme.accentColor, fontSize: 18),
+                style: TextStyle(
+                  color: Get.theme.accentColor,
+                  fontSize: 18,
+                ),
               ),
               focusColor: Get.theme.accentColor,
               onTap: () => _onDrawerSelect(1),
@@ -155,7 +181,10 @@ class _NewsContainerPageState extends State<NewsContainerPage>
             ListTile(
               title: Text(
                 'Saved Articles',
-                style: TextStyle(color: Get.theme.accentColor, fontSize: 18),
+                style: TextStyle(
+                  color: Get.theme.accentColor,
+                  fontSize: 18,
+                ),
               ),
               focusColor: Get.theme.accentColor,
               onTap: () => _onDrawerSelect(2),
@@ -278,11 +307,7 @@ class _NewsContainerPageState extends State<NewsContainerPage>
 
   @override
   Widget build(BuildContext context) {
-    UserProvider userProvider = Provider.of<UserProvider>(context);
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
-    _newsFeeds = userProvider.user.newsPreferences ?? [];
-    _blogsFeeds = userProvider.user.blogPreferences ?? [];
-    _pubFeeds = userProvider.user.pubPreferences ?? [];
 
     if (selectedMenuItem == 1)
       return Scaffold(
@@ -513,19 +538,16 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                             ? _withoutSearchAppBar(
                                 titleText: "News",
                                 bottom: TabBar(
-                                  tabs: List.generate(
-                                    _newsFeeds.length,
-                                    (index) {
-                                      return Tab(
-                                        text: _newsFeeds[index]
-                                            .toString()
-                                            .split('.')
-                                            .last
-                                            .replaceAll("_", " ")
-                                            .toUpperCase(),
-                                      );
-                                    },
-                                  ),
+                                  tabs: _newsFeeds
+                                      .map((e) => Tab(
+                                            text: e
+                                                .toString()
+                                                .split('.')
+                                                .last
+                                                .replaceAll("_", " ")
+                                                .toUpperCase(),
+                                          ))
+                                      .toList(),
                                   isScrollable: true,
                                 ),
                               )
@@ -539,6 +561,8 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                                   newsFeed: _newsFeeds[index],
                                   articleType: ArticleType.NEWS,
                                 );
+                              } else if (_newsFeeds[index] == "RECOMMENDED") {
+                                return RecommendedNewsPage();
                               } else {
                                 return NewsPage(
                                   customPref: _newsFeeds[index],

@@ -17,7 +17,12 @@ class NewsPage extends StatefulWidget {
   final String blogAuthor;
   final ArticleType articleType;
 
-  NewsPage({this.newsFeed, this.customPref, this.blogAuthor, this.articleType});
+  NewsPage({
+    this.newsFeed,
+    this.customPref,
+    this.blogAuthor,
+    this.articleType,
+  });
 
   @override
   _NewsPageState createState() => _NewsPageState();
@@ -27,19 +32,13 @@ class _NewsPageState extends State<NewsPage>
     with AutomaticKeepAliveClientMixin<NewsPage> {
   List<Article> _newsItems;
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   Future<List<Article>> loadFeed() async {
     try {
       // print(widget.articleType);
       // print(widget.newsFeed);
       ApiProvider apiProvider =
           Provider.of<ApiProvider>(context, listen: false);
-      UserProvider userProvider =
-          Provider.of<UserProvider>(context, listen: false);
+
       if (widget.articleType == ArticleType.CUSTOM) {
         List<Article> articleList =
             await apiProvider.getArticlesFromCustomPreference(
@@ -54,6 +53,8 @@ class _NewsPageState extends State<NewsPage>
         _newsItems = articleList;
         return articleList;
       } else if (widget.articleType == ArticleType.AROUNDME) {
+        UserProvider userProvider =
+            Provider.of<UserProvider>(context, listen: false);
         print(userProvider.user.latitude);
         print(userProvider.user.longitude);
         List<Article> articleList = await apiProvider.getArticlesFromLocation(
@@ -94,7 +95,6 @@ class _NewsPageState extends State<NewsPage>
         Provider.of<UserProvider>(context, listen: false);
     super.build(context);
     return Scaffold(
-      backgroundColor: Colors.transparent,
       body: !(widget.articleType == ArticleType.AROUNDME &&
               userProvider.user.longitude == null)
           ? FutureBuilder(

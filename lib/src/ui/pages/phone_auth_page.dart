@@ -75,13 +75,13 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
             ..email = authResult.user.email
             ..firebaseUid = authResult.user.uid
             ..photoUrl = authResult.user.photoURL
-            ..savedBlogsIds = []
-            ..savedPubIds = []
-            ..pubPreferences = []
-            ..blogPreferences = []
-            ..newsPreferences = []
-            ..savedNewsIds = []
-            ..notifEnabledPrefs = []
+            // ..savedBlogsIds = []
+            // ..savedPubIds = []
+            // ..pubPreferences = []
+            // ..blogPreferences = []
+            // ..newsPreferences = []
+            // ..savedNewsIds = []
+            // ..notifEnabledPrefs = []
             ..isUserLoggedIn = true;
 
           userProvider.createUserInFirebase(newUser: userProvider.user);
@@ -112,31 +112,20 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
           _newsBox.put(NEWS_BLOGS_AUTHORS, userr.blogPreferences);
           _newsBox.put(NEWS_CUSTOM, userr.customPreferences);
           ProfileHive().setIsUserLoggedIn(true);
-          Get.toNamed(BasePage.routeName);
-          Get.snackbar(
-            "Successful",
-            userProvider.user.name == null
-                ? "Welcome back!"
-                : "Welcome back, ${userProvider.user.name}!",
-            snackPosition: SnackPosition.BOTTOM,
-          );
+          if (isFirstLogin) {
+            Get.offAndToNamed(ControlCenterOnboardingPage.routeName);
+            // Get.offAndToNamed(PreferencesOnboardingPage.routeName);
+          } else {
+            Get.offAndToNamed(BasePage.routeName);
+            Get.snackbar(
+              "Successful",
+              userProvider.user.name == null
+                  ? "Welcome!"
+                  : "Welcome, ${userProvider.user.name}!",
+              snackPosition: SnackPosition.BOTTOM,
+            );
+          }
         }
-        // if (authResult.user != null && authResult.additionalUserInfo.isNewUser) {
-        //   userProvider.createNewUser(newUser: authResult.user, phoneNumber: _phoneController.text.trim());
-        //   // Navigator.popAndPushNamed(context, OnboardingPages.routeName);
-        //   Get.toNamed(PreferencesOnboardingPage.routeName);
-        // } else {
-        //
-        //   print("[] Old User but not in Hive");
-        //   ApiUser userr = await userProvider.getUserFromFirebase(firebaseUid: authResult.user.uid);
-        //   userProvider.setUserInProvider(setUser: userr);
-        //   userProvider.saveToHive(user: userr);
-        //   _newsBox.put(NEWS_PREFS, userr.newsPreferences);
-        //   _newsBox.put(NEWS_BLOGS_AUTHORS, userr.blogPreferences);
-        //   _newsBox.put(NEWS_CUSTOM, userr.customPreferences);
-        //   ProfileHive().setIsUserLoggedIn(true);
-        //   Navigator.popAndPushNamed(context, BasePage.routeName);
-        // }
       } catch (e) {
         Get.snackbar(
           "Error",
@@ -186,13 +175,13 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
           ..email = authResult.user.email
           ..firebaseUid = authResult.user.uid
           ..photoUrl = authResult.user.photoURL
-          ..savedBlogsIds = []
-          ..savedPubIds = []
-          ..pubPreferences = []
-          ..blogPreferences = []
-          ..newsPreferences = []
-          ..savedNewsIds = []
-          ..notifEnabledPrefs = []
+          // ..savedBlogsIds = []
+          // ..savedPubIds = []
+          // ..pubPreferences = []
+          // ..blogPreferences = []
+          // ..newsPreferences = []
+          // ..savedNewsIds = []
+          // ..notifEnabledPrefs = []
           ..isUserLoggedIn = true;
 
         userProvider.createUserInFirebase(newUser: userProvider.user);
@@ -208,11 +197,12 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
         } else {
           Get.offAndToNamed(BasePage.routeName);
           Get.snackbar(
-              "Successful",
-              userProvider.user.name == null
-                  ? "Welcome!"
-                  : "Welcome, ${userProvider.user.name}!",
-              snackPosition: SnackPosition.BOTTOM);
+            "Successful",
+            userProvider.user.name == null
+                ? "Welcome!"
+                : "Welcome, ${userProvider.user.name}!",
+            snackPosition: SnackPosition.BOTTOM,
+          );
         }
       } else {
         print("[] Old User but not in Hive");
@@ -225,12 +215,18 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
         _newsBox.put(NEWS_CUSTOM, userr.customPreferences);
         ProfileHive().setIsUserLoggedIn(true);
         Get.toNamed(BasePage.routeName);
-        Get.snackbar(
+        if (userProvider.user.completedOnboarding == false) {
+          Get.offAndToNamed(ControlCenterOnboardingPage.routeName);
+        } else {
+          Get.offAndToNamed(BasePage.routeName);
+          Get.snackbar(
             "Successful",
             userProvider.user.name == null
                 ? "Welcome back!"
                 : "Welcome back, ${userProvider.user.name}!",
-            snackPosition: SnackPosition.BOTTOM);
+            snackPosition: SnackPosition.BOTTOM,
+          );
+        }
       }
 
       // if (user != null && authResult.additionalUserInfo.isNewUser) {
@@ -325,7 +321,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Phone Number',
-                      hintText: '8197513721',
+                      hintText: 'Phone Number',
                       icon: Icon(Icons.phone, color: Color(0xff3B916E)),
                     ),
                   ),

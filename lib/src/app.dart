@@ -79,8 +79,6 @@ class App extends StatelessWidget {
                   return BasePage();
                 } else {
                   /// Something weird
-                  print(userProvider.user.completedOnboarding);
-                  print(userProvider.user.isUserLoggedIn);
                   return SplashPage();
                 }
               } else {
