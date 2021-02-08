@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:news_summarizer/src/ui/pages/preferences_page.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class PreferencesOnboardingPage extends StatefulWidget {
   static String routeName = "/prefs_onboarding_page";
@@ -14,21 +15,27 @@ class PreferencesOnboardingPage extends StatefulWidget {
 class _PreferencesOnboardingPageState extends State<PreferencesOnboardingPage> {
   double opacity = 0.0;
   double buttonOpacity = 0.0;
-  final Widget svg = SvgPicture.asset(
-    "assets/svgs/select.svg",
-    semanticsLabel: 'Selection Logo',
-    // color: Get.theme.accentColor,
-    width: Get.mediaQuery.size.width - 20,
-    height: Get.mediaQuery.size.height * 0.25,
-    fit: BoxFit.contain,
-    placeholderBuilder: (context) {
-      return Center(child: CircularProgressIndicator());
-    },
-  );
+  Widget svg;
 
   @override
   void initState() {
     super.initState();
+    if (kIsWeb) {
+      svg = Image.network(
+        "/assets/assets/svgs/select.svg",
+        // color: Get.theme.accentColor,
+        width: Get.mediaQuery.size.width,
+        fit: BoxFit.contain,
+      );
+    } else {
+      svg = SvgPicture.asset(
+        "assets/svgs/select.svg",
+        semanticsLabel: 'Expert SVG',
+        // color: Get.theme.accentColor,
+        width: Get.mediaQuery.size.width,
+        fit: BoxFit.contain,
+      );
+    }
     Future.delayed(Duration(milliseconds: 300), () {
       setState(() {
         opacity = 1.0;

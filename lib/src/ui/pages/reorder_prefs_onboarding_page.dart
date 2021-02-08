@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:news_summarizer/src/ui/pages/reorder_news_prefs_page.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
+
 
 class ReorderPrefsOnboardingPage extends StatefulWidget {
   static String routeName = "/reorder_onboarding_page";
@@ -13,7 +15,7 @@ class ReorderPrefsOnboardingPage extends StatefulWidget {
 class _ReorderPrefsOnboardingPageState extends State<ReorderPrefsOnboardingPage> {
   double opacity = 0.0;
   double buttonOpacity = 0.0;
-  final Widget svg = SvgPicture.asset(
+   Widget svg = SvgPicture.asset(
     "assets/svgs/reorder.svg",
     semanticsLabel: 'Reorder SVG',
     // color: Get.theme.accentColor,
@@ -24,6 +26,22 @@ class _ReorderPrefsOnboardingPageState extends State<ReorderPrefsOnboardingPage>
   @override
   void initState() {
     super.initState();
+    if (kIsWeb) {
+      svg = Image.network(
+        "/assets/assets/svgs/reorder.svg",
+        // color: Get.theme.accentColor,
+        width: Get.mediaQuery.size.width,
+        fit: BoxFit.contain,
+      );
+    } else {
+      svg = SvgPicture.asset(
+        "assets/svgs/reorder.svg",
+        semanticsLabel: 'Expert SVG',
+        // color: Get.theme.accentColor,
+        width: Get.mediaQuery.size.width,
+        fit: BoxFit.contain,
+      );
+    }
     Future.delayed(Duration(milliseconds: 300), () {
       setState(() {
         opacity = 1.0;

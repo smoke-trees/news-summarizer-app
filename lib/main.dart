@@ -14,6 +14,7 @@ import 'package:flutter/foundation.dart' show kDebugMode;
 ///flutter packages pub run build_runner build --delete-conflicting-outputs
 ///build command: flutter build apk --dart-define=envType=dev
 ///Launcher icon command: flutter pub run flutter_launcher_icons:main
+///flutter build web --dart-define=envType=dev
 
 Future<void> initializations() async {
   WidgetsFlutterBinding.ensureInitialized();

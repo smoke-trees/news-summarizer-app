@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:news_summarizer/src/ui/pages/blogs_prefs_page.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class BlogsOnboardingPage extends StatefulWidget {
   static String routeName = "/blogs_onboarding_page";
@@ -13,16 +14,26 @@ class BlogsOnboardingPage extends StatefulWidget {
 class _BlogsOnboardingPageState extends State<BlogsOnboardingPage> {
   double opacity = 0.0;
   double buttonOpacity = 0.0;
-  final Widget svg = SvgPicture.asset(
-    "assets/svgs/expert.svg",
-    semanticsLabel: 'Expert SVG',
-    // color: Get.theme.accentColor,
-    width: Get.mediaQuery.size.width,
-    fit: BoxFit.contain,
-  );
+  Widget svg;
 
   @override
   void initState() {
+    if (kIsWeb) {
+      svg = Image.network(
+        "/assets/assets/svgs/expert.svg",
+        // color: Get.theme.accentColor,
+        width: Get.mediaQuery.size.width,
+        fit: BoxFit.contain,
+      );
+    } else {
+      svg = SvgPicture.asset(
+        "assets/svgs/expert.svg",
+        semanticsLabel: 'Expert SVG',
+        // color: Get.theme.accentColor,
+        width: Get.mediaQuery.size.width,
+        fit: BoxFit.contain,
+      );
+    }
     super.initState();
     Future.delayed(Duration(milliseconds: 300), () {
       setState(() {

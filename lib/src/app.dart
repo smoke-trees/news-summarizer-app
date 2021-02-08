@@ -97,7 +97,7 @@ class App extends StatelessWidget {
             ReorderExpertPrefsPage.routeName: (context) =>
                 ReorderExpertPrefsPage(),
             BlogsPrefsPage.routeName: (context) => BlogsPrefsPage(),
-            OnboardingPages.routeName: (context) => OnboardingPages(),
+            // OnboardingPages.routeName: (context) => OnboardingPages(),
             PhoneAuthPage.routeName: (context) => PhoneAuthPage(),
             GetLocationPage.routeName: (context) => GetLocationPage(),
             NotifsChecklistPage.routeName: (context) => NotifsChecklistPage(),
