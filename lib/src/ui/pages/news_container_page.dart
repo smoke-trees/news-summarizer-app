@@ -45,9 +45,10 @@ class _NewsContainerPageState extends State<NewsContainerPage>
     _newsFeeds = userProvider.user.newsPreferences ?? [];
     _blogsFeeds = userProvider.user.blogPreferences ?? [];
     _pubFeeds = userProvider.user.pubPreferences ?? [];
-    if (!_newsFeeds.contains("RECOMMENDED")) {
-      _newsFeeds.insert(0, "RECOMMENDED");
-    }
+    print(_newsFeeds);
+    // if (!_newsFeeds.contains("RECOMMENDED")) {
+    //   _newsFeeds.insert(0, "RECOMMENDED");
+    // }
     // if (!_blogsFeeds.contains("RECOMMENDED")) {
     //   _blogsFeeds.insert(0, "RECOMMENDED");
     // }
@@ -87,7 +88,9 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                   });
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SearchPage()),
+                    MaterialPageRoute(
+                      builder: (context) => SearchPage(),
+                    ),
                   );
                 },
                 autofocus: true,
@@ -308,6 +311,8 @@ class _NewsContainerPageState extends State<NewsContainerPage>
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: true);
 
     if (selectedMenuItem == 1)
       return Scaffold(
@@ -528,47 +533,65 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                       ),
                     )
                   : DefaultTabController(
-                      length: _newsFeeds.length,
+                      length: _newsFeeds.length + 1,
                       child: Scaffold(
                         drawer: drawerWidget(),
                         bottomNavigationBar: _bottomNavigationBar(),
                         // drawer: drawerWidget(),
                         backgroundColor: Get.theme.scaffoldBackgroundColor,
-                        appBar: (!_isSearchActive)
+                        appBar: !_isSearchActive
                             ? _withoutSearchAppBar(
                                 titleText: "News",
                                 bottom: TabBar(
-                                  tabs: _newsFeeds
-                                      .map((e) => Tab(
-                                            text: e
-                                                .toString()
-                                                .split('.')
-                                                .last
-                                                .replaceAll("_", " ")
-                                                .toUpperCase(),
-                                          ))
-                                      .toList(),
+                                  tabs: List.generate(_newsFeeds.length + 1,
+                                      (index) {
+                                    if (index == 0) {
+                                      return Tab(text: "RECOMMENDED");
+                                    }
+                                    return Tab(
+                                      child: Text(
+                                        _newsFeeds[index - 1]
+                                            .toString()
+                                            .split('.')
+                                            .last
+                                            .replaceAll("_", " ")
+                                            .toUpperCase(),
+                                        style: userProvider
+                                                .user.customPreferences
+                                                .contains(_newsFeeds[index - 1])
+                                            ? TextStyle(
+                                                decoration:
+                                                    TextDecoration.underline,
+                                                decorationStyle:
+                                                    TextDecorationStyle.dashed,
+                                                decorationThickness: 2,
+                                              )
+                                            : TextStyle(),
+                                      ),
+                                    );
+                                  }),
                                   isScrollable: true,
                                 ),
                               )
                             : _searchAppBar(context),
                         body: TabBarView(
                           children: List.generate(
-                            _newsFeeds.length,
+                            _newsFeeds.length + 1,
                             (index) {
-                              if (_newsFeeds[index].contains("NewsFeed.")) {
+                              if (index == 0) {
+                                return RecommendedNewsPage();
+                              } else if (_newsFeeds[index - 1]
+                                  .contains("NewsFeed.")) {
                                 return NewsPage(
-                                  newsFeed: _newsFeeds[index],
+                                  newsFeed: _newsFeeds[index - 1],
                                   articleType: ArticleType.NEWS,
                                 );
-                              } else if (_newsFeeds[index] == "RECOMMENDED") {
-                                return RecommendedNewsPage();
                               } else {
                                 return NewsPage(
-                                  customPref: _newsFeeds[index],
+                                  customPref: _newsFeeds[index - 1],
                                   articleType: ArticleType.CUSTOM,
                                 ); //
-                              } // Very bad method but eet ees what eet ees
+                              }
                             },
                           ),
                         ),

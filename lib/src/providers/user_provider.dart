@@ -9,6 +9,7 @@ import 'package:news_summarizer/src/models/user.dart';
 import 'package:news_summarizer/src/utils/article_type_enum.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:news_summarizer/src/utils/hive_prefs.dart';
 
 class UserProvider extends ChangeNotifier {
   ApiUser user;
@@ -24,9 +25,9 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void createUserInFirebase({ApiUser newUser}) {
+  void createUserInFirebase({ApiUser newUser}) async {
     print("[UserProvider] Creating user in firebase");
-    FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection('user')
         .doc(newUser.firebaseUid)
         .set(newUser.toJson());
@@ -70,8 +71,12 @@ class UserProvider extends ChangeNotifier {
     //     print("onResume: $message");
     //   },
     // );
-    // _firebaseMessaging
-    //     .requestNotificationPermissions(const IosNotificationSettings(sound: true, badge: true, alert: true));
+    // _firebaseMessaging.requestPermission(
+    //   alert: true,
+    //   announcement: true,
+    //   badge: true,
+    //   sound: true,
+    // );
     //
     // ProfileHive sp = new ProfileHive();
     // _firebaseMessaging.onTokenRefresh.listen((event) {
@@ -125,8 +130,9 @@ class UserProvider extends ChangeNotifier {
       FirebaseFirestore.instance
           .collection('user')
           .doc(user.firebaseUid)
-          .update(
-              {'newsPreferences': prefsList.map((e) => e.toString()).toList()});
+          .update({
+        'newsPreferences': prefsList.map((e) => e.toString()).toList(),
+      });
     } else {
       print(
           "[UserProvider] No user in Firebase. Did not Set news preferences in Firebase");
@@ -304,22 +310,22 @@ class UserProvider extends ChangeNotifier {
   }
 
   void subscribeToTopic({String topic}) {
-    if(!kIsWeb) {
+    if (!kIsWeb) {
       print("[UserProvider] Subscribing to topic $topic");
       _firebaseMessaging.subscribeToTopic(topic);
     }
   }
 
   void unsubscribeToTopic({String topic}) {
-    if(!kIsWeb) {
+    if (!kIsWeb) {
       print("[UserProvider] Unsubscribe to topic $topic");
       _firebaseMessaging.unsubscribeFromTopic(topic);
     }
   }
 
-  void saveToHive({ApiUser user}) {
+  void saveToHive({ApiUser user}) async {
     print("[UserProvider] Changes in user saved to Hive");
-    userBox.put("user", user);
+    await userBox.put("user", user);
   }
 
   ApiUser fetchFromHive() {

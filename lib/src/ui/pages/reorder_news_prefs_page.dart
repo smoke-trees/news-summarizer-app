@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
+import 'package:news_summarizer/src/providers/user_provider.dart';
 import 'package:news_summarizer/src/ui/pages/blogs_onboarding_page.dart';
 import 'package:news_summarizer/src/ui/widgets/listview_card.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
+import 'package:provider/provider.dart';
 
 class ReorderNewsPrefsPage extends StatefulWidget {
   static String routeName = "/reorder_news_prefs_page";
@@ -38,6 +40,9 @@ class _ReorderNewsPrefsPageState extends State<ReorderNewsPrefsPage> {
 
   void finishReordering() {
     _newsBox.put(NEWS_PREFS, preferences);
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
+    userProvider.setNewsPreferences(prefsList: preferences);
     if (isNewUser) {
       Get.toNamed(BlogsOnboardingPage.routeName);
     } else {
@@ -80,7 +85,8 @@ class _ReorderNewsPrefsPageState extends State<ReorderNewsPrefsPage> {
         data: ThemeData(canvasColor: Get.theme.scaffoldBackgroundColor),
         child: ReorderableListView(
           header: Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16, top: 8),
+            padding:
+                const EdgeInsets.only(left: 16, right: 16, bottom: 16, top: 8),
             child: Text(
               "Reorder the news channels according to your level of interest!",
               textAlign: TextAlign.center,

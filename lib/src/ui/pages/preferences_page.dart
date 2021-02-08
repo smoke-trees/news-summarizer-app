@@ -264,9 +264,10 @@ class _PreferencesPageState extends State<PreferencesPage> {
                   children: [
                     ChipsChoice<dynamic>.multiple(
                       itemConfig: ChipsChoiceItemConfig(
-                        selectedColor: themeProvider.isDarkMode
-                            ? Get.theme.accentColor
-                            : Get.theme.primaryColorDark,
+                        selectedColor: Color(0xffff8708),
+                        // themeProvider.isDarkMode
+                        //     ? Get.theme.accentColor
+                        //     : Get.theme.primaryColorDark,
                         unselectedColor: Get.theme.primaryColor,
                         unselectedBrightness: Get.theme.brightness,
                         selectedBrightness: Get.theme.brightness,
@@ -294,7 +295,17 @@ class _PreferencesPageState extends State<PreferencesPage> {
                             child: Container(
                               width: Get.mediaQuery.size.width * 0.7,
                               child: TextFormField(
-                                // decoration: InputDecoration(hintText: "Enter your custom preference"),
+                                decoration: InputDecoration(
+                                  focusColor: Color(0xffff8708),
+                                  fillColor: Color(0xffff8708),
+                                  hoverColor: Color(0xffff8708),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Color(0xffff8708),
+                                    ),
+                                  ),
+                                ),
+                                cursorColor: Color(0xffff8708),
                                 textInputAction: TextInputAction.next,
                                 controller: customPrefsController,
                                 validator: (value) {
@@ -317,7 +328,7 @@ class _PreferencesPageState extends State<PreferencesPage> {
                             ),
                           ),
                           CircleAvatar(
-                            backgroundColor: Get.theme.accentColor,
+                            backgroundColor: Color(0xffff8708),
                             child: IconButton(
                               icon: Icon(Icons.add),
                               color: Get.theme.primaryColorDark,
