@@ -5,7 +5,7 @@ import 'package:news_summarizer/src/providers/api_provider.dart';
 import 'package:news_summarizer/src/providers/theme_provider.dart';
 import 'package:news_summarizer/src/providers/user_provider.dart';
 import 'package:news_summarizer/src/ui/pages/auth_page.dart';
-import 'package:news_summarizer/src/ui/pages/blogs_prefs_page.dart';
+import 'package:news_summarizer/src/ui/pages/expert_prefs_page.dart';
 import 'package:news_summarizer/src/ui/pages/control_center.dart';
 import 'package:news_summarizer/src/ui/pages/get_location_page.dart';
 import 'package:news_summarizer/src/ui/pages/news_page.dart';
@@ -45,16 +45,6 @@ class _NewsContainerPageState extends State<NewsContainerPage>
     _newsFeeds = userProvider.user.newsPreferences ?? [];
     _blogsFeeds = userProvider.user.blogPreferences ?? [];
     _pubFeeds = userProvider.user.pubPreferences ?? [];
-    print(_newsFeeds);
-    // if (!_newsFeeds.contains("RECOMMENDED")) {
-    //   _newsFeeds.insert(0, "RECOMMENDED");
-    // }
-    // if (!_blogsFeeds.contains("RECOMMENDED")) {
-    //   _blogsFeeds.insert(0, "RECOMMENDED");
-    // }
-    // if (!_pubFeeds.contains("RECOMMENDED")) {
-    //   _pubFeeds.insert(0, "RECOMMENDED");
-    // }
   }
 
   Future<void> _showThemeDialog(BuildContext context) async {
@@ -416,7 +406,7 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                             ),
                             InkWell(
                               onTap: () {
-                                Get.toNamed(BlogsPrefsPage.routeName);
+                                Get.toNamed(ExpertPrefsPage.routeName);
                               },
                               child: Text(
                                 "Add Expert Channels",

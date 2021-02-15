@@ -89,41 +89,43 @@ class _AuthPageState extends State<AuthPage> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 30),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
-                          child: OutlineButton(
-                            onPressed: () {
-                              Get.toNamed(
-                                PhoneAuthPage.routeName,
-                                arguments: widget.firstLogin,
-                              );
-                            },
-                            padding: EdgeInsets.symmetric(vertical: 14),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            borderSide: BorderSide(color: Color(0xff3B916E)),
-                            highlightedBorderColor: Colors.transparent,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.phone),
-                                SizedBox(
-                                  width: 18,
-                                ),
-                                Text(
-                                  "Continue with Phone Number",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                        SizedBox(
+                          height: 30,
                         ),
+                        // Padding(
+                        //   padding: const EdgeInsets.symmetric(
+                        //       horizontal: 20, vertical: 10),
+                        //   child: OutlineButton(
+                        //     onPressed: () {
+                        //       Get.toNamed(
+                        //         PhoneAuthPage.routeName,
+                        //         arguments: widget.firstLogin,
+                        //       );
+                        //     },
+                        //     padding: EdgeInsets.symmetric(vertical: 14),
+                        //     shape: RoundedRectangleBorder(
+                        //       borderRadius: BorderRadius.circular(10),
+                        //     ),
+                        //     borderSide: BorderSide(color: Color(0xff3B916E)),
+                        //     highlightedBorderColor: Colors.transparent,
+                        //     child: Row(
+                        //       mainAxisAlignment: MainAxisAlignment.center,
+                        //       children: [
+                        //         Icon(Icons.phone),
+                        //         SizedBox(
+                        //           width: 18,
+                        //         ),
+                        //         Text(
+                        //           "Continue with Phone Number",
+                        //           style: TextStyle(
+                        //             fontWeight: FontWeight.bold,
+                        //             fontSize: 16,
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
+                        // ),
                         // Padding(
                         //   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         //   child: OutlineButton(

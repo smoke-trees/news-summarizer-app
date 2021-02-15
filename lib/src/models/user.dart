@@ -61,6 +61,9 @@ class ApiUser extends HiveObject {
   @HiveField(18)
   bool forceRelogin;
 
+  @HiveField(19)
+  Map<String, dynamic> ipifyObject;
+
   ApiUser({
     this.email,
     this.name,
@@ -81,26 +84,8 @@ class ApiUser extends HiveObject {
     this.completedOnboarding,
     this.isUserLoggedIn,
     this.forceRelogin,
+    this.ipifyObject,
   });
-
-  // {
-  //   email = "";
-  //   name = "";
-  //   blogPreferences = [];
-  //   customPreferences = [];
-  //   newsPreferences = [];
-  //   fcmToken = "";
-  //   photoUrl = "";
-  //   firebaseUid = "";
-  //   phoneNumber = "";
-  //   latitude = -1;
-  //   longitude = -1;
-  //   notifEnabledPrefs = [];
-  //   savedNewsIds = [];
-  //   pubPreferences = [];
-  //   savedBlogsIds = [];
-  //   savedPubIds = [];
-  // }
 
   factory ApiUser.fromJson(json) {
     return ApiUser(
@@ -139,6 +124,7 @@ class ApiUser extends HiveObject {
       isUserLoggedIn: json['isUserLoggedIn'] ?? false,
       completedOnboarding: json['completedOnboarding'] ?? false,
       forceRelogin: json['forceRelogin'] ?? false,
+      ipifyObject: json['ipifyObject'],
     );
   }
 
@@ -164,6 +150,7 @@ class ApiUser extends HiveObject {
     data['completedOnboarding'] = completedOnboarding ?? false;
     data['isUserLoggedIn'] = isUserLoggedIn ?? false;
     data['forceRelogin'] = forceRelogin ?? false;
+    data['ipifyObject'] = ipifyObject;
     return data;
   }
 }

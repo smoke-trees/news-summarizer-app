@@ -38,9 +38,11 @@ class _AuthOnboardingPageState extends State<AuthOnboardingPage> {
               .whenComplete(
             () => Future.delayed(Duration(milliseconds: 500), () {
               // Get.toNamed(AuthPage.routeName, arguments: true);
-              Get.to(AuthPage(
-                firstLogin: true,
-              ));
+              Get.offAll(
+                AuthPage(
+                  firstLogin: true,
+                ),
+              );
             }),
           );
         },

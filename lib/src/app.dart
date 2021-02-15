@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:news_summarizer/src/providers/api_provider.dart';
 import 'package:news_summarizer/src/providers/auth_provider.dart';
-import 'package:news_summarizer/src/providers/dynamic_link_provider.dart';
 import 'package:news_summarizer/src/providers/theme_provider.dart';
 import 'package:news_summarizer/src/providers/user_provider.dart';
+import 'package:news_summarizer/src/services/dynamic_link_services.dart';
 import 'package:news_summarizer/src/ui/pages/auth_page.dart';
 import 'package:news_summarizer/src/ui/pages/base_page.dart';
 import 'package:news_summarizer/src/ui/pages/blogs_onboarding_page.dart';
-import 'package:news_summarizer/src/ui/pages/blogs_prefs_page.dart';
+import 'package:news_summarizer/src/ui/pages/expert_prefs_page.dart';
 import 'package:news_summarizer/src/ui/pages/control_center.dart';
 import 'package:news_summarizer/src/ui/pages/control_center_onboarding_page.dart';
 import 'package:news_summarizer/src/ui/pages/custom_prefs_page.dart';
@@ -17,7 +17,6 @@ import 'package:news_summarizer/src/ui/pages/get_location_page.dart';
 import 'package:news_summarizer/src/ui/pages/home_page.dart';
 import 'package:news_summarizer/src/ui/pages/new_prefs_onboarding_page.dart';
 import 'package:news_summarizer/src/ui/pages/notifs_checklist_page.dart';
-import 'package:news_summarizer/src/ui/pages/onboarding_pages.dart';
 import 'package:news_summarizer/src/ui/pages/phone_auth_page.dart';
 import 'package:news_summarizer/src/ui/pages/preferences_onboarding_page.dart';
 import 'package:news_summarizer/src/ui/pages/preferences_page.dart';
@@ -58,6 +57,7 @@ class App extends StatelessWidget {
                 bool isLoggedIn = ProfileHive().getIsUserLoggedIn();
                 if (userProvider.user == null) {
                   ///First time user
+                  // Get.offAndToNamed(AuthOnboardingPage.routeName);
                   return AuthOnboardingPage();
                 } else if (isLoggedIn == false &&
                     userProvider.user.isUserLoggedIn == false) {
@@ -96,7 +96,7 @@ class App extends StatelessWidget {
             ReorderPubPrefsPage.routeName: (context) => ReorderPubPrefsPage(),
             ReorderExpertPrefsPage.routeName: (context) =>
                 ReorderExpertPrefsPage(),
-            BlogsPrefsPage.routeName: (context) => BlogsPrefsPage(),
+            ExpertPrefsPage.routeName: (context) => ExpertPrefsPage(),
             // OnboardingPages.routeName: (context) => OnboardingPages(),
             PhoneAuthPage.routeName: (context) => PhoneAuthPage(),
             GetLocationPage.routeName: (context) => GetLocationPage(),

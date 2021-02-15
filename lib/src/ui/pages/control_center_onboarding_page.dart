@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:news_summarizer/src/services/ip_service.dart';
 import 'package:news_summarizer/src/ui/pages/control_center.dart';
 import 'package:news_summarizer/src/ui/widgets/onboarding_text_widget.dart';
 
@@ -36,13 +37,22 @@ class _ControlCenterOnboardingPageState
             // setState(() {
             //   opacity = 0.0;
             // });
-          }).whenComplete(() => Future.delayed(Duration(milliseconds: 500), () {
+          })
+              .whenComplete(
+            () => Future.delayed(
+              Duration(milliseconds: 500),
+              () {
+                IPService cs = new IPService();
+                cs.getLocation(context);
+
                 Get.offAllNamed(
                   ControlCenterPage.routeName,
                   arguments: true,
                 );
                 // Get.offAndToNamed(ControlCenterPage.routeName, arguments: true);
-              }),);
+              },
+            ),
+          );
         },
         child: Center(
             child: Column(

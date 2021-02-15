@@ -60,12 +60,27 @@ class _PublicationPrefsPageState extends State<PublicationPrefsPage> {
     UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
     var finList = pubChosen.cast<String>();
-    previousPubs.forEach((element) {
-      userProvider.unsubscribeToTopic(topic: element.replaceAll(' ', ''));
-    });
-    finList.forEach((element) {
-      userProvider.subscribeToTopic(topic: element.replaceAll(' ', ''));
-    });
+
+    List<String> oldEntries = userProvider.user.pubPreferences
+        .where((element) => finList.contains(element))
+        .toList();
+
+    List<String> newEntries = finList
+        .where(
+            (element) => !userProvider.user.pubPreferences.contains(element))
+        .toList();
+
+    List<String> removedEntries = userProvider.user.pubPreferences
+        .where((element) => !finList.contains(element))
+        .toList();
+
+    finList.clear();
+    finList.addAll(oldEntries);
+    finList.addAll(newEntries);
+
+    removedEntries.forEach((e) => userProvider.unsubscribeToTopic(topic: e));
+    newEntries.forEach((e) => userProvider.subscribeToTopic(topic: e));
+
     userProvider.user.notifEnabledPrefs.addAll(finList);
     userProvider.user.notifEnabledPrefs =
         userProvider.user.notifEnabledPrefs.toSet().toList();

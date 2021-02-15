@@ -124,6 +124,25 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setUserIpifyObject({Map<String, dynamic> object}) {
+    if (user.firebaseUid != null) {
+      FirebaseFirestore.instance
+          .collection('user')
+          .doc(user.firebaseUid)
+          .update({
+        'ipifyObject': object,
+      });
+      print("[UserProvider] Set ipifyObject in Firebase");
+    } else {
+      print(
+          "[UserProvider] No user in Firebase. Did not Set ipifyObject in Firebase");
+    }
+
+    user.ipifyObject = object;
+    saveToHive(user: user);
+    // notifyListeners();
+  }
+
   void setNewsPreferences({List prefsList}) {
     if (user != null && user.firebaseUid != null) {
       print("[UserProvider] Set news preferences in Firebase");

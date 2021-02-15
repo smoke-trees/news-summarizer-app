@@ -19,6 +19,7 @@ class _BasePageState extends State<BasePage> {
     UserProvider userProvider =
     Provider.of<UserProvider>(context, listen: false);
     userProvider.configureFCM();
+
   }
 
   @override

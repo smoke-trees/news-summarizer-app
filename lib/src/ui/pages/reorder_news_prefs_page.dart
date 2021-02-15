@@ -46,8 +46,7 @@ class _ReorderNewsPrefsPageState extends State<ReorderNewsPrefsPage> {
     if (isNewUser) {
       Get.toNamed(BlogsOnboardingPage.routeName);
     } else {
-      // Get.toNamed(BlogsPrefsPage.routeName);
-      Get.back();
+      Navigator.pop(context, preferences);
     }
   }
 

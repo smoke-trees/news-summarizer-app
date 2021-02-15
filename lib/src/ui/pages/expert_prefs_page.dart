@@ -11,15 +11,14 @@ import 'package:news_summarizer/src/ui/pages/reorder_expert_prefs_page.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
 import 'package:provider/provider.dart';
 
-
-class BlogsPrefsPage extends StatefulWidget {
-  static String routeName = "/blogs_prefs_page";
+class ExpertPrefsPage extends StatefulWidget {
+  static String routeName = "/expert_prefs_page";
 
   @override
-  _BlogsPrefsPageState createState() => _BlogsPrefsPageState();
+  _ExpertPrefsPageState createState() => _ExpertPrefsPageState();
 }
 
-class _BlogsPrefsPageState extends State<BlogsPrefsPage> {
+class _ExpertPrefsPageState extends State<ExpertPrefsPage> {
   bool isNewUser = Get.arguments ?? false;
   var _newsBox = Hive.box(NEWS_PREFS_BOX);
 
@@ -63,18 +62,36 @@ class _BlogsPrefsPageState extends State<BlogsPrefsPage> {
     print("finishSelection called");
     UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
-    var finList = authorsChosen.cast<String>();
-    previousAuthors.forEach((element) {
-      userProvider.unsubscribeToTopic(topic: element.replaceAll(' ', ''));
-    });
-    finList.forEach((element) {
-      userProvider.subscribeToTopic(topic: element.replaceAll(' ', ''));
-    });
+    List<String> finList = authorsChosen.cast<String>();
+
+    List<String> oldEntries = userProvider.user.blogPreferences
+        .where((element) => finList.contains(element))
+        .toList();
+
+    List<String> newEntries = finList
+        .where(
+            (element) => !userProvider.user.blogPreferences.contains(element))
+        .toList();
+
+    List<String> removedEntries = userProvider.user.blogPreferences
+        .where((element) => !finList.contains(element))
+        .toList();
+
+    finList.clear();
+    finList.addAll(oldEntries);
+    finList.addAll(newEntries);
+
+    removedEntries.forEach(
+        (e) => userProvider.unsubscribeToTopic(topic: e.replaceAll(' ', '')));
+    newEntries.forEach(
+        (e) => userProvider.subscribeToTopic(topic: e.replaceAll(' ', '')));
+
     userProvider.user.notifEnabledPrefs.addAll(finList);
     userProvider.user.notifEnabledPrefs =
         userProvider.user.notifEnabledPrefs.toSet().toList();
     userProvider.setNotificationPrefs(
-        prefsList: userProvider.user.notifEnabledPrefs);
+      prefsList: userProvider.user.notifEnabledPrefs,
+    );
     _newsBox.put(NEWS_BLOGS_AUTHORS, finList);
     userProvider.setBlogPreferences(prefsList: finList);
     print("Saved to blogs authors, now list is: $finList");
@@ -83,6 +100,18 @@ class _BlogsPrefsPageState extends State<BlogsPrefsPage> {
     } else {
       Get.back();
     }
+  }
+
+  void gotToReorderPage() async {
+    final information = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (context) => ReorderExpertPrefsPage(),
+      ),
+    );
+    print(information);
+    print("information");
   }
 
   @override
@@ -104,7 +133,7 @@ class _BlogsPrefsPageState extends State<BlogsPrefsPage> {
             icon: Icon(Icons.sort),
             onPressed: () {
               finishSelection();
-              Get.toNamed(ReorderExpertPrefsPage.routeName);
+              gotToReorderPage();
             },
           ),
           GestureDetector(

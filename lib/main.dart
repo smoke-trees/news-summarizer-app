@@ -6,9 +6,7 @@ import 'package:news_summarizer/src/app.dart';
 import 'package:news_summarizer/src/models/user.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/foundation.dart' show kDebugMode;
-
 
 ///Hive command:
 ///flutter packages pub run build_runner build --delete-conflicting-outputs
@@ -18,13 +16,9 @@ import 'package:flutter/foundation.dart' show kDebugMode;
 
 Future<void> initializations() async {
   WidgetsFlutterBinding.ensureInitialized();
-  var appDocumentDirectory;
-  if (kIsWeb) {
-    // Set web-specific directory
-  } else {
-    final appDocumentDir = await path_provider.getApplicationDocumentsDirectory();
-    Hive.init(appDocumentDir.path);
-  }
+
+  final appDocumentDir = await path_provider.getApplicationDocumentsDirectory();
+  Hive.init(appDocumentDir.path);
 
   Hive.registerAdapter(ApiUserAdapter());
   await Hive.openBox(NEWS_PREFS_BOX);
@@ -41,14 +35,12 @@ Future<void> initializations() async {
   if (kDebugMode) {
     // Force disable Crashlytics collection while doing every day development.
     // Temporarily toggle this to true if you want to test crash reporting in your app.
-    await FirebaseCrashlytics.instance
-        .setCrashlyticsCollectionEnabled(false);
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
   } else {
     // Handle Crashlytics enabled status when not in Debug,
     // e.g. allow your users to opt-in to crash reporting.
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   }
-
 }
 
 void main() async {

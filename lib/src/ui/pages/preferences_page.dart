@@ -31,12 +31,11 @@ class _PreferencesPageState extends State<PreferencesPage> {
   // var indianCitiesChosen = [];
   List<String> internationalChosen = [];
 
-  List<String> allPrefs = [];
-
   List<String> customPrefsChosen = [];
   List<String> customPrefsPresent = [];
   TextEditingController customPrefsController = new TextEditingController();
   final formKey = GlobalKey<FormState>();
+
 
   List<String> newsFeedList = [
     "NewsFeed.INDIA",
@@ -101,7 +100,6 @@ class _PreferencesPageState extends State<PreferencesPage> {
     // metroChosen = _newsBox.get(NEWS_METRO);
     // indianCitiesChosen = _newsBox.get(NEWS_OTHER);
     internationalChosen = _newsBox.get(NEWS_INT);
-    allPrefs = _newsBox.get(NEWS_PREFS) ?? [];
     customPrefsChosen = _newsBox.get(NEWS_CUSTOM) ?? [];
 
     customPrefsPresent.addAll(customPrefsChosen);
@@ -111,16 +109,11 @@ class _PreferencesPageState extends State<PreferencesPage> {
     UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
     print("finishSelection called");
+
     List<String> finList = [];
     if (!popularChosen.isNullOrBlank) {
       finList.addAll(popularChosen);
     }
-    // if (!metroChosen.isNullOrBlank) {
-    //   finList.addAll(metroChosen);
-    // }
-    // if (!indianCitiesChosen.isNullOrBlank) {
-    //   finList.addAll(indianCitiesChosen);
-    // }
     if (!internationalChosen.isNullOrBlank) {
       finList.addAll(internationalChosen);
     }
@@ -134,22 +127,26 @@ class _PreferencesPageState extends State<PreferencesPage> {
       );
       return;
     }
-    // _newsBox.put(NEWS_PREFS, finList);
+    List<String> oldEntries = userProvider.user.newsPreferences
+        .where((element) => finList.contains(element))
+        .toList();
 
-    // _newsBox.put(NEWS_METRO, metroChosen);
-    // _newsBox.put(NEWS_OTHER, indianCitiesChosen);
+    List<String> newEntries = finList
+        .where(
+            (element) => !userProvider.user.newsPreferences.contains(element))
+        .toList();
 
-    allPrefs.forEach((element) {
-      if (!finList.contains(element) && !customPrefsChosen.contains(element)) {
-        userProvider.unsubscribeToTopic(topic: element.toString());
-      }
-    });
-    finList.forEach((element) {
-      if (!customPrefsChosen.contains(element)) {
-        userProvider.subscribeToTopic(topic: element.toString());
-      }
-    });
-    // userProvider.setUserInProvider(setUser: new ApiUser());
+    List<String> removedEntries = userProvider.user.newsPreferences
+        .where((element) => !finList.contains(element))
+        .toList();
+
+    finList.clear();
+    finList.addAll(oldEntries);
+    finList.addAll(newEntries);
+
+    removedEntries.forEach((e) => userProvider.unsubscribeToTopic(topic: e));
+    newEntries.forEach((e) => userProvider.subscribeToTopic(topic: e));
+
     if (userProvider.user == null) {
       print("[] User not in provider, creating new User");
       userProvider.setUserInProvider(
@@ -203,6 +200,19 @@ class _PreferencesPageState extends State<PreferencesPage> {
     }
   }
 
+  void gotToReorderPage() async {
+    final information = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (context) => ReorderNewsPrefsPage(),
+      ),
+    );
+
+    print(information);
+    print("information");
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
@@ -221,7 +231,9 @@ class _PreferencesPageState extends State<PreferencesPage> {
           IconButton(
             icon: Icon(Icons.sort),
             onPressed: () {
-              Get.toNamed(ReorderNewsPrefsPage.routeName);
+              // Get.toNamed(ReorderNewsPrefsPage.routeName);
+              finishSelection();
+              gotToReorderPage();
             },
           ),
           GestureDetector(
@@ -279,7 +291,9 @@ class _PreferencesPageState extends State<PreferencesPage> {
                         label: (index, item) => item,
                       ),
                       onChanged: (val) {
-                        setState(() => customPrefsChosen = val.cast<String>());
+                        setState(() {
+                          customPrefsChosen = val.cast<String>();
+                        });
                       },
                       padding: EdgeInsets.all(8),
                       isWrapped: true,
@@ -410,7 +424,9 @@ class _PreferencesPageState extends State<PreferencesPage> {
                               .replaceAll("_", " "),
                         ),
                         onChanged: (val) {
-                          setState(() => popularChosen = val.cast<String>());
+                          setState(() {
+                            popularChosen = val.cast<String>();
+                          });
                         },
                         padding: EdgeInsets.all(8),
                         isWrapped: true,
@@ -466,8 +482,9 @@ class _PreferencesPageState extends State<PreferencesPage> {
                               .replaceAll("_", " "),
                         ),
                         onChanged: (val) {
-                          setState(
-                              () => internationalChosen = val.cast<String>());
+                          setState(() {
+                            internationalChosen = val.cast<String>();
+                          });
                         },
                         padding: EdgeInsets.all(8),
                         isWrapped: true,

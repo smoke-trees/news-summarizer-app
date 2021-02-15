@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:news_summarizer/src/ui/pages/blogs_prefs_page.dart';
+import 'package:news_summarizer/src/ui/pages/expert_prefs_page.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 class BlogsOnboardingPage extends StatefulWidget {
@@ -59,7 +59,7 @@ class _BlogsOnboardingPageState extends State<BlogsOnboardingPage> {
               opacity = 0.0;
             });
           }).whenComplete(() => Future.delayed(Duration(milliseconds: 500), () {
-                Get.toNamed(BlogsPrefsPage.routeName, arguments: true);
+                Get.toNamed(ExpertPrefsPage.routeName, arguments: true);
               }));
         },
         child: Column(

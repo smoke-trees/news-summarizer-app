@@ -10,3 +10,4 @@ const String NEWS_BLOGS_AUTHORS = "blogsAuthors";
 const String NOTIFICATION_ENABLED = "notifEnabled";
 String BASE_URL = ""; //WILL GET FROM RUNTYME TYPE
 const String PROFILE_BOX = 'loginBox';
+const String IPIFY_KEY = "at_66VbMyHszHNaoVXXhUWiw46tO3KLv";

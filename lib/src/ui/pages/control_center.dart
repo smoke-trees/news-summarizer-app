@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:news_summarizer/src/providers/user_provider.dart';
 import 'package:news_summarizer/src/ui/pages/base_page.dart';
-import 'package:news_summarizer/src/ui/pages/blogs_prefs_page.dart';
+import 'package:news_summarizer/src/ui/pages/expert_prefs_page.dart';
 import 'package:news_summarizer/src/ui/pages/preferences_page.dart';
 import 'package:news_summarizer/src/ui/pages/pub_prefs_page.dart';
 import 'package:news_summarizer/src/ui/pages/reorder_expert_prefs_page.dart';
@@ -18,7 +18,13 @@ class ControlCenterPage extends StatefulWidget {
 }
 
 class _ControlCenterPageState extends State<ControlCenterPage> {
-  bool isNewUser = Get.arguments;
+  bool isNewUser = Get.arguments ?? false;
+
+  @override
+  void initState()  {
+    super.initState();
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +57,9 @@ class _ControlCenterPageState extends State<ControlCenterPage> {
                 );
                 return;
               } else {
-                userProvider.completeOnboarding();
+                if (isNewUser) {
+                  userProvider.completeOnboarding();
+                }
                 Get.toNamed(BasePage.routeName);
               }
             },
@@ -131,7 +139,7 @@ class _ControlCenterPageState extends State<ControlCenterPage> {
                         userProvider.user.blogPreferences?.join(", ") ?? ""),
                   ),
             onTap: () {
-              Get.toNamed(BlogsPrefsPage.routeName);
+              Get.toNamed(ExpertPrefsPage.routeName);
             },
           ),
           SizedBox(
