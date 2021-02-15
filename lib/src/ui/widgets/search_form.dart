@@ -11,7 +11,6 @@ class SearchForm extends StatefulWidget {
 }
 
 class SearchFormState extends State<SearchForm> {
-
   @override
   Widget build(BuildContext context) {
     final apiProvider = Provider.of<ApiProvider>(context);
@@ -28,13 +27,15 @@ class SearchFormState extends State<SearchForm> {
               return null;
             },
             decoration: InputDecoration(
-                labelText: 'Search term',
-                hintText: 'What do you want to search for?',
-                border: OutlineInputBorder(),
-                icon: Icon(Icons.search)),
+              labelText: 'Search term',
+              hintText: 'What do you want to search for?',
+              border: OutlineInputBorder(),
+              icon: Icon(Icons.search),
+            ),
             onSaved: (value) {
               apiProvider.setSearchTerm(value);
-              Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SearchPage()));
             },
           ),
         ],

@@ -1,0 +1,13 @@
+const String NEWS_PREFS_BOX = "newsPrefsBox";
+const String USER_BOX = "userBox";
+const String NEWS_PREFS = "newsPrefs";
+const String NEWS_POPULAR = "newsPopular";
+const String NEWS_INT = "newsInt";
+const String NEWS_METRO = "newsMetro";
+const String NEWS_OTHER = "newsOther";
+const String NEWS_CUSTOM = "newsCustom";
+const String NEWS_BLOGS_AUTHORS = "blogsAuthors";
+const String NOTIFICATION_ENABLED = "notifEnabled";
+String BASE_URL = ""; //WILL GET FROM RUNTYME TYPE
+const String PROFILE_BOX = 'loginBox';
+const String IPIFY_KEY = "at_66VbMyHszHNaoVXXhUWiw46tO3KLv";
