@@ -46,6 +46,9 @@ class _NewsCardState extends State<NewsCard> {
     DynamicLinkService dynamicLinkProvider = new DynamicLinkService();
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      // height: getImageUrl(widget.article.description) == null
+      //     ? Get.height / 2 - 20
+      //     : Get.height - 20,
       child: InkWell(
         child: Card(
           shape: RoundedRectangleBorder(

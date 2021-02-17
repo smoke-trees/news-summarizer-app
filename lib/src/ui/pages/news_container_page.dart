@@ -120,132 +120,138 @@ class _NewsContainerPageState extends State<NewsContainerPage>
     );
   }
 
-  void _onDrawerSelect(int index) {
-    if (selectedMenuItem != index) {
-      setState(() {
-        // _isAuthSelected = false;
-        selectedMenuItem = index;
-      });
-      Get.back();
-    }
-  }
+  // void _onDrawerSelect(int index) {
+  //   if (selectedMenuItem != index) {
+  //     setState(() {
+  //       // _isAuthSelected = false;
+  //       selectedMenuItem = index;
+  //     });
+  //     Get.back();
+  //   }
+  // }
 
-  Drawer drawerWidget() {
-    return Drawer(
-      child: Container(
-        color: Get.theme.primaryColor,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(
-              child: Text(
-                'Terran Tidings',
-                style: TextStyle(
-                  color: Get.theme.primaryColor,
-                  fontSize: 20,
-                ),
-              ),
-              decoration: BoxDecoration(
-                color: Get.theme.accentColor,
-              ),
-            ),
-            ListTile(
-              title: Text(
-                'Home',
-                style: TextStyle(
-                  color: Get.theme.accentColor,
-                  fontSize: 18,
-                ),
-              ),
-              focusColor: Get.theme.accentColor,
-              onTap: () => _onDrawerSelect(0),
-            ),
-            ListTile(
-              title: Text(
-                'Login',
-                style: TextStyle(
-                  color: Get.theme.accentColor,
-                  fontSize: 18,
-                ),
-              ),
-              focusColor: Get.theme.accentColor,
-              onTap: () => _onDrawerSelect(1),
-            ),
-            ListTile(
-              title: Text(
-                'Saved Articles',
-                style: TextStyle(
-                  color: Get.theme.accentColor,
-                  fontSize: 18,
-                ),
-              ),
-              focusColor: Get.theme.accentColor,
-              onTap: () => _onDrawerSelect(2),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  // Drawer drawerWidget() {
+  //   return Drawer(
+  //     child: Container(
+  //       color: Get.theme.primaryColor,
+  //       child: ListView(
+  //         padding: EdgeInsets.zero,
+  //         children: <Widget>[
+  //           DrawerHeader(
+  //             child: Text(
+  //               'Terran Tidings',
+  //               style: TextStyle(
+  //                 color: Get.theme.primaryColor,
+  //                 fontSize: 20,
+  //               ),
+  //             ),
+  //             decoration: BoxDecoration(
+  //               color: Get.theme.accentColor,
+  //             ),
+  //           ),
+  //           ListTile(
+  //             title: Text(
+  //               'Home',
+  //               style: TextStyle(
+  //                 color: Get.theme.accentColor,
+  //                 fontSize: 18,
+  //               ),
+  //             ),
+  //             focusColor: Get.theme.accentColor,
+  //             onTap: () => _onDrawerSelect(0),
+  //           ),
+  //           ListTile(
+  //             title: Text(
+  //               'Login',
+  //               style: TextStyle(
+  //                 color: Get.theme.accentColor,
+  //                 fontSize: 18,
+  //               ),
+  //             ),
+  //             focusColor: Get.theme.accentColor,
+  //             onTap: () => _onDrawerSelect(1),
+  //           ),
+  //           ListTile(
+  //             title: Text(
+  //               'Saved Articles',
+  //               style: TextStyle(
+  //                 color: Get.theme.accentColor,
+  //                 fontSize: 18,
+  //               ),
+  //             ),
+  //             focusColor: Get.theme.accentColor,
+  //             onTap: () => _onDrawerSelect(2),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   AppBar _withoutSearchAppBar({Widget bottom, String titleText}) {
     return AppBar(
-        centerTitle: true,
-        // leading: InkWell(
-        //   child: Icon(Icons.search),
-        //   onTap: () => setState(() {
-        //     _isSearchActive = true;
-        //   }),
-        // ),
-        title: Text(
-          titleText,
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            color: Get.theme.accentColor,
-          ),
+      centerTitle: false,
+      // leading: InkWell(
+      //   child: Icon(Icons.search),
+      //   onTap: () => setState(() {
+      //     _isSearchActive = true;
+      //   }),
+      // ),
+      title: Text(
+        titleText,
+        style: TextStyle(
+          fontSize: 22,
+          fontWeight: FontWeight.bold,
+          color: Get.theme.accentColor,
         ),
-        actions: [
-          InkWell(
-            child: Icon(Icons.search),
-            onTap: () => setState(() {
-              _isSearchActive = true;
-            }),
-          ),
-          PopupMenuButton(
-            onSelected: (value) async {
-              switch (value) {
-                case 'Change Theme':
-                  _showThemeDialog(context);
-                  break;
-                case 'Control Center':
-                  Get.toNamed(ControlCenterPage.routeName);
-                  // Get.toNamed(PreferencesPage.routeName);
-                  // Get.toNamed(PreferencesOnboardingPage.routeName);
-                  break;
-                case "Change Location":
-                  Get.toNamed(GetLocationPage.routeName);
-                  break;
-                case "Notification Center":
-                  Get.toNamed(NotifsChecklistPage.routeName);
-              }
-            },
-            itemBuilder: (context) {
-              return {
-                'Change Theme',
-                'Control Center',
-                "Change Location",
-                "Notification Center"
-              }.map((String choice) {
-                return PopupMenuItem<String>(
-                  value: choice,
-                  child: Text(choice),
-                );
-              }).toList();
-            },
-          ),
-        ],
-        bottom: bottom);
+      ),
+      actions: [
+        InkWell(
+          child: Icon(Icons.search),
+          onTap: () => setState(() {
+            _isSearchActive = true;
+          }),
+        ),
+        PopupMenuButton(
+          onSelected: (value) async {
+            switch (value) {
+              case 'Change Theme':
+                _showThemeDialog(context);
+                break;
+              case 'Control Center':
+                Get.toNamed(ControlCenterPage.routeName);
+                // Get.toNamed(PreferencesPage.routeName);
+                // Get.toNamed(PreferencesOnboardingPage.routeName);
+                break;
+              case "Change Location":
+                Get.toNamed(GetLocationPage.routeName);
+                break;
+              case "Notification Center":
+                Get.toNamed(NotifsChecklistPage.routeName);
+                break;
+              case "Login":
+                Get.toNamed(AuthPage.routeName);
+                break;
+            }
+          },
+          itemBuilder: (context) {
+            return {
+              'Change Theme',
+              'Control Center',
+              "Change Location",
+              "Notification Center",
+              "Login"
+            }.map((String choice) {
+              return PopupMenuItem<String>(
+                value: choice,
+                child: Text(choice),
+              );
+            }).toList();
+          },
+        ),
+      ],
+      bottom: bottom,
+    );
   }
 
   BottomNavigationBar _bottomNavigationBar() {
@@ -269,10 +275,10 @@ class _NewsContainerPageState extends State<NewsContainerPage>
           icon: Icon(Icons.menu_book_rounded),
           label: 'Publications',
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.location_on),
-          label: 'Around Me',
-        ),
+        // BottomNavigationBarItem(
+        //   icon: Icon(Icons.location_on),
+        //   label: 'Around Me',
+        // ),
       ],
       currentIndex: _selectedTab,
 
@@ -306,9 +312,8 @@ class _NewsContainerPageState extends State<NewsContainerPage>
 
     if (selectedMenuItem == 1)
       return Scaffold(
-          drawer: drawerWidget(),
           appBar: AppBar(
-            centerTitle: true,
+            centerTitle: false,
             title: Text(
               'Terran Tidings',
               style: TextStyle(
@@ -324,9 +329,8 @@ class _NewsContainerPageState extends State<NewsContainerPage>
       return DefaultTabController(
         length: 3,
         child: Scaffold(
-          drawer: drawerWidget(),
           appBar: AppBar(
-            centerTitle: true,
+            centerTitle: false,
             title: Text(
               'Saved Articles',
               style: TextStyle(
@@ -369,7 +373,6 @@ class _NewsContainerPageState extends State<NewsContainerPage>
           ? DefaultTabController(
               length: _blogsFeeds.length,
               child: Scaffold(
-                drawer: drawerWidget(),
                 bottomNavigationBar: _bottomNavigationBar(),
                 appBar: (!_isSearchActive)
                     ? _withoutSearchAppBar(
@@ -392,8 +395,7 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                               ),
                       )
                     : _searchAppBar(context),
-                // drawer: drawerWidget(),
-                backgroundColor: Get.theme.scaffoldBackgroundColor,
+                // backgroundColor: Get.theme.scaffoldBackgroundColor,
                 body: _blogsFeeds.isEmpty
                     ? Center(
                         child: Column(
@@ -436,13 +438,11 @@ class _NewsContainerPageState extends State<NewsContainerPage>
               ))
           : _selectedTab == 3
               ? Scaffold(
-                  drawer: drawerWidget(),
                   bottomNavigationBar: _bottomNavigationBar(),
                   appBar: (!_isSearchActive)
                       ? _withoutSearchAppBar(titleText: "Around Me")
                       : _searchAppBar(context),
-                  // drawer: drawerWidget(),
-                  backgroundColor: Get.theme.scaffoldBackgroundColor,
+                  // backgroundColor: Get.theme.scaffoldBackgroundColor,
                   body: NewsPage(
                     articleType: ArticleType.AROUNDME,
                   ),
@@ -451,10 +451,8 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                   ? DefaultTabController(
                       length: _pubFeeds.length,
                       child: Scaffold(
-                        drawer: drawerWidget(),
                         bottomNavigationBar: _bottomNavigationBar(),
-                        // drawer: drawerWidget(),
-                        backgroundColor: Get.theme.scaffoldBackgroundColor,
+                        // backgroundColor: Get.theme.scaffoldBackgroundColor,
                         appBar: (!_isSearchActive)
                             ? _withoutSearchAppBar(
                                 titleText: "Publications",
@@ -525,10 +523,8 @@ class _NewsContainerPageState extends State<NewsContainerPage>
                   : DefaultTabController(
                       length: _newsFeeds.length + 1,
                       child: Scaffold(
-                        drawer: drawerWidget(),
                         bottomNavigationBar: _bottomNavigationBar(),
-                        // drawer: drawerWidget(),
-                        backgroundColor: Get.theme.scaffoldBackgroundColor,
+                        // backgroundColor: Get.theme.scaffoldBackgroundColor,
                         appBar: !_isSearchActive
                             ? _withoutSearchAppBar(
                                 titleText: "News",

@@ -290,7 +290,7 @@ class _PhoneAuthPageState extends State<PhoneAuthPage> {
     return Scaffold(
       backgroundColor: Get.theme.backgroundColor,
       appBar: AppBar(
-          centerTitle: true,
+          centerTitle: false,
           title: Text(
             'Terran Tidings',
             style: TextStyle(

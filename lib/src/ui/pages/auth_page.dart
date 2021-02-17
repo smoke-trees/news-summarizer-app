@@ -6,7 +6,6 @@ import 'package:news_summarizer/src/models/user.dart';
 import 'package:news_summarizer/src/providers/auth_provider.dart';
 import 'package:news_summarizer/src/providers/user_provider.dart';
 import 'package:news_summarizer/src/ui/pages/control_center_onboarding_page.dart';
-import 'package:news_summarizer/src/ui/pages/phone_auth_page.dart';
 import 'package:news_summarizer/src/utils/constants.dart';
 import 'package:news_summarizer/src/utils/hive_prefs.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +23,7 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
-  bool isNewUser = Get.arguments;
+  bool isNewUser = Get.arguments ?? false;
   var _newsBox = Hive.box(NEWS_PREFS_BOX);
   bool _isLoading = false;
 
@@ -34,21 +33,18 @@ class _AuthPageState extends State<AuthPage> {
         Provider.of<UserProvider>(context, listen: true);
     return Scaffold(
       backgroundColor: Get.theme.backgroundColor,
-      // appBar: AppBar(
-      //   centerTitle: true,
-      //   title: Text(
-      //     'Terran Tidings',
-      //     style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Get.theme.accentColor),
-      //   ),
-      // actions: [
-      //   IconButton(
-      //     icon: Icon(Icons.tonality),
-      //     onPressed: () {
-      //       themeProvider.toggleTheme();
-      //     },
-      //   ),
-      // ],
-      // ),
+      appBar: isNewUser || widget.firstLogin
+          ? null
+          : AppBar(
+              centerTitle: false,
+              title: Text(
+                'Terran Tidings',
+                style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Get.theme.accentColor),
+              ),
+            ),
       body: _isLoading
           ? Center(
               child: CircularProgressIndicator(),
@@ -81,7 +77,7 @@ class _AuthPageState extends State<AuthPage> {
                         Container(
                           // padding: EdgeInsets.only(top: 100),
                           child: Text(
-                            "You can create an account for better, consistent experience on multiple devices",
+                            "You can login for a better, consistent experience on multiple devices",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
@@ -309,53 +305,72 @@ class _AuthPageState extends State<AuthPage> {
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                    widget.firstLogin
-                        ? Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Container(
-                              padding: EdgeInsets.only(bottom: 30),
-                              // alignment: Alignment.bottomCenter,
-                              child: InkWell(
-                                onTap: () {
-                                  UserProvider userProvider =
-                                      Provider.of<UserProvider>(context,
-                                          listen: false);
-                                  ApiUser user = new ApiUser(
-                                    blogPreferences: [],
-                                    notifEnabledPrefs: [],
-                                    customPreferences: [],
-                                    newsPreferences: [],
-                                    savedNewsIds: [],
-                                    savedBlogsIds: [],
-                                    savedPubIds: [],
-                                    pubPreferences: [],
-                                    completedOnboarding: false,
-                                  );
-                                  userProvider.setUserInProvider(setUser: user);
-                                  userProvider.saveToHive(user: user);
-                                  Navigator.of(context).pushNamedAndRemoveUntil(
-                                    ControlCenterOnboardingPage.routeName,
-                                    (Route<dynamic> route) => false,
-                                  );
-                                  // Get.offAndToNamed(
-                                  //   ControlCenterOnboardingPage.routeName,
-                                  // );
-                                  // Get.offAndToNamed(PreferencesOnboardingPage.routeName);
-                                },
-                                child: Text(
-                                  "Proceed without login",
-                                  style: TextStyle(
-                                    decoration: TextDecoration.underline,
-                                    decorationColor: Get.theme.accentColor,
-                                    decorationThickness: 3,
+                        SizedBox(
+                          height: 20,
+                        ),
+                        widget.firstLogin
+                            ? Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 10),
+                                child: OutlineButton(
+                                  onPressed: () {
+                                    UserProvider userProvider =
+                                        Provider.of<UserProvider>(context,
+                                            listen: false);
+                                    ApiUser user = new ApiUser(
+                                      blogPreferences: [],
+                                      notifEnabledPrefs: [],
+                                      customPreferences: [],
+                                      newsPreferences: [],
+                                      savedNewsIds: [],
+                                      savedBlogsIds: [],
+                                      savedPubIds: [],
+                                      pubPreferences: [],
+                                      completedOnboarding: false,
+                                    );
+                                    userProvider.setUserInProvider(
+                                        setUser: user);
+                                    userProvider.saveToHive(user: user);
+                                    Navigator.of(context)
+                                        .pushNamedAndRemoveUntil(
+                                      ControlCenterOnboardingPage.routeName,
+                                      (Route<dynamic> route) => false,
+                                    );
+                                    // Get.offAndToNamed(
+                                    //   ControlCenterOnboardingPage.routeName,
+                                    // );
+                                    // Get.offAndToNamed(PreferencesOnboardingPage.routeName);
+                                  },
+                                  padding: EdgeInsets.symmetric(vertical: 14),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  borderSide:
+                                      BorderSide(color: Color(0xff3B916E)),
+                                  highlightedBorderColor: Colors.transparent,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.account_circle_rounded,
+                                      ),
+                                      SizedBox(
+                                        width: 18,
+                                      ),
+                                      Text(
+                                        "Proceed without login",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ),
-                            ),
-                          )
-                        : SizedBox.shrink()
+                              )
+                            : SizedBox.shrink()
+                      ],
+                    ),
                   ],
                 ),
     );
