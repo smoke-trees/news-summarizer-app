@@ -19,7 +19,7 @@ class SearchPageState extends State<SearchPage> {
     return Scaffold(
       backgroundColor: Get.theme.backgroundColor,
       appBar: AppBar(
-        centerTitle: true,
+        centerTitle: false,
         title: Text('Search results',
             style: TextStyle(
                 fontSize: 22,

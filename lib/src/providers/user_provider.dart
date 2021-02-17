@@ -286,7 +286,7 @@ class UserProvider extends ChangeNotifier {
           "[UserProvider] No user in Firebase. Did not Set save news in Firebase");
     }
     saveToHive(user: user);
-    notifyListeners();
+    // notifyListeners();
   }
 
   void unsaveArticle({Article article, ArticleType articleType}) {

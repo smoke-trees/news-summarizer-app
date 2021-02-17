@@ -9,7 +9,7 @@ class HomeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
+        centerTitle: false,
         title: Text(
           'Terran Tidings',
           style: TextStyle(

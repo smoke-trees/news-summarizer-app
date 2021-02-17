@@ -21,7 +21,7 @@ class _GetLocationPageState extends State<GetLocationPage> {
     return Scaffold(
       backgroundColor: Get.theme.primaryColor,
       appBar: AppBar(
-          centerTitle: true,
+          centerTitle: false,
           title: Text(
             'Location',
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Get.theme.accentColor),

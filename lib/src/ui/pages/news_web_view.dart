@@ -16,6 +16,7 @@ class NewsWebView extends StatefulWidget {
 
 class _NewsWebViewState extends State<NewsWebView> {
   bool showSummary = false;
+  bool isLoading = true;
 
   @override
   Widget build(BuildContext context) {
@@ -28,12 +29,32 @@ class _NewsWebViewState extends State<NewsWebView> {
               : widget.articleType == ArticleType.PUB
                   ? "Publication"
                   : 'News',
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Get.theme.accentColor),
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: Get.theme.accentColor,
+          ),
         ),
       ),
-      body: WebView(
-        initialUrl: widget.article.link,
-        javascriptMode: JavascriptMode.unrestricted,
+      body: Stack(
+        children: [
+          WebView(
+            initialUrl: widget.article.link,
+            javascriptMode: JavascriptMode.unrestricted,
+            // onPageFinished: (finish) {
+            //   print("finish");
+            //   print(finish);
+            //   setState(() {
+            //     isLoading = false;
+            //   });
+            // },
+          ),
+          // isLoading
+          //     ? Center(
+          //         child: CircularProgressIndicator(),
+          //       )
+          //     : SizedBox.shrink(),
+        ],
       ),
     );
   }

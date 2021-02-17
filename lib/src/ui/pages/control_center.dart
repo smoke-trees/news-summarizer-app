@@ -21,9 +21,8 @@ class _ControlCenterPageState extends State<ControlCenterPage> {
   bool isNewUser = Get.arguments ?? false;
 
   @override
-  void initState()  {
+  void initState() {
     super.initState();
-
   }
 
   @override
@@ -32,7 +31,7 @@ class _ControlCenterPageState extends State<ControlCenterPage> {
         Provider.of<UserProvider>(context, listen: true);
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
+        centerTitle: false,
         actions: [
           GestureDetector(
             child: Container(
@@ -59,8 +58,11 @@ class _ControlCenterPageState extends State<ControlCenterPage> {
               } else {
                 if (isNewUser) {
                   userProvider.completeOnboarding();
+                  Get.offAllNamed(BasePage.routeName);
+                } else {
+                  // Get.b(BasePage.routeName);
+                  Get.back();
                 }
-                Get.toNamed(BasePage.routeName);
               }
             },
           ),
@@ -171,66 +173,66 @@ class _ControlCenterPageState extends State<ControlCenterPage> {
           SizedBox(
             height: 10,
           ),
-          ListTile(
-            title: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "News Ordering",
-                style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  decorationColor: Get.theme.accentColor,
-                  decorationThickness: 3,
-                ),
-              ),
-            ),
-            // subtitle: Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            //   child: Text(userProvider.user.blogPreferences.join(" ")),
-            // ),
-            onTap: () {
-              Get.toNamed(ReorderNewsPrefsPage.routeName);
-            },
-          ),
-          ListTile(
-            title: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "Publication Ordering",
-                style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  decorationColor: Get.theme.accentColor,
-                  decorationThickness: 3,
-                ),
-              ),
-            ),
-            // subtitle: Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            //   child: Text(userProvider.user.blogPreferences.join(" ")),
-            // ),
-            onTap: () {
-              Get.toNamed(ReorderPubPrefsPage.routeName);
-            },
-          ),
-          ListTile(
-            title: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "Expert Opinion Ordering",
-                style: TextStyle(
-                  decoration: TextDecoration.underline,
-                  decorationColor: Get.theme.accentColor,
-                  decorationThickness: 3,
-                ),
-              ),
-            ),
-            // subtitle: Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            //   child: Text(userProvider.user.blogPreferences.join(" ")),
-            // ),
-            onTap: () {
-              Get.toNamed(ReorderExpertPrefsPage.routeName);
-            },
-          ),
+          // ListTile(
+          //   title: Padding(
+          //     padding: const EdgeInsets.all(8.0),
+          //     child: Text(
+          //       "News Ordering",
+          //       style: TextStyle(
+          //         decoration: TextDecoration.underline,
+          //         decorationColor: Get.theme.accentColor,
+          //         decorationThickness: 3,
+          //       ),
+          //     ),
+          //   ),
+          //   // subtitle: Padding(
+          //   //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          //   //   child: Text(userProvider.user.blogPreferences.join(" ")),
+          //   // ),
+          //   onTap: () {
+          //     Get.toNamed(ReorderNewsPrefsPage.routeName);
+          //   },
+          // ),
+          // ListTile(
+          //   title: Padding(
+          //     padding: const EdgeInsets.all(8.0),
+          //     child: Text(
+          //       "Publication Ordering",
+          //       style: TextStyle(
+          //         decoration: TextDecoration.underline,
+          //         decorationColor: Get.theme.accentColor,
+          //         decorationThickness: 3,
+          //       ),
+          //     ),
+          //   ),
+          //   // subtitle: Padding(
+          //   //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          //   //   child: Text(userProvider.user.blogPreferences.join(" ")),
+          //   // ),
+          //   onTap: () {
+          //     Get.toNamed(ReorderPubPrefsPage.routeName);
+          //   },
+          // ),
+          // ListTile(
+          //   title: Padding(
+          //     padding: const EdgeInsets.all(8.0),
+          //     child: Text(
+          //       "Expert Opinion Ordering",
+          //       style: TextStyle(
+          //         decoration: TextDecoration.underline,
+          //         decorationColor: Get.theme.accentColor,
+          //         decorationThickness: 3,
+          //       ),
+          //     ),
+          //   ),
+          //   // subtitle: Padding(
+          //   //   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          //   //   child: Text(userProvider.user.blogPreferences.join(" ")),
+          //   // ),
+          //   onTap: () {
+          //     Get.toNamed(ReorderExpertPrefsPage.routeName);
+          //   },
+          // ),
         ],
       ),
     );
